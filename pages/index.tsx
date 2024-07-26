@@ -1,118 +1,207 @@
+"use client";
+// import ECommerce from "@/components/Dashboard/E-commerce";
+import { Metadata } from "next";
+import DefaultLayout from "@/components/Layouts/DefaultLayout";
+import PageWrapper from "@/components/Shared/PageWrapper";
+import { useState } from "react";
+import Link from "next/link";
+import { GiPadlock } from "react-icons/gi";
+import { ImEnvelop } from "react-icons/im";
+import { BallTriangle } from "react-loader-spinner";
 import Image from "next/image";
-import { Inter } from "next/font/google";
+import logo from "../public/images/logo.png";
+import axios from "axios";
+import toast, { Toaster } from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
-const inter = Inter({ subsets: ["latin"] });
+interface FormErrors {
+  email?: string;
+  password?: string;
+}
+
 
 export default function Home() {
-  return (
-    <main
-      className={`flex min-h-screen flex-col items-center justify-between p-24 ${inter.className}`}
-    >
-      <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex">
-        <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
-          Get started by editing&nbsp;
-          <code className="font-mono font-bold">pages/index.tsx</code>
-        </p>
-        <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:h-auto lg:w-auto lg:bg-none">
-          <a
-            className="pointer-events-none flex place-items-center gap-2 p-8 lg:pointer-events-auto lg:p-0"
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className="dark:invert"
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
+  const router = useRouter();
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [errors, setErrors] = useState<FormErrors>({});
 
-      <div className="relative flex place-items-center before:absolute before:h-[300px] before:w-full sm:before:w-[480px] before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-full sm:after:w-[240px] after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700/10 after:dark:from-sky-900 after:dark:via-[#0141ff]/40 before:lg:h-[360px]">
-        <Image
-          className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
+  const validateForm = (): boolean => {
+    const newErrors: FormErrors = {};
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!email) {
+      newErrors.email = "Email is required";
+    } else if (!emailRegex.test(email)) {
+      newErrors.email = "Invalid email format";
+    }
+    if (!password) {
+      newErrors.password = "Password is required";
+    } 
+    // else if (password.length < 6) {
+    //   newErrors.password = "Password must be at least 6 characters long";
+    // }
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
-      <div className="mb-32 grid text-center lg:max-w-5xl lg:w-full lg:mb-0 lg:grid-cols-4 lg:text-left">
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Docs{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
 
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Learn{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Learn about Next.js in an interactive course with&nbsp;quizzes!
-          </p>
-        </a>
+    const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+      e.preventDefault();
+      if (!validateForm()) return;
+      setIsLoading(true);
+      try {
+        const response = await axios.post('/api/login', { email,password });
+        console.log(
+          ' status' + response.status + 'message :' + response.data.message,
+        );
+        if (response.status === 200) {
+          toast.success(response.data.message || 'Login successful');
+          // setUser(response.data.user); // Update context with user data
+          router.push('/Admin/dashboard/page'); // Navigate to the admin dashboard
+        } else if (response.status === 500) {
+          toast.error(response.data.message);
+        } else if (response.status == 401) {
+          toast.error(`${response.data.message}`);
+        } else {
+          toast.error(
+            `Error: ${response.data.message}` || 'Unknown error occured',
+          );
+        }
+      } catch (error:any) {
+        toast.error(error.response?.data.message || 'Unexpected error occurred');
+      } finally {
+        setIsLoading(false);
+        
+      }
+    };
+  
+  
 
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Templates{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Discover and deploy boilerplate example Next.js&nbsp;projects.
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Deploy{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50 text-balance`}>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
-  );
+    return (
+        <>
+            <PageWrapper>
+                <div className="flex flex-col items-center justify-center w-4/5 min-h-screen py-5 pt-5 mx-4 sm:pt-0 sm:mx-2">
+                    <main className="flex flex-col items-center justify-center flex-1 w-full px-0 text-center sm:px-20">
+                        <div className="flex flex-col w-full max-w-4xl bg-white shadow-2xl rounded-2xl sm:w-6/7 sm:flex-row">
+                            <div className="w-full p-10 sm:w-3/5 sm:p-5">
+                                <div className="font-bold text-left text-gray-400">
+                                    <span className="text-mainColor text-[30px]">.</span>
+                                </div>
+                                <div className="py-5">
+                                    <div className="flex justify-center">
+                                        <Link href="/">
+                                            <Image
+                                                width={150}
+                                                height={40}
+                                                src={logo}
+                                                alt="Logo"
+                                                className="flex justify-center  ml-10"
+                                                priority
+                                            />
+                                        </Link>
+                                    </div>
+                                    <h2 className="mb-2 text-3xl font-bold text-mainColor">
+                                        Welcome Back
+                                    </h2>
+                                    <div className="inline-block w-10 mb-2 border-2 border-mainColor"></div>
+                                    <p className="mb-3 text-gray-500">Use your email account</p>
+                                    <form onSubmit={onSubmit}>
+                                        <div className="flex flex-col items-center">
+                                            <div className="flex flex-col w-64 mb-3">
+                                                <div className="flex items-center rounded-lg border border-mainColor">
+                                                    <ImEnvelop className="m-2 text-gray-400 " />
+                                                    <input
+                                                        type="text"
+                                                        name="email"
+                                                        value={email}
+                                                        onChange={(e) => setEmail(e.target.value)}
+                                                        placeholder="email"
+                                                        className="rounded-lg py-2 px-4 w-full"
+                                                    />
+                                                </div>
+                                                {errors.email && (
+                                                    <p className="text-red-500 text-sm mt-1">{errors.email}</p>
+                                                )}
+                                            </div>
+                                            <div className="flex flex-col w-64 mb-3">
+                                                <div className="flex items-center rounded-lg border border-mainColor">
+                                                    <GiPadlock className="m-2 text-gray-400 " />
+                                                    <input
+                                                        type={showPassword ? 'text' : 'password'}
+                                                        name="password"
+                                                        value={password}
+                                                        onChange={(e) => setPassword(e.target.value)}
+                                                        placeholder="password"
+                                                        className="rounded-lg py-2 px-4 w-full"
+                                                    />
+                                                    <div className="relative inset-y-0 right-0 flex items-center pr-3 text-sm leading-5">
+                                                        <svg
+                                                            className="h-4 text-gray-700"
+                                                            fill="none"
+                                                            onClick={() => setShowPassword(!showPassword)}
+                                                            xmlns="http://www.w3.org/2000/svg"
+                                                            viewBox="0 0 576 512"
+                                                        >
+                                                            <path
+                                                                fill="currentColor"
+                                                                d="M572.52 241.4C518.29 135.59 410.93 64 288 64S57.68 135.64 3.48 241.41a32.35 32.35 0 0 0 0 29.19C57.71 376.41 165.07 448 288 448s230.32-71.64 284.52-177.41a32.35 32.35 0 0 0 0-29.19zM288 400a144 144 0 1 1 144-144 143.93 143.93 0 0 1-144 144zm0-240a95.31 95.31 0 0 0-25.31 3.79 47.85 47.85 0 0 1-66.9 66.9A95.78 95.78 0 1 0 288 160z"
+                                                            ></path>
+                                                        </svg>
+                                                    </div>
+                                                </div>
+                                                {errors.password && (
+                                                    <p className="text-red-500 text-sm mt-1">{errors.password}</p>
+                                                )}
+                                            </div>
+                                            <div className="flex justify-between w-64 mt-2 mb-5 text-gray-500">
+                                                <label className="flex items-center text-xs">
+                                                    <input type="checkbox" name="remember" className="mr-1" />{' '}
+                                                    Remember me
+                                                </label>
+                                                <Link href="#" className="text-xs">
+                                                    Forgot password?
+                                                </Link>
+                                            </div>
+                                            <button
+                                                type="submit"
+                                                className="inline-block w-64 px-12 py-2 font-semibold text-mainColor transition duration-300 ease-in-out border-2 border-mainColor rounded-full hover:bg-mainColor hover:text-white"
+                                            >
+                                                {isLoading ? (
+                                                    <div className="flex items-center justify-between gap-3">
+                                                        <BallTriangle
+                                                            height={25}
+                                                            width={25}
+                                                            radius={6}
+                                                            color="blue"
+                                                            ariaLabel="ball-triangle-loading"
+                                                            visible={true}
+                                                        />{' '}
+                                                        <p className="flex items-center w-full h-full">
+                                                            Signing in...
+                                                        </p>{' '}
+                                                    </div>
+                                                ) : (
+                                                    'Sign In'
+                                                )}
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            <div className="w-full px-12 text-white bg-mainColor sm:w-2/5 sm:rounded-tr-2xl rounded-2xl sm:rounded-br-2xl py-36 ">
+                                <h2 className="mb-2 text-3xl font-bold">Hello, Friend</h2>
+                                <div className="inline-block w-10 mb-2 border-2 border-white-600"></div>
+                                <p className="mb-10">
+                                    Unlock your school's potential—log in and make learning magical today!
+                                </p>
+                            </div>
+                        </div>
+                        <Toaster position="top-center" />
+                    </main>
+                </div>
+            </PageWrapper>
+        </>
+    );
 }
