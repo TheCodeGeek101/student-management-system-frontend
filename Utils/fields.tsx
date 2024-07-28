@@ -23,3 +23,13 @@ export const inputFields = [
         type: 'select',
       },
 ];
+
+export const tutorFields = [
+    { name: 'first_name', type: 'text', placeholder: 'First Name', label: 'First Name', required: true },
+    { name: 'last_name', type: 'text', placeholder: 'Last Name', label: 'Last Name', required: true },
+    { name: 'email', type: 'email', placeholder: 'Email', label: 'Email', required: true },
+    { name: 'phone', type: 'text', placeholder: 'Phone Number', label: 'Phone Number' },
+    { name: 'hire_date', type: 'date', placeholder: 'Hire Date', label: 'Hire Date', required: true },
+    { name: 'department', type: 'text', placeholder: 'Department', label: 'Department' },
+    { name: 'bio', type: 'textarea', placeholder: 'Bio', label: 'Bio' }
+];

@@ -1,4 +1,4 @@
-import Tutors from '@/components/admin/tutors/Tutors';
+import Tutors from '@/components/Adminstrator/tutors/Tutors';
 import DefaultLayout from '@/components/Layouts/DefaultLayout';
 import React from 'react';
 

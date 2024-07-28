@@ -56,7 +56,7 @@ const config: Config = {
         "meta-9": "#E5E7EB",
         "meta-10": "#0FADCF",
         success: "#219653",
-        danger: "#D34053",
+        infromative: "#D34053",
         warning: "#FFA70B",
       },
       fontSize: {

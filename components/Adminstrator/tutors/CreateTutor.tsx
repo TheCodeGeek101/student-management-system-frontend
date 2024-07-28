@@ -1,114 +1,166 @@
 "use client";
 import React, { useState } from 'react';
+import { tutorFields } from '@/Utils/fields';
+import { createInitialFormState } from '@/hooks/FormConfigHelper';
+import toast, { Toaster } from 'react-hot-toast';
+import axios from 'axios';
+import { validateForm } from '@/hooks/FormConfigHelper';
+import Loader from '@/components/Shared/Loader';
+
+interface Tutor {
+  first_name: string;
+  last_name: string;
+  email: string;
+  phone: string;
+  hire_date: string;
+  department: string;
+  bio: string;
+}
+
+type Field = {
+  name: string;
+  label: string;
+  type: string;
+  placeholder: string;
+  required?: boolean;
+};
+
+type FormData = {
+  [key: string]: string;
+};
+
+type Errors = {
+  [key: string]: string;
+};
+
+interface Props {
+  inputFields: Field[];
+  formData: FormData;
+  errors: Errors;
+  handleChange: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>, name: string) => void;
+  handleSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
+  loading: boolean;
+}
 
 const CreateTutor: React.FC = () => {
-    const [formData, setFormData] = useState<Tutor>({
-        first_name: '',
-        last_name: '',
-        email: '',
-        phone: '',
-        hire_date: '',
-        department: '',
-        bio: ''
-    });
+  const [loading, setIsLoading] = useState<boolean>(false);
+  const endpoint = "tutors/create";
+  const [formData, setFormData] = useState<Tutor>(createInitialFormState(tutorFields));
+  const [errors, setErrors] = useState<Errors>({});
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        const { name, value } = e.target;
-        setFormData(prevData => ({ ...prevData, [name]: value }));
-    };
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>, name: string) => {
+    const { value } = e.target;
 
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        // Handle form submission
-        console.log(formData);
-    };
+    setFormData((prevFormData: any) => ({
+      ...prevFormData,
+      [name]: value,
+    }));
 
-    return (
-        <div className="min-h-screen flex items-center justify-center py-12">
-            <div className="container mx-auto">
-                <div className="flex justify-center w-full max-w-4xl bg-white rounded-xl mx-auto shadow-lg overflow-hidden">
-                    <div className="w-full lg:w-full py-16 px-12 bg-gray-50">
-                        <h2 className="text-3xl mb-4 text-center">Register</h2>
-                        <p className="mb-4 text-center">Create Tutor</p>
-                        <form onSubmit={handleSubmit}>
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                                <input
-                                    type="text"
-                                    name="first_name"
-                                    placeholder="First Name"
-                                    value={formData.first_name}
-                                    onChange={handleChange}
-                                    className="border border-gray-400 py-2 px-4 w-full"
-                                    required
-                                />
-                                <input
-                                    type="text"
-                                    name="last_name"
-                                    placeholder="Last Name"
-                                    value={formData.last_name}
-                                    onChange={handleChange}
-                                    className="border border-gray-400 py-2 px-4 w-full"
-                                    required
-                                />
-                            </div>
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mt-2">
-                                <input
-                                    type="email"
-                                    name="email"
-                                    placeholder="Email"
-                                    value={formData.email}
-                                    onChange={handleChange}
-                                    className="border border-gray-400 py-2 px-4 w-full"
-                                    required
-                                />
-                                <input
-                                    type="text"
-                                    name="phone"
-                                    placeholder="Phone Number"
-                                    value={formData.phone}
-                                    onChange={handleChange}
-                                    className="border border-gray-400 py-2 px-4 w-full"
-                                />
-                            </div>
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mt-2">
-                                <input
-                                    type="date"
-                                    name="hire_date"
-                                    placeholder="Hire Date"
-                                    value={formData.hire_date}
-                                    onChange={handleChange}
-                                    className="border border-gray-400 py-2 px-4 w-full"
-                                    required
-                                />
-                                <input
-                                    type="text"
-                                    name="department"
-                                    placeholder="Department"
-                                    value={formData.department}
-                                    onChange={handleChange}
-                                    className="border border-gray-400 py-2 px-4 w-full"
-                                />
-                            </div>
-                            <div className="mt-5">
-                                <textarea
-                                    name="bio"
-                                    placeholder="Bio"
-                                    value={formData.bio}
-                                    onChange={handleChange}
-                                    className="border border-gray-400 py-2 px-4 w-full h-32"
-                                />
-                            </div>
-                            <div className="mt-5">
-                                <button type="submit" className="w-full bg-mainColor py-3 text-center text-white">
-                                    Create
+    if (errors[name]) {
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        [name]: '',
+      }));
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    // Handle form submission
+    const validationErrors: any = validateForm(tutorFields, formData);
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
+      setIsLoading(false);
+      return;
+    }
+
+    console.log("Form data:", JSON.stringify(formData));
+    const data = JSON.stringify(formData);
+    try {
+      setIsLoading(true);
+      const response = await axios.post('/api/post/PostDataApi', {
+        endPoint: endpoint,
+        data: formData,
+      });
+      console.log("Response data:", response.data);
+
+      if (response.status === 200) {
+        toast.success(`Tutor created successfully!`);
+        setFormData(createInitialFormState(tutorFields));
+      } else {
+        const errorMessage = response.data.message || 'An unknown error occurred.';
+        toast.error(`Failed to submit tutor data`);
+      }
+    } catch (error: any) {
+      console.error('Submission error:', error);
+      if (error.response) {
+        toast.error(`Failed to create client: ${error.response.data.error || error.message}`);
+      } else if (error.request) {
+        toast.error('No response from server');
+      } else {
+        toast.error('Error encountered: ' + error.message);
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  if(loading){
+    <Loader/>
+  }
+  return (
+    <div className="min-h-screen flex items-center justify-center py-12">
+      <div className="container mx-auto">
+        <div className="flex justify-center w-full max-w-4xl bg-white rounded-xl mx-auto shadow-lg overflow-hidden">
+          <div className="w-full lg:w-full py-16 px-12 bg-gray-50">
+            <h2 className="text-3xl mb-4 text-center text-mainColor">Register</h2>
+            <p className="mb-4 text-center text-gray-50">Create Tutor</p>
+            <form onSubmit={handleSubmit}>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                {tutorFields.map(field => (
+                  <div key={field.name} className={field.type === 'textarea' ? 'col-span-2' : ''}>
+                    <label className="block mb-1 text-mainColor">{field.label}</label>
+                    {field.type === 'textarea' ? (
+                      <textarea
+                        name={field.name}
+                        placeholder={field.placeholder}
+                        value={formData[field.name as keyof Tutor]}
+                        onChange={(e) => handleChange(e as React.ChangeEvent<HTMLTextAreaElement>, field.name)}
+                        className="border border-gray-50 py-2 px-4 w-full h-32"
+                      />
+                    ) : (
+                      <input
+                        type={field.type}
+                        name={field.name}
+                        placeholder={field.placeholder}
+                        value={formData[field.name as keyof Tutor]}
+                        onChange={(e) => handleChange(e, field.name)}
+                        className="border border-gray-50 py-2 px-4 w-full"
+                        required={field.required}
+                      />
+                    )}
+                  </div>
+                ))}
+              </div>
+              <div className="mt-5">
+              <button
+                                    type="submit"
+                                    className={`w-full py-2 font-semibold uppercase transition ${
+                                        loading
+                                            ? 'cursor-not-allowed bg-primary text-white opacity-70'
+                                            : 'bg-mainColor text-white hover:border-2 hover:bg-white hover:text-primary'
+                                    } md:w-full`}
+                                >
+                                    {loading ? 'Submitting...' : 'Submit'}
                                 </button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
+              </div>
+            </form>
+          </div>
         </div>
-    );
+        <Toaster position='top-center' />
+      </div>
+    </div>
+  );
 }
 
 export default CreateTutor;
