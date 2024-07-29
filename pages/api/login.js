@@ -1,5 +1,8 @@
 import { withIronSession } from '@daiyam/next-iron-session';
 import axios from 'axios';
+import jwt from 'jsonwebtoken';
+import cookie from 'cookie';
+const SECRET_KEY = process.env.SECRET_KEY; // Ensure this is a strong secret key
 
 // Define session options
 export const sessionOptions = {
@@ -25,14 +28,24 @@ async function handler(req, res) {
       .status(400)
       .json({ error: 'Missing required parameters: formData' });
   }
-
-  const backendURL = `http://localhost:8000/api/auth/login`;
+  
+  const backendURL = `${process.env.NEXT_PUBLIC_API_URL}/api/auth/login`;
   try {
     const response = await axios.post(backendURL, {email, password});
     console.log(`Data fetched for`, response.data);
 
     // Check for successful authentication
     if (response.status === 200 && response.data.user && response.data.token) {
+        // Create JWT token
+      const token = jwt.sign({ user: response.data.user }, SECRET_KEY, { expiresIn: '1h' });
+
+      // Set cookie with JWT token
+      res.setHeader('Set-Cookie', cookie.serialize('auth_token', token, {
+        httpOnly: true, // Prevent JavaScript access to the cookie
+        secure: process.env.NODE_ENV === 'production', // Only send cookie over HTTPS in production
+        maxAge: 3600, // 1 hour
+        path: '/', // Accessible across the site
+      }));
       // Set user and token in session
       req.session.set('user', response.data.user);
       req.session.set('token', response.data.token);

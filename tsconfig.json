@@ -16,6 +16,6 @@
       "@/*": ["./*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "components/Shared/Sidebar.jsx", "pages/index.jsx", "Utils/motion.js", "pages/api/User.js"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "components/Shared/Sidebar.jsx", "pages/index.jsx", "Utils/motion.js", "pages/api/User.js", "middleware.ts"],
   "exclude": ["node_modules"]
 }
