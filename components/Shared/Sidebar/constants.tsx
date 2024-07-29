@@ -1,4 +1,9 @@
-import { FaHome, FaUserGraduate, FaChalkboardTeacher, FaBook, FaCog, FaMoneyCheckAlt, FaFileInvoiceDollar, FaCreditCard, FaHistory, FaBalanceScaleRight, FaUndo, FaUser, FaUsers, FaDatabase, FaKey } from 'react-icons/fa';
+import { 
+  FaHome, FaUserGraduate, FaChalkboardTeacher, FaBook, 
+  FaCog, FaMoneyCheckAlt, FaFileInvoiceDollar, FaCreditCard, 
+  FaHistory, FaBalanceScaleRight, FaUndo, FaUser, FaUsers, 
+  FaDatabase, FaKey, FaCalendarAlt 
+} from 'react-icons/fa';
 
 interface MenuItem {
   icon: JSX.Element;
@@ -44,7 +49,7 @@ export const menuGroups: MenuGroup[] = [
         ],
       },
       {
-        icon: <FaChalkboardTeacher className="text-yellow-500" />, // Yellow for tutors
+        icon: <FaChalkboardTeacher className="text-yellow-500" />, // Yellow for teachers
         label: 'Teachers',
         route: '#',
         children: [
@@ -80,10 +85,37 @@ export const menuGroups: MenuGroup[] = [
     ],
   },
   {
+    name: 'Events',
+    menuItems: [
+      {
+        icon: <FaCalendarAlt className="text-orange-500" />, // Orange for events
+        label: 'Events',
+        route: '#',
+        children: [
+          {
+            icon: <FaCalendarAlt className="text-orange-500" />,
+            label: 'All Events',
+            route: '/events/all',
+          },
+          {
+            icon: <FaCalendarAlt className="text-orange-500" />,
+            label: 'Add Event',
+            route: '/events/add',
+          },
+          {
+            icon: <FaCalendarAlt className="text-orange-500" />,
+            label: 'Event Calendar',
+            route: '/events/calendar',
+          },
+        ],
+      },
+    ],
+  },
+  {
     name: 'Finance',
     menuItems: [
       {
-        icon: <FaMoneyCheckAlt className="text-teal-500" />, // Teal for payments
+        icon: <FaMoneyCheckAlt className="text-teal-500" />, // Teal for fees payments
         label: 'Fees payments',
         route: '#',
         children: [
@@ -120,7 +152,7 @@ export const menuGroups: MenuGroup[] = [
     name: 'Settings',
     menuItems: [
       {
-        icon: <FaCog className='text-red' />,
+        icon: <FaCog className="text-red-500" />, // Red for system settings
         label: 'System settings',
         route: '#',
         children: [
@@ -144,8 +176,8 @@ export const menuGroups: MenuGroup[] = [
             label: 'Password Complexity Parameters',
             route: '/settings/password-complexity',
           },
-        ], 
-      }
+        ],
+      },
     ],
   },
 ];

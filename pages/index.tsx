@@ -91,7 +91,7 @@ export default function Home() {
                                 </div>
                                 <div className="py-5">
                                     <div className="flex justify-center">
-                                        <Link href="/">
+                                        {/* <Link href="/">
                                             <Image
                                                 width={150}
                                                 height={40}
@@ -100,7 +100,7 @@ export default function Home() {
                                                 className="flex justify-center  ml-10"
                                                 priority
                                             />
-                                        </Link>
+                                        </Link> */}
                                     </div>
                                     <h2 className="mb-2 text-3xl font-bold text-mainColor">
                                         Welcome Back
