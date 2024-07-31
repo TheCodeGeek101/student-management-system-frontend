@@ -2,6 +2,7 @@ import { BRAND } from "@/types/brand";
 import Image from "next/image";
 import DropdownDefault from "../Dropdowns/DropdownDefault";
 
+
 const brandData: BRAND[] = [
   {
     logo: "/images/brand/brand-01.svg",

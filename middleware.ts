@@ -23,8 +23,8 @@ export async function middleware(req: NextRequest) {
   } catch (error) {
     console.error('Authentication error:', error);
   }
-
 }
+
 
 export const config = {
   matcher: [

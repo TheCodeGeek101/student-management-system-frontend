@@ -7,6 +7,10 @@ import ClickOutside from "../ClickOutside";
 import useLocalStorage from "@/hooks/useLocalStorage";
 import logo from "../../../public/images/logo.png";
 import { menuGroups } from "./constants";
+import { User } from "../../../types/user";
+import GetLoggedInUserHelper from "@/helpers/GetLoggedInUserHelper";
+import { teacherMenuGroups } from "./teacherConstants";
+import { studentMenuGroups } from "./studentsConstants";
 
 interface SidebarProps {
   sidebarOpen: boolean;
@@ -14,8 +18,86 @@ interface SidebarProps {
 }
 
 const Sidebar: React.FC<SidebarProps> = ({ sidebarOpen, setSidebarOpen }) => {
+  const user: User | undefined = GetLoggedInUserHelper();
+
+  // Extract role from user object
+  // const role = user?.student?.role || user?.tutor?.role || user?.admin?.role || '';
+  var role = 'admin';
+  if(user){
+  if ('student' in user) {
+    role = user.student.role;
+    console.log(role);
+  } else if ('tutor' in user) {
+    role = user.tutor.role;
+    console.log(role);
+  } else if ('admin' in user) {
+    role = user.admin.position;
+    console.log(role);
+  }
+}
   const pathname = usePathname();
   const [pageName, setPageName] = useLocalStorage("selectedMenu", "dashboard");
+
+  const renderMenuGroups = () => {
+    switch (role) {
+      case 'admin':
+        return menuGroups.map((group, groupIndex) => (
+          <div key={groupIndex}>
+            <h3 className="mb-4 ml-4 text-sm font-semibold">
+              {group.name}
+            </h3>
+            <ul className="mb-6 flex flex-col gap-1.5">
+              {group.menuItems.map((menuItem, menuIndex) => (
+                <SidebarItem
+                  key={menuIndex}
+                  item={menuItem}
+                  pageName={pageName}
+                  setPageName={setPageName}
+                />
+              ))}
+            </ul>
+          </div>
+        ));
+      case 'tutor':
+        return teacherMenuGroups.map((group, groupIndex) => (
+          <div key={groupIndex}>
+            <h3 className="mb-4 ml-4 text-sm font-semibold">
+              {group.name}
+            </h3>
+            <ul className="mb-6 flex flex-col gap-1.5">
+              {group.menuItems.map((menuItem, menuIndex) => (
+                <SidebarItem
+                  key={menuIndex}
+                  item={menuItem}
+                  pageName={pageName}
+                  setPageName={setPageName}
+                />
+              ))}
+            </ul>
+          </div>
+        ));
+      case 'student':
+        return studentMenuGroups.map((group, groupIndex) => (
+          <div key={groupIndex}>
+            <h3 className="mb-4 ml-4 text-sm font-semibold">
+              {group.name}
+            </h3>
+            <ul className="mb-6 flex flex-col gap-1.5">
+              {group.menuItems.map((menuItem, menuIndex) => (
+                <SidebarItem
+                  key={menuIndex}
+                  item={menuItem}
+                  pageName={pageName}
+                  setPageName={setPageName}
+                />
+              ))}
+            </ul>
+          </div>
+        ));
+      default:
+        return <p className="text-center">No menu available for this role.</p>;
+    }
+  };
 
   return (
     <ClickOutside onClick={() => setSidebarOpen(false)}>
@@ -61,25 +143,8 @@ const Sidebar: React.FC<SidebarProps> = ({ sidebarOpen, setSidebarOpen }) => {
 
         <div className="no-scrollbar flex flex-col overflow-y-auto duration-300 ease-linear">
           {/* <!-- Sidebar Menu --> */}
-          <nav className=" px-4 py-4 lg:mt-1 lg:px-6">
-            {menuGroups.map((group, groupIndex) => (
-              <div key={groupIndex}>
-                <h3 className="mb-4 ml-4 text-sm font-semibold">
-                  {group.name}
-                </h3>
-
-                <ul className="mb-6 flex flex-col gap-1.5">
-                  {group.menuItems.map((menuItem, menuIndex) => (
-                    <SidebarItem
-                      key={menuIndex}
-                      item={menuItem}
-                      pageName={pageName}
-                      setPageName={setPageName}
-                    />
-                  ))}
-                </ul>
-              </div>
-            ))}
+          <nav className="px-4 py-4 lg:mt-1 lg:px-6">
+            {renderMenuGroups()}
           </nav>
           {/* <!-- Sidebar Menu --> */}
         </div>

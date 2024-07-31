@@ -13,7 +13,7 @@ import logo from "../public/images/logo.png";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
 import { useRouter } from "next/navigation";
-
+import {User} from "../types/user";
 interface FormErrors {
   email?: string;
   password?: string;
@@ -23,6 +23,7 @@ interface FormErrors {
 export default function Home() {
   const router = useRouter();
   const [email, setEmail] = useState<string>("");
+  const [user,setUser] = useState<User | undefined>();
   const [password, setPassword] = useState<string>("");
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -54,12 +55,24 @@ export default function Home() {
       try {
         const response = await axios.post('/api/login', { email,password });
         console.log(
-          ' status' + response.status + 'message :' + response.data.message,
+          ' status' + response.status + 'message :' + response.data.message, 'user' + response.data.user
         );
         if (response.status === 200) {
           toast.success(response.data.message || 'Login successful');
-          // setUser(response.data.user); // Update context with user data
-          router.push('/Admin/dashboard/page'); // Navigate to the admin dashboard
+          const authenticatedUser = response.data.user;
+          if (authenticatedUser && 'admin' in authenticatedUser) {
+            console.log('admin');
+            router.push('/Admin/dashboard/page'); // Navigate to the admin dashboard
+          }
+          else if (authenticatedUser && 'student' in authenticatedUser) {
+            console.log('student');
+            router.push('/Student/dashboard/page'); // Navigate to the admin dashboard
+          }
+          else if (authenticatedUser && 'tutor' in authenticatedUser) {
+            console.log('teacher');
+            router.push('/Tutors/dashboard/page'); // Navigate to the admin dashboard
+          }
+        //   setUser(response.data.user); // Update context with user data
         } else if (response.status === 500) {
           toast.error(response.data.message);
         } else if (response.status == 401) {
@@ -84,7 +97,7 @@ export default function Home() {
             <PageWrapper>
                 <div className="flex flex-col items-center justify-center w-4/5 min-h-screen py-5 pt-5 mx-4 sm:pt-0 sm:mx-2">
                     <main className="flex flex-col items-center justify-center flex-1 w-full px-0 text-center sm:px-20">
-                        <div className="flex flex-col w-full max-w-4xl bg-white shadow-2xl rounded-2xl sm:w-6/7 sm:flex-row">
+                        <div className="flex justify-center w-full max-w-4xl bg-white shadow-2xl rounded-2xl sm:w-6/7 sm:flex-row">
                             <div className="w-full p-10 sm:w-3/5 sm:p-5">
                                 <div className="font-bold text-left text-gray-400">
                                     <span className="text-mainColor text-[30px]">.</span>
@@ -190,13 +203,13 @@ export default function Home() {
                                     </form>
                                 </div>
                             </div>
-                            <div className="w-full px-12 text-white bg-mainColor sm:w-2/5 sm:rounded-tr-2xl rounded-2xl sm:rounded-br-2xl py-36 ">
+                            {/* <div className="w-full px-12 text-white bg-mainColor sm:w-2/5 sm:rounded-tr-2xl rounded-2xl sm:rounded-br-2xl py-36 ">
                                 <h2 className="mb-2 text-3xl font-bold">Hello, Friend</h2>
                                 <div className="inline-block w-10 mb-2 border-2 border-white-600"></div>
                                 <p className="mb-10">
                                     Unlock your school's potential—log in and make learning magical today!
                                 </p>
-                            </div>
+                            </div> */}
                         </div>
                         <Toaster position="top-center" />
                     </main>

@@ -14,7 +14,7 @@ interface Tutor {
   email: string;
   phone: string;
   hire_date: string;
-  department: string;
+  department_name: string;
   bio: string;
 }
 
@@ -112,7 +112,7 @@ const ShowTutor: React.FC<ShowTutorProps> = ({ setShowTutorModal, id }) => {
               <strong className="px-5 font-bold text-[#0ea5e9]">
                 Department:
               </strong>{' '}
-              {tutorData.department}
+              {tutorData.department_name}
             </li>
             <li>
               <strong className="px-5 font-bold text-[#0ea5e9]">

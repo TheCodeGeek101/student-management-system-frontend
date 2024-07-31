@@ -29,7 +29,103 @@ export const tutorFields = [
     { name: 'last_name', type: 'text', placeholder: 'Last Name', label: 'Last Name', required: true },
     { name: 'email', type: 'email', placeholder: 'Email', label: 'Email', required: true },
     { name: 'phone', type: 'text', placeholder: 'Phone Number', label: 'Phone Number' },
+    {
+        label: 'Subject Class',
+        name: 'year_of_study',
+        placeholder: 'Subject Class',
+        options: [
+          { label: 'Science', value: 1 },
+          { label: 'Humanities', value: 2 },
+          { label: 'Languages', value: 3 },
+          { label: 'Arts', value: 4 }
+        ],
+        type: 'select',
+      },
     { name: 'hire_date', type: 'date', placeholder: 'Hire Date', label: 'Hire Date', required: true },
-    { name: 'department', type: 'text', placeholder: 'Department', label: 'Department' },
     { name: 'bio', type: 'textarea', placeholder: 'Bio', label: 'Bio' }
 ];
+
+export const subjectFields = [
+ {
+    name: 'name',
+    type:'text',
+    placeholder: 'Subject name',
+    label: 'Subject Name',
+    required: true
+ },
+ {
+    name: 'code',
+    type:'text',
+    placeholder: 'Subject Code',
+    label: 'Subject Code',
+    required: true
+ },
+ {
+    name: 'credits',
+    type:'text',
+    placeholder: 'Subject Credit hours',
+    label: 'Subject Credits',
+    required: true
+ },
+ {
+    label: 'Subject Class',
+    name: 'year_of_study',
+    placeholder: 'Subject Class',
+    options: [
+      { label: 'Form 1', value: 'Form 1' },
+      { label: 'Form 2', value: 'Form 2' },
+      { label: 'Form 3', value: 'Form 3' },
+      { label: 'Form 4', value: 'Form 4' }
+    ],
+    type: 'select',
+  },
+ {
+    name: 'description',
+    type:'textarea',
+    placeholder: 'Subject Description',
+    label: 'Subject Description',
+    required: true
+ },
+ 
+];
+
+export const departmentFields = [
+    {
+      name: 'name',
+      type: 'text',
+      placeholder: 'Department Name',
+      label: 'Department Name',
+      required: true,
+    },
+    {
+      name: 'code',
+      type: 'text',
+      placeholder: 'Department Code',
+      label: 'Department Code',
+    },
+    {
+      name: 'head_of_department',
+      type: 'number',
+      placeholder: 'Head of Department ID',
+      label: 'Head of Department',
+      required: true,
+    },
+    {
+      name: 'description',
+      type: 'textarea',
+      placeholder: 'Department Description',
+      label: 'Department Description',
+      required: true,
+    },  
+  ];
+  
+  export const selectTutor = [
+    {
+        name:'tutor_id',
+        type:'select',
+        placeholder:'Select teacher',
+        label:'Available teachers in the department',
+        options:'dynamic',
+        required:true
+    }
+  ];

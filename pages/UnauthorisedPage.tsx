@@ -12,7 +12,7 @@ const UnauthorisedPage = () => {
   useEffect(() => {
     setTimeout(() => {
       router.push('/');
-    }, 50000);
+    }, 5000);
   }, [router]);
 
   return (
@@ -43,7 +43,7 @@ const UnauthorisedPage = () => {
           </button>
           <button
             className={`hover:text-[#d03434]' w-28 cursor-not-allowed bg-primary bg-primary             
-                      py-2 font-semibold uppercase text-white text-white opacity-70 transition hover:border-2 hover:bg-white
+                      py-2 font-semibold uppercase text-white text-white opacity-70 transition hover:border-2 hover:bg-opacity-50
                    md:w-40`}
           >
             Learn more

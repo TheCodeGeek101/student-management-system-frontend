@@ -2,7 +2,8 @@ import {
   FaHome, FaUserGraduate, FaChalkboardTeacher, FaBook, 
   FaCog, FaMoneyCheckAlt, FaFileInvoiceDollar, FaCreditCard, 
   FaHistory, FaBalanceScaleRight, FaUndo, FaUser, FaUsers, 
-  FaDatabase, FaKey, FaCalendarAlt 
+  FaDatabase, FaKey, FaCalendarAlt ,
+  FaBuilding 
 } from 'react-icons/fa';
 
 interface MenuItem {
@@ -31,6 +32,23 @@ export const menuGroups: MenuGroup[] = [
   {
     name: 'Academic',
     menuItems: [
+      {
+        icon: <FaBuilding className="text-blue-500" />, // Blue for departments
+        label: 'Departments',
+        route: '#',
+        children: [
+          {
+            icon: <FaBuilding className="text-blue-500" />,
+            label: 'All Departments',
+            route: '/Admin/departments/all/page',
+          },
+          {
+            icon: <FaBuilding className="text-blue-500" />,
+            label: 'Add Department',
+            route: '/Admin/departments/create/page',
+          },
+        ],
+      },
       {
         icon: <FaUserGraduate className="text-green-500" />, // Green for students
         label: 'Students',
@@ -73,12 +91,17 @@ export const menuGroups: MenuGroup[] = [
           {
             icon: <FaBook className="text-purple-500" />,
             label: 'All Subjects',
-            route: '/subjects/all',
+            route: '/Admin/subjects/all/page',
           },
           {
             icon: <FaBook className="text-purple-500" />,
             label: 'Add Subject',
-            route: '/subjects/add',
+            route: '/Admin/subjects/create/page',
+          },
+          {
+            icon: <FaBook className="text-purple-500" />,
+            label: 'Assigned Subjects',
+            route: '/Admin/subjects/assigned/page',
           },
         ],
       },

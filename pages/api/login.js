@@ -37,13 +37,13 @@ async function handler(req, res) {
     // Check for successful authentication
     if (response.status === 200 && response.data.user && response.data.token) {
         // Create JWT token
-      const token = jwt.sign({ user: response.data.user }, SECRET_KEY, { expiresIn: '1h' });
+      const token = jwt.sign({ user: response.data.user }, SECRET_KEY, { expiresIn: '3d' });
 
       // Set cookie with JWT token
       res.setHeader('Set-Cookie', cookie.serialize('auth_token', token, {
         httpOnly: true, // Prevent JavaScript access to the cookie
         secure: process.env.NODE_ENV === 'production', // Only send cookie over HTTPS in production
-        maxAge: 3600, // 1 hour
+        maxAge: 259200, // 1 hour
         path: '/', // Accessible across the site
       }));
       // Set user and token in session
@@ -51,7 +51,7 @@ async function handler(req, res) {
       req.session.set('token', response.data.token);
       await req.session.save(); // Save the session
       res.send('Logged in');
-      return res.status(200).json(response.data);
+      return res.status(200).json(response.data.user);
     } else if (response.status === 401) {
       return res.status(401).json(response.data);
     } else if (response.status === 500) {

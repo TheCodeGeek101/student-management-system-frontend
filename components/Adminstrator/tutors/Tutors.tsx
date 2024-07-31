@@ -14,7 +14,7 @@ interface Tutor {
   email: string;
   phone?: string;
   hire_date: string;
-  department?: string;
+  department_name?: string;
   bio?: string;
 }
 
@@ -47,7 +47,7 @@ const Tutors: React.FC = () => {
     },
     {
       name: 'Department',
-      selector: (row: Tutor) => row.department || 'N/A',
+      selector: (row: Tutor) => row.department_name || 'N/A',
     },
     {
       name: 'Action',
