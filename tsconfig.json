@@ -16,6 +16,6 @@
       "@/*": ["./*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "components/Shared/Sidebar.jsx", "pages/index.jsx", "Utils/motion.js", "pages/api/User.js", "middleware.ts", "components/Adminstrator/subjects/AssignSubject.jsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "components/Shared/Sidebar.jsx", "pages/index.jsx", "Utils/motion.js", "pages/api/User.js", "middleware.ts", "components/Adminstrator/subjects/AssignSubject.jsx", "components/Shared/Sidebar/index.jsx"],
   "exclude": ["node_modules"]
 }

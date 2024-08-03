@@ -57,18 +57,18 @@ const AssignSubject: React.FC<AssignSubjectProps> = ({ setAssignSubjectModal, id
     const fetchTutors = async () => {
       try {
         const response = await axios.post('/api/getTutor', { id });
-        console.log('Response data:', response.data);
+        // console.log('Response data:', response.data);
 
         if (response.status === 200 && response.data && Array.isArray(response.data.tutors)) {
           setTutors(response.data.tutors);
         } else {
-          console.error('Unexpected response format:', response.data);
+          // console.error('Unexpected response format:', response.data);
         }
       } catch (error: any) {
         console.error('Error fetching tutors:', error);
         if (error.response) {
-          console.log('Server responded with status:', error.response.status);
-          console.log('Response data:', error.response.data);
+          // console.log('Server responded with status:', error.response.status);
+          // console.log('Response data:', error.response.data);
         } else if (error.request) {
           console.log('No response received:', error.request);
         } else {
@@ -83,7 +83,7 @@ const AssignSubject: React.FC<AssignSubjectProps> = ({ setAssignSubjectModal, id
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
-    console.log('tutor data is:' +JSON.stringify(formData));
+    // console.log('tutor data is:' +JSON.stringify(formData));
 
     const validationErrors: any = validateForm(selectTutor, formData);
     if (Object.keys(validationErrors).length > 0) {
@@ -101,7 +101,7 @@ const AssignSubject: React.FC<AssignSubjectProps> = ({ setAssignSubjectModal, id
       });
     
       if (response.status === 200) {
-        toast.success('Subject assigned successfully!');
+        toast.success('Subject allocated successfully!');
         setFormData(createInitialFormState(selectTutor));
         setErrors({});
       }else if(response.status == 429){
@@ -161,7 +161,7 @@ const AssignSubject: React.FC<AssignSubjectProps> = ({ setAssignSubjectModal, id
           </div>
           <div className="relative flex flex-col">
             <div className="mb-7 mt-0 w-full text-center font-bold capitalize text-primary md:mt-7 md:text-2xl">
-              Assign Subject
+              Allocate Subject
             </div>
             <form onSubmit={onSubmit}>
               {selectTutor.map(
@@ -216,9 +216,9 @@ const AssignSubject: React.FC<AssignSubjectProps> = ({ setAssignSubjectModal, id
               </div>
             </form>
           </div>
+        <Toaster position="top-center"/>
         </motion.div>
       </div>
-      <Toaster position="top-right" reverseOrder={false} />
     </div>
   );
 };

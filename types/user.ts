@@ -67,7 +67,13 @@ export interface Admin extends UserBase {
 }
 
 export type User =
-  | { student: Student }
-  | { tutor: Tutor }
-  | { admin: Admin };
+  | {
+    role: string; student: Student 
+}
+  | {
+    role: string; tutor: Tutor 
+}
+  | {
+    role: string; admin: Admin 
+};
 

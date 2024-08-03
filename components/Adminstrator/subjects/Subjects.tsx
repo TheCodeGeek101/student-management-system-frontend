@@ -51,10 +51,10 @@ const Subjects: React.FC = () => {
         name: 'Department',
         selector: (row: Subject) => row.department_name
       },
-    {
-      name: 'Class',
-      selector: (row: Subject) => row.year_of_study,
-    },
+    // {
+    //   name: 'Class',
+    //   selector: (row: Subject) => row.year_of_study,
+    // },
     {
         name: 'Action',
         grow: 3,

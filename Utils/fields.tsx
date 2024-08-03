@@ -22,6 +22,18 @@ export const inputFields = [
         ],
         type: 'select',
       },
+      {
+        label: 'Class',
+        name: 'class_id',
+        placeholder: 'Class',
+        options: [
+          { label: 'Form 1', value: 1 },
+          { label: 'Form 2', value: 2 },
+          { label: 'Form 3', value: 3 },
+          { label: 'Form 4', value: 4 }
+        ],
+        type: 'select',
+      },
 ];
 
 export const tutorFields = [
@@ -30,9 +42,9 @@ export const tutorFields = [
     { name: 'email', type: 'email', placeholder: 'Email', label: 'Email', required: true },
     { name: 'phone', type: 'text', placeholder: 'Phone Number', label: 'Phone Number' },
     {
-        label: 'Subject Class',
-        name: 'year_of_study',
-        placeholder: 'Subject Class',
+        label: 'Department',
+        name: 'department_id',
+        placeholder: 'Department',
         options: [
           { label: 'Science', value: 1 },
           { label: 'Humanities', value: 2 },
@@ -67,15 +79,28 @@ export const subjectFields = [
     label: 'Subject Credits',
     required: true
  },
+ 
+  {
+        label: 'Department',
+        name: 'department_id',
+        placeholder: 'Department',
+        options: [
+          { label: 'Science', value: 1 },
+          { label: 'Humanities', value: 2 },
+          { label: 'Languages', value: 3 },
+          { label: 'Arts', value: 4 }
+        ],
+        type: 'select',
+ },
  {
     label: 'Subject Class',
-    name: 'year_of_study',
+    name: 'class_id',
     placeholder: 'Subject Class',
     options: [
-      { label: 'Form 1', value: 'Form 1' },
-      { label: 'Form 2', value: 'Form 2' },
-      { label: 'Form 3', value: 'Form 3' },
-      { label: 'Form 4', value: 'Form 4' }
+      { label: 'Form 1', value: 1 },
+      { label: 'Form 2', value: 2 },
+      { label: 'Form 3', value: 3 },
+      { label: 'Form 4', value: 4 }
     ],
     type: 'select',
   },

@@ -100,7 +100,7 @@ export const menuGroups: MenuGroup[] = [
           },
           {
             icon: <FaBook className="text-purple-500" />,
-            label: 'Assigned Subjects',
+            label: 'Subject Allocation',
             route: '/Admin/subjects/assigned/page',
           },
         ],

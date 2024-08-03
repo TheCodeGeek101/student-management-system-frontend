@@ -7,10 +7,10 @@ import ClickOutside from "../ClickOutside";
 import useLocalStorage from "@/hooks/useLocalStorage";
 import logo from "../../../public/images/logo.png";
 import { menuGroups } from "./constants";
-import { User } from "../../../types/user";
-import GetLoggedInUserHelper from "@/helpers/GetLoggedInUserHelper";
 import { teacherMenuGroups } from "./teacherConstants";
 import { studentMenuGroups } from "./studentsConstants";
+import GetLoggedInUserHelper from "@/helpers/GetLoggedInUserHelper";
+import Loader from "@/components/Shared/Loader";
 
 interface SidebarProps {
   sidebarOpen: boolean;
@@ -18,34 +18,25 @@ interface SidebarProps {
 }
 
 const Sidebar: React.FC<SidebarProps> = ({ sidebarOpen, setSidebarOpen }) => {
-  const user: User | undefined = GetLoggedInUserHelper();
-
-  // Extract role from user object
-  // const role = user?.student?.role || user?.tutor?.role || user?.admin?.role || '';
-  var role = 'admin';
-  if(user){
-  if ('student' in user) {
-    role = user.student.role;
-    console.log(role);
-  } else if ('tutor' in user) {
-    role = user.tutor.role;
-    console.log(role);
-  } else if ('admin' in user) {
-    role = user.admin.position;
-    console.log(role);
-  }
-}
+  const loggedInUser = GetLoggedInUserHelper();
   const pathname = usePathname();
   const [pageName, setPageName] = useLocalStorage("selectedMenu", "dashboard");
 
+  // Show loader if loggedInUser is undefined (still fetching)
+  if (!loggedInUser) {
+    return <Loader />;
+  }
+
+  // Extract role from user object
+  const role = loggedInUser.role;
+  console.log("user role is:" + role);
+
   const renderMenuGroups = () => {
     switch (role) {
-      case 'admin':
+      case "admin":
         return menuGroups.map((group, groupIndex) => (
           <div key={groupIndex}>
-            <h3 className="mb-4 ml-4 text-sm font-semibold">
-              {group.name}
-            </h3>
+            <h3 className="mb-4 ml-4 text-sm font-semibold">{group.name}</h3>
             <ul className="mb-6 flex flex-col gap-1.5">
               {group.menuItems.map((menuItem, menuIndex) => (
                 <SidebarItem
@@ -58,12 +49,10 @@ const Sidebar: React.FC<SidebarProps> = ({ sidebarOpen, setSidebarOpen }) => {
             </ul>
           </div>
         ));
-      case 'tutor':
+      case "teacher":
         return teacherMenuGroups.map((group, groupIndex) => (
           <div key={groupIndex}>
-            <h3 className="mb-4 ml-4 text-sm font-semibold">
-              {group.name}
-            </h3>
+            <h3 className="mb-4 ml-4 text-sm font-semibold">{group.name}</h3>
             <ul className="mb-6 flex flex-col gap-1.5">
               {group.menuItems.map((menuItem, menuIndex) => (
                 <SidebarItem
@@ -76,12 +65,10 @@ const Sidebar: React.FC<SidebarProps> = ({ sidebarOpen, setSidebarOpen }) => {
             </ul>
           </div>
         ));
-      case 'student':
+      case "student":
         return studentMenuGroups.map((group, groupIndex) => (
           <div key={groupIndex}>
-            <h3 className="mb-4 ml-4 text-sm font-semibold">
-              {group.name}
-            </h3>
+            <h3 className="mb-4 ml-4 text-sm font-semibold">{group.name}</h3>
             <ul className="mb-6 flex flex-col gap-1.5">
               {group.menuItems.map((menuItem, menuIndex) => (
                 <SidebarItem
@@ -102,11 +89,11 @@ const Sidebar: React.FC<SidebarProps> = ({ sidebarOpen, setSidebarOpen }) => {
   return (
     <ClickOutside onClick={() => setSidebarOpen(false)}>
       <aside
-        className={`fixed left-0 top-0 z-9999 flex h-screen w-72.5 flex-col overflow-y-hidden  duration-300 ease-linear bg-white lg:translate-x-0 ${
+        className={`fixed left-0 top-0 z-9999 flex h-screen w-72.5 flex-col overflow-y-hidden duration-300 ease-linear bg-white lg:translate-x-0 ${
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
-        {/* <!-- SIDEBAR HEADER --> */}
+        {/* SIDEBAR HEADER */}
         <div className="flex items-center justify-between gap-2 px-6 py-5.5 lg:py-6.5">
           <Link href="/">
             <Image
@@ -114,7 +101,7 @@ const Sidebar: React.FC<SidebarProps> = ({ sidebarOpen, setSidebarOpen }) => {
               height={80}
               src={logo}
               alt="Logo"
-              className="flex justify-center  ml-10"
+              className="flex justify-center ml-10"
               priority
             />
           </Link>
@@ -139,14 +126,12 @@ const Sidebar: React.FC<SidebarProps> = ({ sidebarOpen, setSidebarOpen }) => {
             </svg>
           </button>
         </div>
-        {/* <!-- SIDEBAR HEADER --> */}
+        {/* SIDEBAR HEADER */}
 
         <div className="no-scrollbar flex flex-col overflow-y-auto duration-300 ease-linear">
-          {/* <!-- Sidebar Menu --> */}
-          <nav className="px-4 py-4 lg:mt-1 lg:px-6">
-            {renderMenuGroups()}
-          </nav>
-          {/* <!-- Sidebar Menu --> */}
+          {/* Sidebar Menu */}
+          <nav className="px-4 py-4 lg:mt-1 lg:px-6">{renderMenuGroups()}</nav>
+          {/* Sidebar Menu */}
         </div>
       </aside>
     </ClickOutside>

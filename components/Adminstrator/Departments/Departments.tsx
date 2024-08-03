@@ -34,11 +34,11 @@ const Departments: React.FC = () => {
       selector: (row: Department) => row.code,
       sortable: true,
     },
-    {
-      name: 'Head of Department',
-      selector: (row: Department) => row.tutor_first_name + " "+ row.tutor_last_name,
-      sortable: true,
-    },
+    // {
+    //   name: 'Head of Department',
+    //   selector: (row: Department) => row.tutor_first_name + " "+ row.tutor_last_name,
+    //   sortable: true,
+    // },
     {
       name: 'Description',
       selector: (row: Department) => row.description,

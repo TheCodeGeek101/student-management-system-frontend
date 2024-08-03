@@ -6,6 +6,8 @@ import DataTable from 'react-data-table-component';
 import { FaEdit, FaEye, FaFileCsv, FaChalkboardTeacher } from 'react-icons/fa';
 import Link from 'next/link';
 import ShowTutor from './ShowTutor';
+import { formatDateToWords } from '@/utils/DateFormat';
+
 // Define the Tutor interface
 interface Tutor {
   id: number;
@@ -43,7 +45,7 @@ const Tutors: React.FC = () => {
     },
     {
       name: 'Hire Date',
-      selector: (row: Tutor) => row.hire_date,
+      selector: (row: Tutor) => formatDateToWords(row.hire_date),
     },
     {
       name: 'Department',
@@ -133,7 +135,7 @@ const Tutors: React.FC = () => {
             <div className="flex justify-between items-center bg-gray-100 p-6 rounded-t-lg">
               <div className="flex items-center">
                 <h2 className="text-2xl font-bold text-blue-600">
-                  Tutors
+                  Teachers
                 </h2>
                 {/* <FaChalkboardTeacher className="ml-2 text-2xl text-blue-600" /> */}
               </div>

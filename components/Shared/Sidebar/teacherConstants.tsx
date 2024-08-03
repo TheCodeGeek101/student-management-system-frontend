@@ -53,8 +53,8 @@ import {
           children: [
             {
               icon: <FaBook className="text-purple-500" />,
-              label: 'Assigned Subjects',
-              route: '/teacher/subjects/assigned',
+              label: 'Allocated Subjects',
+              route: '/Tutors/subjects/allocated/page',
             },
           ],
         },
