@@ -9,10 +9,12 @@ import { User } from '../../../types/user'; // Import User type from the correct
 interface HeaderProps {
   sidebarOpen: boolean;
   setSidebarOpen: (arg0: boolean) => void;
+  setOpenSignOutModal: (arg0:boolean) => void;
   user: User;
+
 }
 
-const Header: React.FC<HeaderProps> = ({ sidebarOpen, setSidebarOpen, user }) => {
+const Header: React.FC<HeaderProps> = ({ sidebarOpen, setSidebarOpen, setOpenSignOutModal, user }) => {
   const renderUserName = () => {
     if ('student' in user) {
       return user.student.full_name;
@@ -130,7 +132,7 @@ const Header: React.FC<HeaderProps> = ({ sidebarOpen, setSidebarOpen, user }) =>
           </ul>
 
           {/* User Area */}
-          <DropdownUser user={user} />
+          <DropdownUser setOpenSignOutModal={setOpenSignOutModal} user={user} />
         </div>
       </div>
     </header>

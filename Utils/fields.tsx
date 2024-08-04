@@ -154,3 +154,27 @@ export const departmentFields = [
         required:true
     }
   ];
+   export const assessmentFields = [
+    {
+        name:'student_id',
+        type:'select',
+        placeholder:'Select student',
+        label:'Student Name',
+        options:'dynamic',
+        required:true
+    },
+    {
+        name:'score',
+        type:'number',
+        placeholder:'Student\'s Score',
+        label:'Student\'s Score',
+        required:true
+    },
+    {
+        name:'comments',
+        type:'text',
+        placeholder:'Remarks',
+        label:'Score Comments',
+        required:true
+    }
+  ];

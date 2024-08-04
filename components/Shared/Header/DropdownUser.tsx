@@ -8,14 +8,16 @@ import toast from "react-hot-toast";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { User } from '../../../types/user'; // Import User type from the correct file
+import SignOutModal from "./SignOutModal";
 
 
   interface DropDownUserLayoutProps {
+    setOpenSignOutModal: (arg0: boolean) => void;
     user: User;
   }
   
 
-  const DropdownUser: React.FC<DropDownUserLayoutProps> = ({ user }) => {
+  const DropdownUser: React.FC<DropDownUserLayoutProps> = ({ user, setOpenSignOutModal }) => {
     const [dropdownOpen, setDropdownOpen] = useState(false);
   
     // Extract the user information based on the type
@@ -32,26 +34,10 @@ import { User } from '../../../types/user'; // Import User type from the correct
       role = user.admin.position;
     }
   const [loading, setLoading] = useState(false);
-  const router = useRouter();
+  
 
   const handleLogout = async () => {
-    setLoading(true);
-    try {
-      const response = await axios.get('/api/logout');
-      if (response.status === 200) {
-        // toast.success(response.data.message);
-        setTimeout(() => {
-          router.push('/');
-        }, 1500); // Delay navigation by 2000 milliseconds (2 seconds)
-      } else {
-        toast.error('failed to sign out user');
-      }
-    } catch (error:any) {
-      console.error('error logging out user:' + error);
-      toast.error(error.response?.status);
-    } finally {
-      setLoading(false);
-    }
+      setOpenSignOutModal(true);
   };
   
     return (
@@ -169,7 +155,7 @@ import { User } from '../../../types/user'; // Import User type from the correct
                     fill=""
                   />
                 </svg>
-                {loading ? 'Sigining out...' : 'Sign out'}
+                Sign out
               </button>
             </div>
           </div>
