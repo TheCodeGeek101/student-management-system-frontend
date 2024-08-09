@@ -57,6 +57,7 @@ export const tutorFields = [
     { name: 'bio', type: 'textarea', placeholder: 'Bio', label: 'Bio' }
 ];
 
+// Subjects
 export const subjectFields = [
  {
     name: 'name',
@@ -114,6 +115,8 @@ export const subjectFields = [
  
 ];
 
+
+// Departments
 export const departmentFields = [
     {
       name: 'name',
@@ -144,6 +147,7 @@ export const departmentFields = [
     },  
   ];
   
+  // Teachers
   export const selectTutor = [
     {
         name:'tutor_id',
@@ -154,6 +158,8 @@ export const departmentFields = [
         required:true
     }
   ];
+
+  // assessments
    export const assessmentFields = [
     {
         name:'student_id',
@@ -171,10 +177,57 @@ export const departmentFields = [
         required:true
     },
     {
+        name:'total_marks',
+        type:'number',
+        placeholder:'Total Marks',
+        label:'Total Marks',
+        required:true
+    },
+    {
         name:'comments',
         type:'text',
         placeholder:'Remarks',
         label:'Score Comments',
+        required:true
+    },
+    {
+        name:'date',
+        type:'date',
+        placeholder:'date',
+        label:'Assessment Date',
+        required:true
+    }
+  ];
+
+   // assessments
+   export const resultsFields = [
+    {
+        name:'student_id',
+        type:'select',
+        placeholder:'Select student',
+        label:'Student Name',
+        options:'dynamic',
+        required:true
+    },
+    {
+        name:'score',
+        type:'number',
+        placeholder:'Student\'s Score',
+        label:'Student\'s Score',
+        required:true
+    },
+    {
+        name:'total_marks',
+        type:'number',
+        placeholder:'Total Marks',
+        label:'Total Marks',
+        required:true
+    },
+    {
+        name:'graded_at',
+        type:'date',
+        placeholder:'date',
+        label:'Examination Date',
         required:true
     }
   ];

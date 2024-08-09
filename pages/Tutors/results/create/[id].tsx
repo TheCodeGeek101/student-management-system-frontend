@@ -4,6 +4,7 @@ import GetLoggedInUserHelper from '@/helpers/GetLoggedInUserHelper';
 import Loader from '@/components/Shared/Loader';
 import { useRouter } from 'next/router';
 import CreateAssessment from '@/components/Teachers/assessments/CreateAssessment';
+import CreateExamResults from '@/components/Teachers/exams/CreateResults';
 
 const Page = () => {
   const user = GetLoggedInUserHelper();
@@ -23,7 +24,7 @@ const Page = () => {
       <Loader /> // Handle the case where user is still being fetched
     ) : (
       <DefaultLayout user={user}>
-        <CreateAssessment id={studentIdNumber}/>
+        <CreateExamResults id={studentIdNumber}/>
       </DefaultLayout>
     )
   );

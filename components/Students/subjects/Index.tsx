@@ -4,8 +4,13 @@ import React, { useEffect, useState } from 'react';
 import { User } from "../../../types/user";
 import Link from "next/link";
 import DataLoader from '@/components/Shared/Loaders/Loader';
-import { getButtonColor, getCardColor, getIcon, getTextColor } from '@/helpers/SubjectDisplayHelper';
 import DataNotFound from '@/components/Shared/Errors/UnallocatedSubject';
+// import { getButtonColor, getCardColor, getIcon, getTextColor } from '@/helpers/SubjectDisplayHelper';
+
+import { FaAtom, FaBook, FaFlask, FaGlobe, FaGraduationCap, FaHeart, FaLandmark, FaLanguage, FaMicroscope, FaSeedling } from "react-icons/fa";
+import toast from 'react-hot-toast';
+import { fadeIn } from '@/Utils/motion';
+import { getButtonColor, getCardColor, getIcon, getTextColor } from '@/helpers/SubjectDisplayHelper';
 
 interface SubjectData {
   subject_id: number;
@@ -13,50 +18,55 @@ interface SubjectData {
   description: string;
   code: string;
   credits: number;
-  department_name: string;
-  class_name: string;
   icon: React.ReactNode;
   cardColor: string;
   textColor: string;
   buttonColor: string;
 }
 
-interface AssessmentsProps {
+interface SubjectsProps {
   user: User;
 }
 
-const Assessments: React.FC<AssessmentsProps> = ({ user }) => {
+const fadeInVariants = fadeIn({
+  direction: 'up',
+  type: 'spring',
+  delay: 1.5,
+  duration: 1.25,
+});
+
+const AvailableSubjects: React.FC<SubjectsProps> = ({ user }) => {
   const [subjectData, setSubjectData] = useState<SubjectData[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const [hasSubjects, setHasSubjects] = useState<boolean>(true); // New state to track if subjects are present
-  const endPoint = 'tutors';
+   const [errors, setErrors] = useState<Record<string, string | null>>({});
+  const [hasSubjects, setHasSubjects] = useState<boolean>(true);
+  const [subjectId,setSubjectId] = useState<number>(0);
+
+  const endPoint = 'students'; // Updated endpoint for student data
 
   let displayName = 'User';
-  let id = 0;
+  let studentId = 0;
 
-  if ('tutor' in user) {
-    displayName = `${user.tutor.first_name} ${user.tutor.last_name}`;
-    id = user.tutor.id;
+  if ('student' in user) {
+    displayName = `${user.student.first_name} ${user.student.last_name}`;
+    studentId = user.student.id;
   }
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.post(`/api/getTutorSubjects`, {
-          id: id,
+        const response = await axios.post(`/api/getStudentSubjects`, {
+          id: studentId,
           endPoint: endPoint,
         });
 
-        // Check if subjects is an array
         if (Array.isArray(response.data.subjects)) {
           const subjects = response.data.subjects.map((subject: any) => ({
             subject_id: subject.id,
             subject_name: subject.name,
             description: subject.description,
             code: subject.code,
-            department_name: subject.department_name,
-            class_name: subject.class_name,
             credits: subject.credits,
             icon: getIcon(subject.name),
             cardColor: getCardColor(subject.name),
@@ -64,30 +74,38 @@ const Assessments: React.FC<AssessmentsProps> = ({ user }) => {
             buttonColor: getButtonColor(subject.name),
           }));
           setSubjectData(subjects);
-          setHasSubjects(subjects.length > 0); // Update state based on subjects length
+          setSubjectId(subjects.subject_id);
+          console.log("ID:" + subjectId);
+          setHasSubjects(subjects.length > 0);
         } else {
-          setHasSubjects(false); // No subjects
+          setHasSubjects(false);
         }
       } catch (error: any) {
         setError(error.response?.statusText || error.message);
-        setHasSubjects(false); // Ensure no subjects are displayed on error
+        setHasSubjects(false);
       } finally {
         setLoading(false);
       }
     };
 
     fetchData();
-  }, [endPoint, id]);
+  }, [endPoint, studentId]);
 
   if (loading) return <div><DataLoader /></div>;
   if (error) return <div>Error: {error}</div>;
-  if (!hasSubjects) return <DataNotFound />; // Render DataNotFound component if no subjects
+  if (!hasSubjects) return <DataNotFound />;
 
+   
+  
   return (
     <div className="min-h-screen">
+      <div className="flex justify-center items-center">
+              <h1 className='font-bold  text-2xl text-primary'>Register for your subjects </h1>
+            </div>
       <section className="m-4 grid gap-8 p-8 md:grid-cols-3">
         {subjectData.map((subject) => (
           <motion.div
+           
             whileHover={{
               scale: 1.1,
               textShadow: '0px 0px 8px rgb(255,255,255)',
@@ -96,6 +114,7 @@ const Assessments: React.FC<AssessmentsProps> = ({ user }) => {
             key={subject.subject_id}
             className={`card mx-auto block rounded-lg p-10 transition duration-200 hover:bg-white/30 ${subject.cardColor}`}
           >
+            
             <div className="card-body">
               <div className="flex items-center justify-between">
                 <h2 className={`font-bold capitalize ${subject.textColor}`}>
@@ -107,11 +126,11 @@ const Assessments: React.FC<AssessmentsProps> = ({ user }) => {
                 {subject.code}
               </div>
               <p className={`mt-4 ${subject.textColor}`}>{subject.description}</p>
+              <p className={`mt-4 ${subject.textColor}`}>Credits: {subject.credits}</p>
               <div className="card-actions mt-5 justify-end">
-                <Link href={`/Tutors/assessments/selection/${subject.subject_id}`}>
+                <Link href={`/Student/subjects/Enroll/${subject.subject_id}`}>
                   <button
-                    className={`mr-4 transform rounded-lg p-3 font-medium capitalize tracking-wide text-white transition-colors duration-300 hover:bg-opacity-50 focus:outline-none focus:ring focus:ring-opacity-80 ${subject.buttonColor}`}
-                  >
+                  className={`rounded-sm px-4 py-2 ${subject.buttonColor} text-white `}                  >
                     View
                   </button>
                 </Link>
@@ -124,4 +143,4 @@ const Assessments: React.FC<AssessmentsProps> = ({ user }) => {
   );
 };
 
-export default Assessments;
+export default AvailableSubjects;

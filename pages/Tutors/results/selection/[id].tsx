@@ -4,6 +4,8 @@ import GetLoggedInUserHelper from '@/helpers/GetLoggedInUserHelper';
 import Loader from '@/components/Shared/Loader';
 import { useRouter } from 'next/router';
 import CreateAssessment from '@/components/Teachers/assessments/CreateAssessment';
+import Selection from '@/components/Teachers/assessments/Section';
+import ResultsSelection from '@/components/Teachers/exams/ExamResults';
 
 const Page = () => {
   const user = GetLoggedInUserHelper();
@@ -12,10 +14,10 @@ const Page = () => {
   const { id } = router.query;
 
   // Ensure `id` is a string
-  const studentId = Array.isArray(id) ? id[0] : id || '';
+  const subjectId = Array.isArray(id) ? id[0] : id || '';
 
-  // Convert `studentId` to a number
-  const studentIdNumber = Number(studentId);
+  // Convert `subjectId` to a number
+  const subjectNumber = Number(subjectId);
 
   // Show loader while fetching user or render the page once user is fetched
   return (
@@ -23,7 +25,7 @@ const Page = () => {
       <Loader /> // Handle the case where user is still being fetched
     ) : (
       <DefaultLayout user={user}>
-        <CreateAssessment id={studentIdNumber}/>
+        <ResultsSelection id={subjectNumber}/>
       </DefaultLayout>
     )
   );

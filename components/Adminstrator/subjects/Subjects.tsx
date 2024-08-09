@@ -15,7 +15,7 @@ interface Subject {
   code: string;
   description: string;
   credits: number;
-  year_of_study: number;
+  class_name: string;
   department_name:string;
 }
 
@@ -51,10 +51,10 @@ const Subjects: React.FC = () => {
         name: 'Department',
         selector: (row: Subject) => row.department_name
       },
-    // {
-    //   name: 'Class',
-    //   selector: (row: Subject) => row.year_of_study,
-    // },
+    {
+      name: 'Class',
+      selector: (row: Subject) => row.class_name,
+    },
     {
         name: 'Action',
         grow: 3,

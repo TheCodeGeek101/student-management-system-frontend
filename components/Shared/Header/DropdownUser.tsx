@@ -51,7 +51,9 @@ import SignOutModal from "./SignOutModal";
             <span className="block text-sm font-medium text-black">
               {displayName}
             </span>
-            <span className="block text-xs">{role === 'tutor' ? 'teacher': role}</span>
+            <span className="block text-xs">
+              {role === 'tutor' ? 'teacher': role}
+              </span>
           </span>
   
           <span className="h-12 w-12 rounded-full">

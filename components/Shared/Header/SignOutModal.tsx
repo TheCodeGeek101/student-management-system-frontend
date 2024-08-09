@@ -17,6 +17,7 @@ const SignOutModal: React.FC<SignOutProps> = ({ setOpenSignOutModal }) => {
   const router = useRouter();
 
   const handleLogout = async () => {
+    
     setLoading(true);
     try {
       const response = await axios.get('/api/logout');
@@ -78,7 +79,7 @@ const SignOutModal: React.FC<SignOutProps> = ({ setOpenSignOutModal }) => {
                   : 'bg-primary text-white hover:border-2 hover:bg-white hover:text-primary'
               } md:w-40`}
             >
-              {loading ? 'Signin out...' : 'Confirm'}
+              {loading ? 'Signing out...' : 'Confirm'}
             </button>
           </div>
           /

@@ -3,6 +3,7 @@ import {
     FaCog, FaMoneyCheckAlt, FaFileInvoiceDollar, FaCreditCard, 
     FaHistory, FaBalanceScaleRight, FaUndo, FaUser, FaUsers, 
     FaDatabase, FaKey, FaCalendarAlt,
+    FaClipboardList,
     FaBuilding 
   } from 'react-icons/fa';
   
@@ -45,22 +46,17 @@ import {
         {
           icon: <FaBook className="text-purple-500" />, // Purple for subjects
           label: 'Subjects',
-          route: '/student/subjects',
+          route: '#',
           children: [
             {
               icon: <FaBook className="text-purple-500" />,
               label: 'Register Subjects',
-              route: '/student/subjects/register',
+              route: '/Student/subjects/Register',
             },
             {
               icon: <FaBook className="text-purple-500" />,
               label: 'My Subjects',
-              route: '/student/subjects/my',
-            },
-            {
-              icon: <FaBook className="text-purple-500" />,
-              label: 'Assigned Subjects',
-              route: '/student/subjects/assigned',
+              route: '/Student/subjects/Index',
             },
           ],
         },
@@ -70,10 +66,35 @@ import {
           route: '/student/events',
         },
         {
-          icon: <FaUserGraduate className="text-green-500" />, // Green for grades/results
-          label: 'Grades/Results',
-          route: '/student/grades',
-        },
+        icon: <FaClipboardList className="text-indigo-500" />, // Indigo for assessments
+        label: 'Assessments',
+        route: '#',
+        children: [
+          {
+            icon: <FaClipboardList className="text-indigo-500" />,
+            label: 'Continuous Assessments',
+            route: '#',
+          },
+        ],
+      },
+      {
+        icon: <FaUserGraduate className="text-green-500" />, // Green for grades
+        label: 'Examination Results',
+        route: '#',
+        children: [
+          {
+            icon: <FaUserGraduate className="text-green-500" />,
+            label: 'End of term',
+            route: '#',
+          },
+          {
+            icon: <FaUserGraduate className="text-green-500" />,
+            label: 'End Of Year',
+            route: '#',
+          },
+        ],
+      },
+        
       ],
     },
     {
@@ -107,7 +128,7 @@ import {
         {
           icon: <FaCog className="text-red-500" />, // Red for system settings
           label: 'Account Settings',
-          route: '/student/settings',
+          route: '#',
           children: [
             {
               icon: <FaUser className="text-red-500" />, // Red for profile

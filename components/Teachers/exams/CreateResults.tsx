@@ -9,8 +9,9 @@ import { createInitialFormState, validateForm } from '@/hooks/FormConfigHelper';
 import { dropIn } from '@/Utils/motion';
 import GetLoggedInUserHelper from '@/helpers/GetLoggedInUserHelper';
 import { User } from '../../../types/user';
-import { assessmentFields } from '@/Utils/fields';
+import { resultsFields } from '@/Utils/fields';
 import Link from "next/link";
+
 interface Tutor {
   id: number;
   first_name: string;
@@ -24,14 +25,14 @@ interface AssignSubjectProps {
 }
 
 
-const CreateAssessment: React.FC<AssignSubjectProps> = ({ id }) => {
+const CreateExamResults: React.FC<AssignSubjectProps> = ({ id }) => {
   const [teacherId, setTeacherId] = useState<number>(0);
   const [isSubmitting] = useState(false);
   const [errors, setErrors] = useState<Record<string, string | null>>({});
-  const [formData, setFormData] = useState(createInitialFormState(assessmentFields));
+  const [formData, setFormData] = useState(createInitialFormState(resultsFields));
   const [loading, setLoading] = useState(false);
   const [students, setStudents] = useState<{ value: number; label: string }[]>([]);
-  const endPoint = "assessments";
+  const endPoint = "grades";
   const user: User | undefined = GetLoggedInUserHelper();
   
 
@@ -105,7 +106,7 @@ const CreateAssessment: React.FC<AssignSubjectProps> = ({ id }) => {
     e.preventDefault();
     setLoading(true);
 
-    const validationErrors: any = validateForm(assessmentFields, formData);
+    const validationErrors: any = validateForm(resultsFields, formData);
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
       setLoading(false);
@@ -121,8 +122,8 @@ const CreateAssessment: React.FC<AssignSubjectProps> = ({ id }) => {
       });
 
       if (response.status === 200) {
-        toast.success('Assessment submitted successfully!');
-        setFormData(createInitialFormState(assessmentFields));
+        toast.success('Record submitted successfully!');
+        setFormData(createInitialFormState(resultsFields));
         setErrors({});
       } else if (response.status === 429) {
         toast.error('Failed to submit assessment');
@@ -171,10 +172,10 @@ const CreateAssessment: React.FC<AssignSubjectProps> = ({ id }) => {
           </div>
           <div className="relative flex flex-col">
             <div className="mb-7 mt-0 w-full text-center font-bold capitalize text-primary md:mt-7 md:text-2xl">
-              Enter Assessment 
+              Enter Final Assessment 
             </div>
             <form onSubmit={onSubmit}>
-              {assessmentFields.map(
+              {resultsFields.map(
                 ({ label, type, name, placeholder, options }) => (
                   <div key={name} className="mx-2 w-full flex-1">
                     <div className="mt-3 h-6 text-xs font-bold text-primary uppercase leading-8 text-gray-500">
@@ -214,7 +215,7 @@ const CreateAssessment: React.FC<AssignSubjectProps> = ({ id }) => {
                 ),
               )}
               <div className="container bottom-1 mb-4 mt-4 flex justify-around">
-                <Link href={`/Tutors/assessments/selection/${id}`}>
+                <Link href={`/Tutors/results/selection/${id}`}>
                 <button
                   // onClick={() => router.back()}
                   className="text-lg text-primary font-semibold px-5 py-2 hover:border-2 hover:bg-mainColor transition duration-300 hover:text-white border border-mainColor"
@@ -246,4 +247,4 @@ const CreateAssessment: React.FC<AssignSubjectProps> = ({ id }) => {
   );
 };
 
-export default CreateAssessment;
+export default CreateExamResults;

@@ -3,7 +3,8 @@ import DefaultLayout from '@/components/Layouts/DefaultLayout';
 import GetLoggedInUserHelper from '@/helpers/GetLoggedInUserHelper';
 import Loader from '@/components/Shared/Loader';
 import { useRouter } from 'next/router';
-import CreateAssessment from '@/components/Teachers/assessments/CreateAssessment';
+import ViewExamResults from '@/components/Teachers/exams/ViewExamResults';
+import ViewAssessments from '@/components/Teachers/assessments/ViewAssessments';
 
 const Page = () => {
   const user = GetLoggedInUserHelper();
@@ -12,10 +13,10 @@ const Page = () => {
   const { id } = router.query;
 
   // Ensure `id` is a string
-  const studentId = Array.isArray(id) ? id[0] : id || '';
+  const subjectId = Array.isArray(id) ? id[0] : id || '';
 
-  // Convert `studentId` to a number
-  const studentIdNumber = Number(studentId);
+  // Convert `subjectId` to a number
+  const subjectIdNumber = Number(subjectId);
 
   // Show loader while fetching user or render the page once user is fetched
   return (
@@ -23,7 +24,7 @@ const Page = () => {
       <Loader /> // Handle the case where user is still being fetched
     ) : (
       <DefaultLayout user={user}>
-        <CreateAssessment id={studentIdNumber}/>
+        <ViewAssessments subject_id={subjectIdNumber}/>
       </DefaultLayout>
     )
   );

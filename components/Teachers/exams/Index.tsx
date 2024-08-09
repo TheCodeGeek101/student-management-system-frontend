@@ -25,7 +25,7 @@ interface AssessmentsProps {
   user: User;
 }
 
-const Assessments: React.FC<AssessmentsProps> = ({ user }) => {
+const ExamResults: React.FC<AssessmentsProps> = ({ user }) => {
   const [subjectData, setSubjectData] = useState<SubjectData[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -108,7 +108,7 @@ const Assessments: React.FC<AssessmentsProps> = ({ user }) => {
               </div>
               <p className={`mt-4 ${subject.textColor}`}>{subject.description}</p>
               <div className="card-actions mt-5 justify-end">
-                <Link href={`/Tutors/assessments/selection/${subject.subject_id}`}>
+                <Link href={`/Tutors/results/selection/${subject.subject_id}`}>
                   <button
                     className={`mr-4 transform rounded-lg p-3 font-medium capitalize tracking-wide text-white transition-colors duration-300 hover:bg-opacity-50 focus:outline-none focus:ring focus:ring-opacity-80 ${subject.buttonColor}`}
                   >
@@ -124,4 +124,4 @@ const Assessments: React.FC<AssessmentsProps> = ({ user }) => {
   );
 };
 
-export default Assessments;
+export default ExamResults;

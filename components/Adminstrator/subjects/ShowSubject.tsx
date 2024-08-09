@@ -13,7 +13,7 @@ interface Subject {
   code: string;
   description: string;
   credits: number;
-  year_of_study: number;
+  class_name: string;
   department_name:string;
 }
 
@@ -111,7 +111,7 @@ const ShowSubject: React.FC<ShowSubjectProps> = ({ setShowSubjectModal, id }) =>
               <strong className="px-5 font-bold text-[#0ea5e9]">
                 Class:
               </strong>{' '}
-              {subjectData.year_of_study}
+              {subjectData.class_name}
             </li>
             <li>
               <strong className="px-5 font-bold text-[#0ea5e9]">

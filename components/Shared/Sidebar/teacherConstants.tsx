@@ -22,7 +22,7 @@ export const teacherMenuGroups: MenuGroup[] = [
       {
         icon: <FaHome className="text-blue-500" />, // Blue for home/dashboard
         label: 'Dashboard',
-        route: '/teacher/dashboard',
+        route: '/Tutors/dashboard/page',
       },
     ],
   },
@@ -72,22 +72,17 @@ export const teacherMenuGroups: MenuGroup[] = [
       },
       {
         icon: <FaCheckCircle className="text-green-500" />, // Green for grades
-        label: 'Grades',
+        label: 'Examination Results',
         route: '#',
         children: [
           {
             icon: <FaCheckCircle className="text-green-500" />,
-            label: 'Mid term',
-            route: '/teacher/subjects/grades/mid-term',
-          },
-          {
-            icon: <FaCheckCircle className="text-green-500" />,
             label: 'End of term',
-            route: '/teacher/subjects/grades/end-term',
+            route: '/Tutors/results/Index',
           },
           {
             icon: <FaCheckCircle className="text-green-500" />,
-            label: 'Examination Results',
+            label: 'End Of Year Results',
             route: '/teacher/subjects/grades/exam-results',
           },
         ],

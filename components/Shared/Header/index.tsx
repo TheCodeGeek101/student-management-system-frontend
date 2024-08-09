@@ -1,11 +1,9 @@
 import Link from "next/link";
-import DarkModeSwitcher from "./DarkModeSwitcher";
-import DropdownMessage from "./DropdownMessage";
 import DropdownNotification from "./DropdownNotification";
 import DropdownUser from "./DropdownUser";
 import Image from "next/image";
 import { User } from '../../../types/user'; // Import User type from the correct file
-
+import logo from "../../../public/images/logo.png";
 interface HeaderProps {
   sidebarOpen: boolean;
   setSidebarOpen: (arg0: boolean) => void;
@@ -37,7 +35,7 @@ const Header: React.FC<HeaderProps> = ({ sidebarOpen, setSidebarOpen, setOpenSig
               e.stopPropagation();
               setSidebarOpen(!sidebarOpen);
             }}
-            className="z-99999 block rounded-sm border border-stroke bg-white p-1.5 shadow-sm dark:border-strokedark dark:bg-boxdark lg:hidden"
+            className="z-99999 block rounded-sm border border-stroke bg-blue-400 p-1.5 shadow-sm  lg:hidden"
           >
             <span className="relative block h-5.5 w-5.5 cursor-pointer">
               <span className="du-block absolute right-0 h-full w-full">
@@ -75,9 +73,9 @@ const Header: React.FC<HeaderProps> = ({ sidebarOpen, setSidebarOpen, setOpenSig
 
           <Link className="block flex-shrink-0 lg:hidden" href="/">
             <Image
-              width={32}
-              height={32}
-              src={"/images/logo/logo-icon.svg"}
+              width={80}
+              height={80}
+              src={logo}
               alt="Logo"
             />
           </Link>
