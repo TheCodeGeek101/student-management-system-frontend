@@ -241,7 +241,7 @@ const StudentAssessments: React.FC<AssessmentsProps> = ({ user }) => {
   return (
     <div className="min-h-screen">
       <div className="flex justify-center items-center">
-        <h1 className="text-primary  font-bold text-2xl">View and Manage Your Student Assessments</h1>
+        {/* <h1 classN</div>ame="text-primary  font-bold text-2xl">View and Manage Your Student Assessments</h1> */}
       </div>
       <section className="m-4 grid gap-8 p-8 md:grid-cols-3">
         {assessmentData.map((subject) => (

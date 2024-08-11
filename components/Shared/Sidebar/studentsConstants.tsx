@@ -85,7 +85,7 @@ import {
           {
             icon: <FaUserGraduate className="text-green-500" />,
             label: 'End of term',
-            route: '#',
+            route: '/Student/results/Index',
           },
           {
             icon: <FaUserGraduate className="text-green-500" />,

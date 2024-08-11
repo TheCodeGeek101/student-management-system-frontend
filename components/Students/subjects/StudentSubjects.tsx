@@ -84,7 +84,7 @@ const StudentSubjects: React.FC<AssessmentsProps> = ({ user }) => {
   return (
     <div className="min-h-screen">
         <div className='flex justify-center items-center'>
-            <h1 className='text-2xl font-bold text-primary'>My Subjects</h1>
+            {/* <h1 className='text-2xl font-bold text-primary'>My Subjects</h1> */}
         </div>
       <section className="m-4 grid gap-8 p-8 md:grid-cols-3">
         {subjectData.map((subject) => (
