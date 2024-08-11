@@ -17,7 +17,7 @@ const DataLoader = () => {
           />
           {/* <BarLoader olor="#1d4ed8" /> */}
           <GridLoader color="#1d4ed8" />
-          <p>Retrieving data...</p>
+          
         </div>
       </div>
       {/* </PageWrapper> */}

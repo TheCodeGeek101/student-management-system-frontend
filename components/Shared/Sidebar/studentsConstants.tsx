@@ -73,7 +73,7 @@ import {
           {
             icon: <FaClipboardList className="text-indigo-500" />,
             label: 'Continuous Assessments',
-            route: '#',
+            route: '/Student/assessments/Index',
           },
         ],
       },
