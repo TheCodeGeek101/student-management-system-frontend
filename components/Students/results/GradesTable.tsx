@@ -1,7 +1,10 @@
-import NoExaminationsFound from '@/components/Shared/Errors/NoExaminationsUploaded';
-import DataLoader from '@/components/Shared/Loaders/Loader';
+"use client";
+import { motion } from 'framer-motion';
+import React, { useState, useEffect } from 'react';
+import DataTable from 'react-data-table-component';
 import axios from 'axios';
-import { useEffect, useState } from 'react';
+import Loader from '@/components/Shared/Loaders/Loader';
+import NoExaminationsFound from '@/components/Shared/Errors/NoExaminationsUploaded';
 
 interface ExaminationData {
   subject_name: string;
@@ -17,17 +20,53 @@ interface StudentProps {
 
 const StudentGradesTable: React.FC<StudentProps> = ({ studentId }) => {
   const [examinationData, setExaminationData] = useState<ExaminationData[]>([]);
+  const [filter, setFilter] = useState<ExaminationData[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [search, setSearch] = useState('');
   const [hasExaminationResults, setHasExaminationResults] = useState<boolean>(true);
-  const endPoint = 'students';
+  const endPoint = "students";
+  const columns = [
+    {
+      name: 'Subject',
+      selector: (row: ExaminationData) => row.subject_name,
+    },
+    {
+      name: 'Code',
+      selector: (row: ExaminationData) => row.subject_code,
+    },
+    {
+      name: 'Number Grade',
+      selector: (row: ExaminationData) => row.number_grade,
+    },
+    {
+      name: 'Letter Grade',
+      selector: (row: ExaminationData) => row.letter_grade,
+    },
+    {
+      name: 'Comments',
+      selector: (row: ExaminationData) => row.grade_comments,
+      grow: 3
+    },
+  ];
+
+  const tableHeaderStyle = {
+    headCells: {
+      style: {
+        fontWeight: 'bold',
+        fontSize: '14px',
+        backgroundColor: '#f3f4f6',
+        color: 'black',
+      },
+    },
+  };
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axios.post('/api/getStudentResults', {
           studentId: studentId,
-          endPoint: endPoint,
+          endPoint:endPoint
         });
 
         if (response.status === 200 && Array.isArray(response.data.grades)) {
@@ -44,7 +83,6 @@ const StudentGradesTable: React.FC<StudentProps> = ({ studentId }) => {
           setHasExaminationResults(false);
         }
       } catch (error: any) {
-        console.error('Error fetching data:', error);
         setError(error.response?.statusText || error.message);
         setHasExaminationResults(false);
       } finally {
@@ -53,56 +91,58 @@ const StudentGradesTable: React.FC<StudentProps> = ({ studentId }) => {
     };
 
     fetchData();
-  }, [endPoint, studentId]);
+  }, [studentId]);
 
-  if (loading) return <DataLoader/>;
+  useEffect(() => {
+    setFilter(
+      examinationData.filter((data) =>
+        data.subject_name.toLowerCase().includes(search.toLowerCase())
+      )
+    );
+  }, [search, examinationData]);
+
+  if (loading) return <Loader />;
   if (error) return <div>Error: {error}</div>;
-  if (!hasExaminationResults) return <NoExaminationsFound/>;
+  if (!hasExaminationResults) return <NoExaminationsFound />;
 
   return (
-    <section className="container px-4 mx-auto">
-      <h2 className="text-lg font-medium text-gray-800">Results</h2>
-      <div className="flex flex-col mt-6">
-        <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
-          <div className="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
-            <div className="overflow-x-auto border border-gray-50 md:rounded-lg">
-              <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                <thead className="bg-primary text-white">
-                  <tr>
-                    <th className="py-3.5 px-4 text-sm font-normal text-left text-gray-500 dark:text-gray-400">
-                      Subject
-                    </th>
-                    <th className="px-4 py-3.5 text-sm font-normal text-left text-gray-500 dark:text-gray-400">
-                      Code
-                    </th>
-                    <th className="px-4 py-3.5 text-sm font-normal text-left text-gray-500 dark:text-gray-400">
-                      Number Grade
-                    </th>
-                    <th className="px-4 py-3.5 text-sm font-normal text-left text-gray-500 dark:text-gray-400">
-                      Letter Grade
-                    </th>
-                    <th className="px-4 py-3.5 text-sm font-normal text-left text-gray-500 dark:text-gray-400">
-                      Comments
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="bg-white divide-y divide-gray-200 dark:divide-gray-700 dark:bg-gray-900">
-                  {examinationData.map((subject) => (
-                    <tr key={subject.subject_code}>
-                      <td className="px-4 py-4 text-sm font-medium text-gray-800">{subject.subject_name}</td>
-                      <td className="px-4 py-4 text-sm text-gray-700 dark:text-gray-200">{subject.subject_code}</td>
-                      <td className="px-4 py-4 text-sm text-gray-700 dark:text-gray-200">{subject.number_grade}</td>
-                      <td className="px-4 py-4 text-sm text-gray-700 dark:text-gray-200">{subject.letter_grade}</td>
-                      <td className="px-4 py-4 text-sm text-gray-700 dark:text-gray-200">{subject.grade_comments}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ ease: 'easeInOut', duration: 0.6 }}
+    >
+      <div className="container px-4 mx-auto mt-20">
+        <h2 className="text-2xl font-bold text-blue-600 mb-4">Examination Results</h2>
+        <div className="bg-white shadow rounded-lg">
+          <div className="p-4">
+            <div className="overflow-x-auto">
+              <DataTable
+                customStyles={tableHeaderStyle}
+                columns={columns}
+                data={filter}
+                pagination
+                selectableRows
+                selectableRowsHighlight
+                fixedHeader
+                highlightOnHover
+                subHeader
+                subHeaderComponent={
+                  <input
+                    type="text"
+                    className="w-full md:w-1/2 lg:w-1/3 mb-5 rounded-md border bg-white py-2 px-4 text-gray-900 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300"
+                    placeholder="Search by subject..."
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)}
+                  />
+                }
+                subHeaderAlign={"left" as any}  
+              />
             </div>
           </div>
         </div>
       </div>
-    </section>
+    </motion.div>
   );
 };
 

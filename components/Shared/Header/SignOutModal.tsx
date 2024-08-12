@@ -66,7 +66,7 @@ const SignOutModal: React.FC<SignOutProps> = ({ setOpenSignOutModal }) => {
           <div className="mt-4 flex justify-around">
             <button
               onClick={() => setOpenSignOutModal(false)}
-              className="border-slate-300 w-28 cursor-pointer rounded-[5px] border-2 p-1  py-2 font-semibold uppercase text-secondary transition duration-200 ease-in-out hover:bg-opacity-50 hover:text-primary md:w-40"
+              className="border-slate-300 w-28 cursor-pointer rounded-[5px] border-2 p-1  py-2 font-semibold uppercase text-primary transition duration-200 ease-in-out hover:bg-opacity-50 hover:text-primary md:w-40"
             >
               Close
             </button>
@@ -82,7 +82,7 @@ const SignOutModal: React.FC<SignOutProps> = ({ setOpenSignOutModal }) => {
               {loading ? 'Signing out...' : 'Confirm'}
             </button>
           </div>
-          /
+          
         </div>
       </motion.div>
 

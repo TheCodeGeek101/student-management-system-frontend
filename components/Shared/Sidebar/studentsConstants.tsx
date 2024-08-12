@@ -33,16 +33,16 @@ import {
     {
       name: 'Academic',
       menuItems: [
-        {
-          icon: <FaUserGraduate className="text-green-500" />, // Green for profile
-          label: 'My Profile',
-          route: '/student/profile',
-        },
-        {
-          icon: <FaChalkboardTeacher className="text-yellow-500" />, // Yellow for teachers
-          label: 'Teachers',
-          route: '/student/teachers',
-        },
+        // {
+        //   icon: <FaUserGraduate className="text-green-500" />, // Green for profile
+        //   label: 'My Profile',
+        //   route: '/student/profile',
+        // },
+        // {
+        //   icon: <FaChalkboardTeacher className="text-yellow-500" />, // Yellow for teachers
+        //   label: 'Teachers',
+        //   route: '/student/teachers',
+        // },
         {
           icon: <FaBook className="text-purple-500" />, // Purple for subjects
           label: 'Subjects',

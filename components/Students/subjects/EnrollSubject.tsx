@@ -165,7 +165,7 @@ const EnrollSubject: React.FC<SelectionProps> = ({ subject_id, user }) => {
               >
                 {isLoading ? 'Enrolling...' : 'Enroll'}
               </button>
-            </div>
+            </div> 
           )
         )}
         <Toaster position="top-center" />
