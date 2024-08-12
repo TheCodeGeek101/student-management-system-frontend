@@ -187,7 +187,7 @@ export const menuGroups: MenuGroup[] = [
           {
             icon: <FaUsers className="text-red-500" />, // Red for user management
             label: 'User Management',
-            route: '/settings/user-management',
+            route: '/Admin/settings/Usermanagement/Index',
           },
           {
             icon: <FaDatabase className="text-red-500" />, // Red for backup management

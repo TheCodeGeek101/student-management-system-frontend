@@ -231,3 +231,156 @@ export const departmentFields = [
         required:true
     }
   ];
+
+  export const adminstratorFields = [
+    {
+        name: 'full_name',
+        type: 'text',
+        placeholder: 'Enter full name',
+        label: 'Full Name',
+        required: true
+    },
+    {
+        name: 'email',
+        type: 'email',
+        placeholder: 'Enter email address',
+        label: 'Email Address',
+        required: true
+    },
+    {
+        name: 'phone_number',
+        type: 'tel',
+        placeholder: 'Enter phone number',
+        label: 'Phone Number',
+        required: true
+    },
+    {
+        name: 'date_of_birth',
+        type: 'date',
+        placeholder: 'Select date of birth',
+        label: 'Date of Birth',
+        required: true
+    },
+    {
+        name: 'gender',
+        type: 'select',
+        placeholder: 'Select gender',
+        label: 'Gender',
+        options: [
+            { value: 'Male', label: 'Male' },
+            { value: 'Female', label: 'Female' },
+            { value: 'Other', label: 'Other' }
+        ],
+        required: true
+    },
+    {
+        name: 'street',
+        type: 'text',
+        placeholder: 'Enter street address',
+        label: 'Street Address',
+        required: true
+    },
+    {
+        name: 'city',
+        type: 'text',
+        placeholder: 'Enter city',
+        label: 'City',
+        required: true
+    },
+    {
+        name: 'state',
+        type: 'text',
+        placeholder: 'Enter state',
+        label: 'State',
+        required: true
+    },
+    {
+        name: 'postal_code',
+        type: 'text',
+        placeholder: 'Enter postal code',
+        label: 'Postal Code',
+        required: true
+    },
+    {
+        name: 'country',
+        type: 'text',
+        placeholder: 'Enter country',
+        label: 'Country',
+        required: true
+    },
+    // {
+    //     name: 'profile_picture',
+    //     type: 'file',
+    //     placeholder: 'Upload profile picture',
+    //     label: 'Profile Picture',
+    //     required: false
+    // },
+    {
+        name: 'employee_id',
+        type: 'text',
+        placeholder: 'Enter employee ID',
+        label: 'Employee ID',
+        required: true
+    },
+    {
+        name: 'position',
+        type: 'text',
+        placeholder: 'Enter position',
+        label: 'Position',
+        required: true
+    },
+    {
+        name: 'department',
+        type: 'text',
+        placeholder: 'Enter department',
+        label: 'Department',
+        required: true
+    },
+    {
+        name: 'date_of_hire',
+        type: 'date',
+        placeholder: 'Select date of hire',
+        label: 'Date of Hire',
+        required: true
+    },
+    {
+        name: 'employment_type',
+        type: 'select',
+        placeholder: 'Select employment type',
+        label: 'Employment Type',
+        options: [
+            { value: 'Full-Time', label: 'Full-Time' },
+            { value: 'Part-Time', label: 'Part-Time' },
+            { value: 'Contract', label: 'Contract' }
+        ],
+        required: true
+    },
+    {
+        name: 'emergency_contact_name',
+        type: 'text',
+        placeholder: 'Enter emergency contact name',
+        label: 'Emergency Contact Name',
+        required: true
+    },
+    {
+        name: 'emergency_contact_relationship',
+        type: 'text',
+        placeholder: 'Enter relationship',
+        label: 'Emergency Contact Relationship',
+        required: false
+    },
+    {
+        name: 'emergency_contact_phone',
+        type: 'tel',
+        placeholder: 'Enter emergency contact phone',
+        label: 'Emergency Contact Phone',
+        required: true
+    },
+    {
+        name: 'emergency_contact_email',
+        type: 'email',
+        placeholder: 'Enter emergency contact email',
+        label: 'Emergency Contact Email',
+        required: false
+    }
+];
