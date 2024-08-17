@@ -232,7 +232,7 @@ export const departmentFields = [
     }
   ];
 
-  export const adminstratorFields = [
+ export const administratorFields = [
     {
         name: 'full_name',
         type: 'text',
@@ -308,13 +308,6 @@ export const departmentFields = [
         label: 'Country',
         required: true
     },
-    // {
-    //     name: 'profile_picture',
-    //     type: 'file',
-    //     placeholder: 'Upload profile picture',
-    //     label: 'Profile Picture',
-    //     required: false
-    // },
     {
         name: 'employee_id',
         type: 'text',
@@ -327,14 +320,14 @@ export const departmentFields = [
         type: 'text',
         placeholder: 'Enter position',
         label: 'Position',
-        required: true
+        required: false
     },
     {
         name: 'department',
         type: 'text',
         placeholder: 'Enter department',
         label: 'Department',
-        required: true
+        required: false
     },
     {
         name: 'date_of_hire',
@@ -353,14 +346,14 @@ export const departmentFields = [
             { value: 'Part-Time', label: 'Part-Time' },
             { value: 'Contract', label: 'Contract' }
         ],
-        required: true
+        required: false
     },
     {
         name: 'emergency_contact_name',
         type: 'text',
         placeholder: 'Enter emergency contact name',
         label: 'Emergency Contact Name',
-        required: true
+        required: false
     },
     {
         name: 'emergency_contact_relationship',
@@ -374,7 +367,7 @@ export const departmentFields = [
         type: 'tel',
         placeholder: 'Enter emergency contact phone',
         label: 'Emergency Contact Phone',
-        required: true
+        required: false
     },
     {
         name: 'emergency_contact_email',
@@ -384,3 +377,4 @@ export const departmentFields = [
         required: false
     }
 ];
+

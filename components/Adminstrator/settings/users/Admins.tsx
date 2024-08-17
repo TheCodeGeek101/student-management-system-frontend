@@ -21,7 +21,7 @@ const Admins: React.FC = () => {
 
   const columns = [
     {
-      name: 'Adminstrator ID',
+      name: 'Admin ID',
       selector: (row: Adminstrator) => row.id,
       sortable: true,
     },
@@ -57,6 +57,7 @@ const Admins: React.FC = () => {
     },
     {
       name: 'Action',
+      grow:2,
       cell: (row: Adminstrator) => (
         <div className="flex justify-around">
           <button
@@ -95,9 +96,9 @@ const Admins: React.FC = () => {
     const fetchData = async () => {
       try {
         const response = await axios.post(`/api/GetData`, { endPoint: endPoint });
-        console.log('Response data is:', JSON.stringify(response.data.Admins));
-        setAdminData(response.data.Admins); // Assuming response data is the final data we need
-        setFilter(response.data.Admins); // Set initial filter data
+        console.log('Response data is:', JSON.stringify(response.data.admins));
+        setAdminData(response.data.admins); // Assuming response data is the final data we need
+        setFilter(response.data.admins); // Set initial filter data
       } catch (error: any) {
         setError(error.response?.statusText || error.message);
         console.error('Fetch error:', error.message);
@@ -106,20 +107,17 @@ const Admins: React.FC = () => {
       }
     };
 
-    fetchData();
-  }, [endPoint]);
-
-  useEffect(() => {
-    // Filtering logic
-    const result = adminData.filter((admin) => {
+   const result = adminData.filter((admin) => {
       return admin.full_name.toLowerCase().includes(search.toLowerCase());
     });
     setFilter(result);
-  }, [search, adminData]);
+    fetchData();
+  }, [endPoint,search, adminData]);
 
   if (loading) {
     return <Loader />;
   }
+  
   if (error) {
     return <div>Error: {error}</div>;
   }
@@ -145,9 +143,8 @@ const Admins: React.FC = () => {
                     Back
                   </div>
                     </Link>
-
                 </button>
-                <h2 className="text-2xl font-bold text-blue-600">Admins</h2>
+                <h2 className="text-2xl font-bold text-blue-600">Adminstrators</h2>
               </div>
               <button
                 onClick={() => console.log('Export CSV clicked')}
@@ -185,10 +182,6 @@ const Admins: React.FC = () => {
           </div>
         </div>
       </motion.div>
-      {/* Adminstrator details modal */}
-      {/* {showAdminModal && (
-        <ShowAdmin id={id} setShowAdminModal={setShowAdminModal} />
-      )} */}
     </>
   );
 };

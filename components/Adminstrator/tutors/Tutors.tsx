@@ -120,7 +120,7 @@ const Tutors: React.FC = () => {
       });
       fetchData();
       setFilter(result);
-  },[search,tutorData]);
+  },[search,endPoint]);
 
   return (
     <>

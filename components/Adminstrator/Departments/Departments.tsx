@@ -87,7 +87,6 @@ const Departments: React.FC = () => {
     const fetchData = async () => {
       try {
         const response = await axios.post(`/api/GetData`, { endPoint: endPoint });
-        console.log('Response data is:', JSON.stringify(response.data.departments));
         setDepartmentData(response.data.departments); // Assuming response data is the final data we need
         setFilter(response.data.departments); // Set initial filter data
       } catch (error: any) {
@@ -98,16 +97,17 @@ const Departments: React.FC = () => {
       }
     };
 
-    fetchData();
-  }, [endPoint]);
 
-  useEffect(() => {
     // Filtering logic
     const result = departmentData.filter((department) => {
       return department.name.toLowerCase().includes(search.toLowerCase());
     });
+
     setFilter(result);
-  }, [search, departmentData]);
+    fetchData();
+  }, [endPoint, search]);
+
+ 
 
   if (loading) {
     return <Loader />;

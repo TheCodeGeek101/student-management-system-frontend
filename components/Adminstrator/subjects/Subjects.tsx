@@ -133,7 +133,7 @@ const Subjects: React.FC = () => {
     });
     fetchData();
     setFilter(result);
-  }, [search, subjectData]); // include subjects in the dependencies array
+  }, [search, endPoint]); // include subjects in the dependencies array
 
   if (loading) {
     return <Loader />;

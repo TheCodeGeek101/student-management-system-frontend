@@ -115,7 +115,7 @@ const Students: React.FC = () => {
     });
     fetchData();
     setFilter(result);
-  }, [search, studentData]); // include clients in the dependencies array
+  }, [search, endPoint]); // include clients in the dependencies array
 
   if (loading) {
     return <Loader />;

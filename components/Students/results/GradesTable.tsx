@@ -91,7 +91,7 @@ const StudentGradesTable: React.FC<StudentProps> = ({ studentId }) => {
     };
 
     fetchData();
-  }, [studentId]);
+  }, [studentId,endPoint]);
 
   useEffect(() => {
     setFilter(
@@ -99,7 +99,7 @@ const StudentGradesTable: React.FC<StudentProps> = ({ studentId }) => {
         data.subject_name.toLowerCase().includes(search.toLowerCase())
       )
     );
-  }, [search, examinationData]);
+  }, [search]);
 
   if (loading) return <Loader />;
   if (error) return <div>Error: {error}</div>;
