@@ -124,6 +124,7 @@ const Tutors: React.FC = () => {
 
   return (
     <>
+    <div className = 'h-screen'>
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -180,6 +181,7 @@ const Tutors: React.FC = () => {
        {showTutorModal && (
             <ShowTutor id={id} setShowTutorModal={setShowTutorModal} />
           )}
+       </div>   
     </>
   );
 }

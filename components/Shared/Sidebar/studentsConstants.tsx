@@ -4,7 +4,8 @@ import {
     FaHistory, FaBalanceScaleRight, FaUndo, FaUser, FaUsers, 
     FaDatabase, FaKey, FaCalendarAlt,
     FaClipboardList,
-    FaBuilding 
+    FaBuilding, 
+    FaInfoCircle
   } from 'react-icons/fa';
   
   interface MenuItem {
@@ -144,5 +145,27 @@ import {
         },
       ],
     },
+     {
+    name: 'Help & Support',
+    menuItems: [
+      {
+        icon: <FaInfoCircle className="text-green-500" />, // Green for help and support
+        label: 'Help & Support',
+        route: '#',
+        children: [
+          {
+            icon: <FaInfoCircle className="text-green-500" />, // Green for help documentation
+            label: 'Help Documentation',
+            route: '/help',
+          },
+          {
+            icon: <FaInfoCircle className="text-green-500" />, // Green for contact support
+            label: 'Contact Support',
+            route: '/support',
+          },
+        ],
+      },
+    ],
+  },
   ];
   

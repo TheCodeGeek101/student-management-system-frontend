@@ -76,7 +76,7 @@ const CreateTutor: React.FC = () => {
       console.log("Response data:", response.data);
 
       if (response.status === 200) {
-        toast.success('Tutor created successfully!');
+        toast.success('Teacher created successfully!');
         setFormData(createInitialFormState(tutorFields));
       } else {
         const errorMessage = response.data.message || 'An unknown error occurred.';
@@ -103,7 +103,7 @@ const CreateTutor: React.FC = () => {
         <div className="flex justify-center w-full max-w-4xl bg-white rounded-xl mx-auto shadow-lg overflow-hidden">
           <div className="w-full lg:w-full py-16 px-12 bg-gray-50">
             <h2 className="text-3xl mb-4 text-center text-mainColor">Register</h2>
-            <p className="mb-4 text-center text-gray-50">Create Tutor</p>
+            <p className="mb-4 text-center text-gray-50">Create Teacher</p>
             <form onSubmit={handleSubmit}>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                 {tutorFields.map((field) => (

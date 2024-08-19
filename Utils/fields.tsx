@@ -317,10 +317,18 @@ export const departmentFields = [
     },
     {
         name: 'position',
-        type: 'text',
-        placeholder: 'Enter position',
+        type: 'select',
+        placeholder: 'Position',
         label: 'Position',
-        required: false
+        options: [
+            { value: 'head_teacher', label: 'Head Teacher' },
+            { value: 'deputy_head_teacher', label: 'Deputy Head Teacher' },
+            { value: 'secretary', label: 'Secretary' },
+            { value: 'bursar', label: 'Bursar' },
+            { value: 'assistant_bursar', label: 'Assistant Bursar' },
+            { value: 'it_officer', label: 'IT Officer' }
+        ],
+        required: true
     },
     {
         name: 'department',

@@ -1,6 +1,7 @@
 import { 
   FaHome, FaBook, FaCalendarAlt, FaUser, 
-  FaCog, FaChalkboardTeacher, FaUsers, FaClipboardList, FaCheckCircle
+  FaCog, FaChalkboardTeacher, FaUsers, FaClipboardList, FaCheckCircle,
+  FaInfoCircle
 } from 'react-icons/fa';
 
 interface MenuItem {
@@ -31,9 +32,14 @@ export const teacherMenuGroups: MenuGroup[] = [
     menuItems: [
       {
         icon: <FaChalkboardTeacher className="text-yellow-500" />, // Yellow for classes
-        label: 'My Classes',
+        label: 'Class Schedules',
         route: '#',
         children: [
+          {
+            icon: <FaCalendarAlt className="text-orange-500" />,
+            label: 'Timetable',
+            route: '/schedules/classes',
+          },
           {
             icon: <FaChalkboardTeacher className="text-yellow-500" />,
             label: 'View Classes',
@@ -90,7 +96,7 @@ export const teacherMenuGroups: MenuGroup[] = [
     ],
   },
   {
-    name: 'Events',
+    name: 'Scheduling',
     menuItems: [
       {
         icon: <FaCalendarAlt className="text-orange-500" />, // Orange for events
@@ -128,6 +134,28 @@ export const teacherMenuGroups: MenuGroup[] = [
             icon: <FaUsers className="text-red-500" />, // Red for user management
             label: 'Manage Students',
             route: '/teacher/students/manage',
+          },
+        ],
+      },
+    ],
+  },
+   {
+    name: 'Help & Support',
+    menuItems: [
+      {
+        icon: <FaInfoCircle className="text-green-500" />, // Green for help and support
+        label: 'Help & Support',
+        route: '#',
+        children: [
+          {
+            icon: <FaInfoCircle className="text-green-500" />, // Green for help documentation
+            label: 'Help Documentation',
+            route: '/help',
+          },
+          {
+            icon: <FaInfoCircle className="text-green-500" />, // Green for contact support
+            label: 'Contact Support',
+            route: '/support',
           },
         ],
       },

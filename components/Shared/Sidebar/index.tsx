@@ -11,6 +11,11 @@ import { teacherMenuGroups } from "./teacherConstants";
 import { studentMenuGroups } from "./studentsConstants";
 import GetLoggedInUserHelper from "@/helpers/GetLoggedInUserHelper";
 import Loader from "@/components/Shared/Loader";
+import { bursarConstants } from "./bursarConstants";
+import { secretaryConstants } from "./secretaryConstants";
+import { itOfficerConstants } from "./itOfficerConstants";
+import {User} from "../../../types/user";
+// Make sure this import points to the right file
 
 interface SidebarProps {
   sidebarOpen: boolean;
@@ -18,69 +23,131 @@ interface SidebarProps {
 }
 
 const Sidebar: React.FC<SidebarProps> = ({ sidebarOpen, setSidebarOpen }) => {
-  const loggedInUser = GetLoggedInUserHelper();
+  const loggedInUser = GetLoggedInUserHelper() as User | undefined;
   const pathname = usePathname();
   const [pageName, setPageName] = useLocalStorage("selectedMenu", "dashboard");
 
-  // Show loader if loggedInUser is undefined (still fetching)
   if (!loggedInUser) {
     return <Loader />;
   }
 
-  // Extract role from user object
-  const role = loggedInUser.role;
-  console.log("user role is:" + role);
-
   const renderMenuGroups = () => {
+    const { role } = loggedInUser;
+
     switch (role) {
       case "admin":
-        return menuGroups.map((group, groupIndex) => (
-          <div key={groupIndex}>
-            <h3 className="mb-4 ml-4 text-sm font-semibold">{group.name}</h3>
-            <ul className="mb-6 flex flex-col gap-1.5">
-              {group.menuItems.map((menuItem, menuIndex) => (
-                <SidebarItem
-                  key={menuIndex}
-                  item={menuItem}
-                  pageName={pageName}
-                  setPageName={setPageName}
-                />
-              ))}
-            </ul>
-          </div>
-        ));
-      case "teacher":
-        return teacherMenuGroups.map((group, groupIndex) => (
-          <div key={groupIndex}>
-            <h3 className="mb-4 ml-4 text-sm font-semibold">{group.name}</h3>
-            <ul className="mb-6 flex flex-col gap-1.5">
-              {group.menuItems.map((menuItem, menuIndex) => (
-                <SidebarItem
-                  key={menuIndex}
-                  item={menuItem}
-                  pageName={pageName}
-                  setPageName={setPageName}
-                />
-              ))}
-            </ul>
-          </div>
-        ));
+        if ("admin" in loggedInUser) {
+          const { position } = loggedInUser.admin;
+          switch (position) {
+            case "Bursar":
+            case "Assistant Bursar":
+              return bursarConstants.map((group, groupIndex) => (
+                <div key={groupIndex}>
+                  <h3 className="mb-4 ml-4 text-sm font-semibold">{group.name}</h3>
+                  <ul className="mb-6 flex flex-col gap-1.5">
+                    {group.menuItems.map((menuItem, menuIndex) => (
+                      <SidebarItem
+                        key={menuIndex}
+                        item={menuItem}
+                        pageName={pageName}
+                        setPageName={setPageName}
+                      />
+                    ))}
+                  </ul>
+                </div>
+              ));
+            case "Secretary":
+              return secretaryConstants.map((group, groupIndex) => (
+                <div key={groupIndex}>
+                  <h3 className="mb-4 ml-4 text-sm font-semibold">{group.name}</h3>
+                  <ul className="mb-6 flex flex-col gap-1.5">
+                    {group.menuItems.map((menuItem, menuIndex) => (
+                      <SidebarItem
+                        key={menuIndex}
+                        item={menuItem}
+                        pageName={pageName}
+                        setPageName={setPageName}
+                      />
+                    ))}
+                  </ul>
+                </div>
+              ));
+            case "It Officer":
+              return itOfficerConstants.map((group, groupIndex) => (
+                <div key={groupIndex}>
+                  <h3 className="mb-4 ml-4 text-sm font-semibold">{group.name}</h3>
+                  <ul className="mb-6 flex flex-col gap-1.5">
+                    {group.menuItems.map((menuItem, menuIndex) => (
+                      <SidebarItem
+                        key={menuIndex}
+                        item={menuItem}
+                        pageName={pageName}
+                        setPageName={setPageName}
+                      />
+                    ))}
+                  </ul>
+                </div>
+              ));
+            case "Head Teacher":
+            case "Deputy Head Teacher":
+              return menuGroups.map((group, groupIndex) => (
+                <div key={groupIndex}>
+                  <h3 className="mb-4 ml-4 text-sm font-semibold">{group.name}</h3>
+                  <ul className="mb-6 flex flex-col gap-1.5">
+                    {group.menuItems.map((menuItem, menuIndex) => (
+                      <SidebarItem
+                        key={menuIndex}
+                        item={menuItem}
+                        pageName={pageName}
+                        setPageName={setPageName}
+                      />
+                    ))}
+                  </ul>
+                </div>
+              ));
+            default:
+              return <p className="text-center">No menu available for this role.</p>;
+          }
+        }
+        break;
       case "student":
-        return studentMenuGroups.map((group, groupIndex) => (
-          <div key={groupIndex}>
-            <h3 className="mb-4 ml-4 text-sm font-semibold">{group.name}</h3>
-            <ul className="mb-6 flex flex-col gap-1.5">
-              {group.menuItems.map((menuItem, menuIndex) => (
-                <SidebarItem
-                  key={menuIndex}
-                  item={menuItem}
-                  pageName={pageName}
-                  setPageName={setPageName}
-                />
-              ))}
-            </ul>
-          </div>
-        ));
+        if ("student" in loggedInUser) {
+          return studentMenuGroups.map((group, groupIndex) => (
+            <div key={groupIndex}>
+              <h3 className="mb-4 ml-4 text-sm font-semibold">{group.name}</h3>
+              <ul className="mb-6 flex flex-col gap-1.5">
+                {group.menuItems.map((menuItem, menuIndex) => (
+                  <SidebarItem
+                    key={menuIndex}
+                    item={menuItem}
+                    pageName={pageName}
+                    setPageName={setPageName}
+                  />
+                ))}
+              </ul>
+            </div>
+          ));
+        }
+        break;
+      case "tutor":
+        if ("tutor" in loggedInUser) {
+          return teacherMenuGroups.map((group, groupIndex) => (
+            <div key={groupIndex}>
+              <h3 className="mb-4 ml-4 text-sm font-semibold">{group.name}</h3>
+              <ul className="mb-6 flex flex-col gap-1.5">
+                {group.menuItems.map((menuItem, menuIndex) => (
+                  <SidebarItem
+                    key={menuIndex}
+                    item={menuItem}
+                    pageName={pageName}
+                    setPageName={setPageName}
+                  />
+                ))}
+              </ul>
+            </div>
+          ));
+        }
+        break;
       default:
         return <p className="text-center">No menu available for this role.</p>;
     }

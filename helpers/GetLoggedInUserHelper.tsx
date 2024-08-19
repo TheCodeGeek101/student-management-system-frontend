@@ -18,7 +18,14 @@ const GetLoggedInUserHelper = (): User | undefined => {
 
           // Detect user type and set it along with user data
           if (userData.admin) {
-            setLoggedInUser({ role: 'admin', admin: userData.admin });
+            // Set the role to 'admin' and include the specific admin position
+            setLoggedInUser({
+              role: 'admin',
+              admin: {
+                ...userData.admin,
+                position: userData.admin.position, // Keep position as part of admin data
+              },
+            });
           } else if (userData.student) {
             setLoggedInUser({ role: 'student', student: userData.student });
           } else if (userData.tutor) {

@@ -70,7 +70,7 @@ const AssignedSubjects: React.FC = () => {
               </button>
             </Link>
             
-              
+          
             
           </div>
         ),
