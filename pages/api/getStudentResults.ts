@@ -8,15 +8,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return res.status(405).end(`Method ${req.method} Not Allowed`);
   }
 
-  const { endPoint, studentId }: { endPoint?: string, studentId?:number } = req.body;
-  if (!endPoint) {
-    return res
-      .status(400)
-      .json({ error: 'Missing required parameter: endPoint' });
+  const { endPoint, studentId, termId }: { endPoint?: string, studentId?: number, termId?: number } = req.body;
+
+  // Ensure all required parameters are present
+  if (!endPoint || !studentId || !termId) {
+    return res.status(400).json({ error: 'Missing required parameters' });
   }
 
-  // Correct the URL construction
-  const backendURL = `${process.env.NEXT_PUBLIC_API_URL}/api/${endPoint}/${studentId}/subjects/grades`;
+  // Construct the backend URL
+  const backendURL = `${process.env.NEXT_PUBLIC_API_URL}/api/${endPoint}/${studentId}/term/${termId}/subjects/grades`;
   console.log('Attempting to fetch from URL:', backendURL); // Log the final URL
 
   try {
