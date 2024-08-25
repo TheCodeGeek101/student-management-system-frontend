@@ -184,6 +184,17 @@ export const departmentFields = [
         required:true
     },
     {
+    label: 'Term',
+    name: 'term_id',
+    placeholder: 'Term',
+    options: [
+      { label: 'Term 1', value: 1 },
+      { label: 'Term 2', value: 2 },
+      { label: 'Term 3', value: 3 }
+    ],
+    type: 'select',
+  },
+    {
         name:'comments',
         type:'text',
         placeholder:'Remarks',
@@ -199,38 +210,49 @@ export const departmentFields = [
     }
   ];
 
-   // assessments
-   export const resultsFields = [
-    {
-        name:'student_id',
-        type:'select',
-        placeholder:'Select student',
-        label:'Student Name',
-        options:'dynamic',
-        required:true
-    },
-    {
-        name:'score',
-        type:'number',
-        placeholder:'Student\'s Score',
-        label:'Student\'s Score',
-        required:true
-    },
-    {
-        name:'total_marks',
-        type:'number',
-        placeholder:'Total Marks',
-        label:'Total Marks',
-        required:true
-    },
-    {
-        name:'graded_at',
-        type:'date',
-        placeholder:'date',
-        label:'Examination Date',
-        required:true
-    }
-  ];
+// assessments
+export const resultsFields = [
+  {
+    name: 'student_id',
+    type: 'select',
+    placeholder: 'Select student',
+    label: 'Student Name',
+    options: 'dynamic',
+    required: true,
+  },
+  {
+    name: 'score',
+    type: 'number',
+    placeholder: "Student's Score",
+    label: "Student's Score",
+    required: true,
+  },
+  {
+    name: 'total_marks',
+    type: 'number',
+    placeholder: 'Total Marks',
+    label: 'Total Marks',
+    required: true,
+  },
+  {
+    label: 'Term',
+    name: 'term_id',
+    placeholder: 'Term',
+    options: [
+      { label: 'Term 1', value: 1 },
+      { label: 'Term 2', value: 2 },
+      { label: 'Term 3', value: 3 },
+    ],
+    type: 'select',
+  },
+  {
+    name: 'graded_at',
+    type: 'date',
+    placeholder: 'date',
+    label: 'Examination Date',
+    required: true,
+  },
+];
 
  export const administratorFields = [
     {

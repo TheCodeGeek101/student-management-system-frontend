@@ -9,29 +9,23 @@ import { createInitialFormState, validateForm } from '@/hooks/FormConfigHelper';
 import { dropIn } from '@/Utils/motion';
 import GetLoggedInUserHelper from '@/helpers/GetLoggedInUserHelper';
 import { User } from '../../../types/user';
+import Link from 'next/link';
 import { resultsFields } from '@/Utils/fields';
-import Link from "next/link";
 
-interface Tutor {
-  id: number;
-  first_name: string;
-  last_name: string;
-  department_name: string;
-  subject_name: string;
-}
-
-interface AssignSubjectProps {
+interface UpdateExaminationsProps {
   id: number;
 }
 
-const CreateExamResults: React.FC<AssignSubjectProps> = ({ id }) => {
+const UpdateExaminations: React.FC<UpdateExaminationsProps> = ({ id }) => {
   const [teacherId, setTeacherId] = useState<number>(0);
-  const [isSubmitting] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [errors, setErrors] = useState<Record<string, string | null>>({});
   const [formData, setFormData] = useState(createInitialFormState(resultsFields));
+  const [subjectId, setSubjectId] = useState<number>(0);
   const [loading, setLoading] = useState(false);
   const [students, setStudents] = useState<{ value: number; label: string }[]>([]);
-  const endPoint = "grades";
+  const endPoint = "grades/show";
+  const updateEndPoint = 'grades';
   const user: User | undefined = GetLoggedInUserHelper();
 
   useEffect(() => {
@@ -39,30 +33,48 @@ const CreateExamResults: React.FC<AssignSubjectProps> = ({ id }) => {
       setTeacherId(user.tutor.id);
     }
 
-    const fetchStudents = async () => {
+    const fetchAssessmentData = async () => {
       try {
-        const response = await axios.post('/api/getEnrolledStudents', {
+        console.log('Requesting assessment data with:', { id, endPoint });
+
+        const response = await axios.post('/api/ShowData', {
           id: id,
-          teacherId: teacherId,
+          endPoint: endPoint,
         });
 
-        if (response.status === 200 && response.data && Array.isArray(response.data.students)) {
-          setStudents(
-            response.data.students.map((student: any) => ({
-              value: student.student_id,
-              label: student.student_first_name + ' ' + student.student_last_name,
-            })),
-          );
+        console.log('Response received:', response);
+
+        if (response.status === 200 && response.data && !Array.isArray(response.data)) {
+          const grade = response.data;
+
+          setFormData((prevFormData: any) => ({
+            ...prevFormData,
+            student_id: grade.student_id,
+            subject_id: grade.subject_id,
+            tutor_id: grade.tutor_id,
+            score: grade.score,
+            total_marks: grade.total_marks,
+            graded_at: grade.graded_at,
+          }));
+
+          setStudents([
+            {
+              value: grade.student_id,
+              label: `${grade.student_first_name} ${grade.student_last_name}`,
+            },
+          ]);
+
+          setSubjectId(grade.subject_id);
         } else {
           console.error('Unexpected response format:', response.data);
         }
       } catch (error: any) {
-        console.error('Error fetching students:', error);
+        console.error('Error fetching grade data:', error.response || error.message);
       }
     };
 
-    fetchStudents();
-  }, [user, teacherId, id]);
+    fetchAssessmentData();
+  }, [user]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>, name: string) => {
     const { value } = e.target;
@@ -82,7 +94,7 @@ const CreateExamResults: React.FC<AssignSubjectProps> = ({ id }) => {
 
   const handleSelectedChange = (
     selectedOption: SingleValue<{ value: number; label: string }>,
-    actionMeta: ActionMeta<{ value: number; label: string }>,
+    actionMeta: ActionMeta<{ value: number; label: string }>
   ) => {
     const name: string = actionMeta.name as string;
     const value = selectedOption ? selectedOption.value : '';
@@ -102,25 +114,34 @@ const CreateExamResults: React.FC<AssignSubjectProps> = ({ id }) => {
       setLoading(false);
       return;
     }
+    console.log('DAta is' + JSON.stringify(formData));
 
     try {
-      const response = await axios.post('/api/AssignAssessment', {
-        endPoint: endPoint,
-        teacherId: teacherId,
+      const response = await axios.post(`/api/UpdateGrades`, {
+        updateEndPoint: updateEndPoint,
         formData: formData,
-        id: id,
+        gradeId: id,
       });
 
-      if (response.status === 201) {
-        toast.success('Record submitted successfully!');
+      if (response.status === 200) {
+        toast.success('Assessment updated successfully!');
         setFormData(createInitialFormState(resultsFields));
         setErrors({});
       } else if (response.status === 429) {
-        toast.error('Failed to submit assessment');
-      } 
+        toast.error('Failed to update assessment');
+      } else {
+        const errorMessage = response.data?.message || 'An unknown error occurred.';
+        toast.error(`Failed to update assessment: ${errorMessage}`);
+      }
     } catch (error: any) {
-      console.error('Submission error:', error);
-      toast.error(`Failed to submit assessment: ${error.message}`);
+      console.error('Update error:', error);
+      if (error.response) {
+        toast.error(`Failed to update assessment: ${error.response.data.error || error.message}`);
+      } else if (error.request) {
+        toast.error('No response from server');
+      } else {
+        toast.error('Error encountered: ' + error.message);
+      }
     } finally {
       setLoading(false);
     }
@@ -139,14 +160,16 @@ const CreateExamResults: React.FC<AssignSubjectProps> = ({ id }) => {
         >
           <div className="flex justify-between">
             <div>.</div>
-            <button onClick={() => {}} className="text-4xl text-primary"></button>
+            <button className="text-4xl text-primary">
+              {/* &times; */}
+            </button>
           </div>
           <div className="flex justify-center">
             <Image src={logo} alt="main_logo" width={150} height={150} />
           </div>
           <div className="relative flex flex-col">
             <div className="mb-7 mt-0 w-full text-center font-bold capitalize text-primary md:mt-7 md:text-2xl">
-              Enter Final Assessment
+              Update Results
             </div>
             <form onSubmit={onSubmit}>
               {resultsFields.map(({ label, type, name, placeholder, options }) => (
@@ -154,17 +177,20 @@ const CreateExamResults: React.FC<AssignSubjectProps> = ({ id }) => {
                   <div className="mt-3 h-6 text-xs font-bold text-primary uppercase leading-8 text-gray-500">
                     {label}
                   </div>
+
+                  {/* Dynamic Select Input */}
                   {options === 'dynamic' && type === 'select' ? (
                     <Select
                       options={students}
                       onChange={handleSelectedChange}
-                      value={students.find((studentOption) => studentOption.value === formData[name]) || null}
+                      value={students.find(studentOption => studentOption.value === formData[name]) || null}
                       placeholder={placeholder}
                       name={name}
                       className="my-2 border border-gray-50 w-full appearance-none rounded bg-white p-1 px-2 text-sm text-gray-800 outline-none"
                       isClearable
                     />
-                  ) : type === 'select' ? (
+                  ) : type === 'select' && Array.isArray(options) ? (
+                    // Static Select Input
                     <select
                       onChange={(e) => handleChange(e, name)}
                       value={formData[name] || ''}
@@ -173,13 +199,14 @@ const CreateExamResults: React.FC<AssignSubjectProps> = ({ id }) => {
                       className="border border-gray-400 py-2 px-4 w-full"
                     >
                       <option value="">{placeholder}</option>
-                      {Array.isArray(options) && options.map((option) => (
+                      {options.map((option) => (
                         <option key={option.value} value={option.value}>
                           {option.label}
                         </option>
                       ))}
                     </select>
                   ) : (
+                    // Other Input Types (number, text, date, etc.)
                     <input
                       type={type}
                       name={name}
@@ -190,11 +217,15 @@ const CreateExamResults: React.FC<AssignSubjectProps> = ({ id }) => {
                       required
                     />
                   )}
-                  {errors[name] && <div className="text-xs italic text-red-500">{errors[name]}</div>}
+                  {errors[name] && (
+                    <div className="text-xs italic text-red-500">
+                      {errors[name]}
+                    </div>
+                  )}
                 </div>
               ))}
               <div className="container bottom-1 mb-4 mt-4 flex justify-around">
-                <Link href={`/Tutors/results/selection/${id}`}>
+                <Link href={`/Tutors/results/selection/${subjectId}`}>
                   <button className="text-lg text-primary font-semibold px-5 py-2 hover:border-2 hover:bg-mainColor transition duration-300 hover:text-white border border-mainColor">
                     &larr; Back
                   </button>
@@ -221,4 +252,4 @@ const CreateExamResults: React.FC<AssignSubjectProps> = ({ id }) => {
   );
 };
 
-export default CreateExamResults;
+export default UpdateExaminations;

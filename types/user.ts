@@ -30,6 +30,7 @@ export interface Student extends UserBase {
   registered_by: number;
   remarks: string | null;
   full_name: string;
+  registration_number:string;
 }
 
 export interface Tutor extends UserBase {

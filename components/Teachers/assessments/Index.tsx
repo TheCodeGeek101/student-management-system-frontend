@@ -64,6 +64,7 @@ const Assessments: React.FC<AssessmentsProps> = ({ user }) => {
             buttonColor: getButtonColor(subject.name),
           }));
           setSubjectData(subjects);
+          console.log("subject data:" + JSON.stringify(subjects));
           setHasSubjects(subjects.length > 0); // Update state based on subjects length
         } else {
           setHasSubjects(false); // No subjects
@@ -82,7 +83,7 @@ const Assessments: React.FC<AssessmentsProps> = ({ user }) => {
   if (loading) return <div><DataLoader /></div>;
   if (error) return <div>Error: {error}</div>;
   if (!hasSubjects) return <DataNotFound />; // Render DataNotFound component if no subjects
-
+  
   return (
     <div className="min-h-screen">
       <section className="m-4 grid gap-8 p-8 md:grid-cols-3">

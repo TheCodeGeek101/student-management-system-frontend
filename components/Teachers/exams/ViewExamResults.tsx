@@ -21,10 +21,16 @@ interface Result {
   subject_code: string;
   tutor_first_name: string;
   tutor_last_name: string;
+  term_name:string;
 }
 
 interface AssessmentProps {
     subject_id: number;
+}
+
+interface TermData {
+  id: number;
+  name: string;
 }
 
 const ViewExamResults: React.FC<AssessmentProps> = ({ subject_id }) => {
@@ -35,16 +41,18 @@ const ViewExamResults: React.FC<AssessmentProps> = ({ subject_id }) => {
   const endPoint = 'grades';
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-
+  const [terms, setTerms] = useState<TermData[]>([]);
+  const [selectedTermId, setSelectedTermId] = useState<number | null>(null);
   // Update columns to reflect the new field names
   const columns = [
-    {
-      name: 'Grade ID',
-      selector: (row: Result) => 'Grade-' + row.grade_id,
-    },
+    // {
+    //   name: 'Grade ID',
+    //   selector: (row: Result) => 'Grade-' + row.grade_id,
+    // },
     {
       name: 'Student',
       selector: (row: Result) => `${row.student_first_name} ${row.student_last_name}`,
+      grow:2
     },
     {
       name: 'Subject',
@@ -72,15 +80,16 @@ const ViewExamResults: React.FC<AssessmentProps> = ({ subject_id }) => {
       name: 'Date',
       selector: (row: Result) => row.graded_at,
     },
-    // {
-    //   name: 'Tutor',
-    //   selector: (row: Result) => `${row.tutor_first_name} ${row.tutor_last_name}`,
-    // },
+    {
+      name: 'Term',
+      selector: (row: Result) => row.term_name,
+    },
     {
       name: 'Action',
+      grow:2,
       cell: (row: Result) => (
         <div className="flex justify-around">
-          <Link href={`/Admin/results/edit//${row.grade_id}`}>
+          <Link href={`/Tutors/results/update/${row.grade_id}`}>
             <button
               onClick={() => {
                 setId(row.grade_id);
@@ -114,23 +123,42 @@ const ViewExamResults: React.FC<AssessmentProps> = ({ subject_id }) => {
   const handleBackClick = () => {
     // Handle back button click, e.g., navigating to the previous page
   };
-
-  useEffect(() => {
-    const fetchData = async () => {
+ useEffect(() => {
+    // Fetch terms
+    const fetchTerms = async () => {
       try {
-        const response = await axios.post(`/api/GetAssessments`, { endPoint: endPoint, subjectId: subject_id });
-        console.log('Response data is:', JSON.stringify(response.data.grades));
-        setAssessmentData(response.data.grades); // Update to match the response structure
+        const response = await axios.post('/api/GetData', { endPoint: 'terms' });
+        if (response.status === 200) {
+          setTerms(response.data.terms);
+          if (response.data.terms.length > 0) {
+            setSelectedTermId(response.data.terms[0].id);
+          }
+        }
       } catch (error: any) {
         setError(error.response?.statusText || error.message);
-        console.error('Fetch error:', error.message);
-      } finally {
-        setLoading(false);
       }
     };
+    fetchTerms();
+  }, []);
 
-    fetchData();
-  }, [subject_id]);
+  useEffect(() => {
+    if (selectedTermId !== null) {
+      const fetchAssessments = async () => {
+        setLoading(true);
+        try {
+          const response = await axios.post('/api/GetAssessments', { endPoint: endPoint, subjectId: subject_id, termId: selectedTermId });
+          setAssessmentData(response.data.grades);
+        } catch (error: any) {
+          setError(error.response?.statusText || error.message);
+          console.error('Fetch error:', error.message);
+        } finally {
+          setLoading(false);
+        }
+      };
+
+      fetchAssessments();
+    }
+  }, [selectedTermId, subject_id]);
 
   useEffect(() => {
     // Filter assessments based on the search term
@@ -174,7 +202,7 @@ const ViewExamResults: React.FC<AssessmentProps> = ({ subject_id }) => {
                 </button>
                 <h2 className="text-2xl font-bold text-blue-600">Examination Results</h2>
               </div>
-              <button
+              {/* <button
                 onClick={handleClick}
                 className="rounded bg-mainColor px-4 py-2 text-sm font-medium text-white transition duration-300 hover:bg-green-400 focus:outline-none focus:ring focus:ring-green-300"
               >
@@ -182,7 +210,19 @@ const ViewExamResults: React.FC<AssessmentProps> = ({ subject_id }) => {
                   <FaFileCsv className="mr-2" />
                   Export CSV
                 </div>
-              </button>
+              </button> */}
+               <select
+                id="term"
+                className="w-full md:w-1/2 lg:w-1/6 mb-5 rounded-md border border-gray-4 bg-white py-2 px-4 text-gray-900 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300"
+                value={selectedTermId ?? ''}
+                onChange={(e) => setSelectedTermId(Number(e.target.value))}
+              >
+                {terms.map((term) => (
+                  <option key={term.id} value={term.id}>
+                    {term.name}
+                  </option>
+                ))}
+              </select>
             </div>
             <div className="overflow-x-auto p-4">
               <DataTable

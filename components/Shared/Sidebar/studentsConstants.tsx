@@ -27,7 +27,7 @@ import {
         {
           icon: <FaHome className="text-blue-500" />, // Blue for home/dashboard
           label: 'Dashboard',
-          route: '/student/dashboard',
+          route: '/student/dashboard/page',
         },
       ],
     },

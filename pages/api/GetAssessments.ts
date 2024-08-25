@@ -8,7 +8,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return res.status(405).end(`Method ${req.method} Not Allowed`);
   }
 
-  const { endPoint, subjectId }: { endPoint?: string, subjectId?:number } = req.body;
+  const { endPoint, subjectId,termId }: { endPoint?: string, subjectId?:number,termId?:number; } = req.body;
   if (!endPoint) {
     return res
       .status(400)
@@ -16,7 +16,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   // Correct the URL construction
-  const backendURL = `${process.env.NEXT_PUBLIC_API_URL}/api/${endPoint}/subject/${subjectId}`;
+  const backendURL = `${process.env.NEXT_PUBLIC_API_URL}/api/${endPoint}/subject/${subjectId}/term/${termId}`;
   console.log('Attempting to fetch from URL:', backendURL); // Log the final URL
 
   try {

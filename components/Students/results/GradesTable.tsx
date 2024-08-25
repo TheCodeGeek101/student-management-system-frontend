@@ -5,7 +5,7 @@ import DataTable from 'react-data-table-component';
 import axios from 'axios';
 import Loader from '@/components/Shared/Loaders/Loader';
 import { FaCheckCircle, FaTimesCircle } from 'react-icons/fa';
-import NoExaminationsFound from '@/components/Shared/Errors/NoExaminationsUploaded';
+import NoEndOfTermExaminations from '@/components/Shared/Errors/NoEndOfTermExaminations';
 
 interface ExaminationData {
   subject_name: string;
@@ -29,9 +29,10 @@ interface ResultData {
 
 interface StudentProps {
   studentId: number;
+  registrationNumber: string;
 }
 
-const StudentGradesTable: React.FC<StudentProps> = ({ studentId }) => {
+const StudentGradesTable: React.FC<StudentProps> = ({ studentId, registrationNumber }) => {
   const [examinationData, setExaminationData] = useState<ExaminationData[]>([]);
   const [filter, setFilter] = useState<ExaminationData[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -42,6 +43,7 @@ const StudentGradesTable: React.FC<StudentProps> = ({ studentId }) => {
   const [hasExaminationResults, setHasExaminationResults] = useState<boolean>(true);
   const [examinationResultData, setExaminationResultData] = useState<ResultData | null>(null);
   const endPoint = 'students';
+  
   const columns = [
     { name: 'Subject', selector: (row: ExaminationData) => row.subject_name },
     { name: 'Code', selector: (row: ExaminationData) => row.subject_code },
@@ -141,21 +143,17 @@ const StudentGradesTable: React.FC<StudentProps> = ({ studentId }) => {
 
   if (loading) return <Loader />;
   
-  if(error){
-    if(error === 'Not Found'){
-      if (!hasExaminationResults) return <NoExaminationsFound />;
-    }
-    else{
-      return <div>Error: {error}</div>
+  if (error) {
+    if (error === 'Not Found') {
+      if (!hasExaminationResults) return <NoEndOfTermExaminations />;
+    } else {
+      return <div>Error: {error}</div>;
     }
   }
-    
-
-  
 
   const cardBackgroundColor = examinationResultData?.status === 'Pass' ? 'bg-green-200' : 'bg-red-200';
   const resultIcon = examinationResultData?.status === 'Pass' ? <FaCheckCircle className="text-green-500" /> : <FaTimesCircle className="text-red-500" />;
-
+ console.log("reg number" + registrationNumber);
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -167,11 +165,24 @@ const StudentGradesTable: React.FC<StudentProps> = ({ studentId }) => {
         <h2 className="text-2xl font-bold text-blue-600 mb-4">Examination Results</h2>
         <div className="bg-white shadow rounded-lg">
           <div className="p-4">
-             <label className=" text-primary text-sm font-bold mb-2 flex justify-end" htmlFor="term">
-                Select Term
-              </label>
-            <div className="mb-4 flex justify-end">
-             
+            <div className="flex justify-between">
+              <label className="text-primary text-sm font-bold mb-2" htmlFor="registrationNumber">
+              Registration Number
+            </label>
+            
+            <label className="text-primary text-sm font-bold mb-2" htmlFor="term">
+              Select Term
+            </label>
+            </div>
+            <div className="mb-4 flex justify-between">
+            <input
+              type="text"
+              id="registrationNumber"
+              className="w-full md:w-1/2 lg:w-1/5 mb-5 rounded-md border bg-gray-100 py-2 px-4 text-black focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300"
+              value={registrationNumber}
+              readOnly
+            />
+
               <select
                 id="term"
                 className="w-full md:w-1/2 lg:w-1/6 mb-5 rounded-md border border-gray-4 bg-white py-2 px-4 text-gray-900 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300"
@@ -199,7 +210,7 @@ const StudentGradesTable: React.FC<StudentProps> = ({ studentId }) => {
                 subHeaderComponent={
                   <input
                     type="text"
-                    className="w-full md:w-1/2 lg:w-1/6 mb-5 rounded-md border bg-white py-2 px-4 text-gray-900 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300"
+                    className="w-full flex justify-start md:w-1/2 lg:w-1/6 mb-5 rounded-md border bg-white py-2 px-4 text-gray-900 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300"
                     placeholder="Search by subject..."
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}

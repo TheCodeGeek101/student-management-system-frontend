@@ -4,13 +4,13 @@ import React, { useEffect, useState } from 'react';
 import { User } from "../../../types/user";
 import Link from "next/link";
 import DataLoader from '@/components/Shared/Loaders/Loader';
-import DataNotFound from '@/components/Shared/Errors/UnallocatedSubject';
 // import { getButtonColor, getCardColor, getIcon, getTextColor } from '@/helpers/SubjectDisplayHelper';
 
 import { FaAtom, FaBook, FaFlask, FaGlobe, FaGraduationCap, FaHeart, FaLandmark, FaLanguage, FaMicroscope, FaSeedling } from "react-icons/fa";
 import toast from 'react-hot-toast';
 import { fadeIn } from '@/Utils/motion';
 import { getButtonColor, getCardColor, getIcon, getTextColor } from '@/helpers/SubjectDisplayHelper';
+import UnregisteredSubjects from '@/components/Shared/Errors/UnregisteredSubjects';
 
 interface SubjectData {
   subject_id: number;
@@ -93,7 +93,7 @@ const AvailableSubjects: React.FC<SubjectsProps> = ({ user }) => {
 
   if (loading) return <div><DataLoader /></div>;
   if (error) return <div>Error: {error}</div>;
-  if (!hasSubjects) return <DataNotFound />;
+  if (!hasSubjects) return <UnregisteredSubjects />;
 
    
   

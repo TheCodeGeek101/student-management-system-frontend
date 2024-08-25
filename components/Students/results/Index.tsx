@@ -12,10 +12,13 @@ interface ExaminationResultsProps {
 const ExaminationResults: React.FC<ExaminationResultsProps> = ({ user }) => {
   let displayName = "User";
   let studentId = 0;
+  let registrationNumber = '';
 
   if ("student" in user) {
     displayName = `${user.student.first_name} ${user.student.last_name}`;
     studentId = user.student.id;
+    registrationNumber = user.student.registration_number;
+    console.log("bwana reg number:" + registrationNumber);
   }
 
  
@@ -24,7 +27,7 @@ const ExaminationResults: React.FC<ExaminationResultsProps> = ({ user }) => {
 
   return (
     <>
-      <StudentGradesTable studentId={studentId} />
+      <StudentGradesTable studentId={studentId} registrationNumber={registrationNumber} />
     </>
   );
 };
