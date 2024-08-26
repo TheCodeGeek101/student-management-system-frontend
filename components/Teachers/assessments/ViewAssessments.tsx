@@ -181,7 +181,7 @@ const ViewAssessments: React.FC<AssessmentProps> = ({ subject_id }) => {
               </div>
               <select
                 id="term"
-                className="w-full md:w-1/2 lg:w-1/6 mb-5 rounded-md border border-gray-4 bg-white py-2 px-4 text-gray-900 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300"
+                className="w-1/6 md:w-1/6 lg:w-1/6 mb-5 rounded-md border border-gray-4 bg-white py-2 px-4 text-gray-900 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300"
                 value={selectedTermId ?? ''}
                 onChange={(e) => setSelectedTermId(Number(e.target.value))}
               >

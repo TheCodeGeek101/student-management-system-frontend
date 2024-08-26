@@ -152,7 +152,7 @@ const StudentGradesTable: React.FC<StudentProps> = ({ studentId, registrationNum
   }
 
   const cardBackgroundColor = examinationResultData?.status === 'Pass' ? 'bg-green-200' : 'bg-red-200';
-  const resultIcon = examinationResultData?.status === 'Pass' ? <FaCheckCircle className="text-green-500" /> : <FaTimesCircle className="text-red-500" />;
+  const resultIcon = examinationResultData?.status === 'Pass' ? <FaCheckCircle className="text-green-500" /> : <FaTimesCircle className="text-red" />;
  console.log("reg number" + registrationNumber);
   return (
     <motion.div
