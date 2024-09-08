@@ -91,7 +91,7 @@ import {
           {
             icon: <FaUserGraduate className="text-green-500" />,
             label: 'End Of Year',
-            route: '#',
+            route: '/Student/results/Overall',
           },
         ],
       },
@@ -104,7 +104,7 @@ import {
         {
           icon: <FaMoneyCheckAlt className="text-teal-500" />, // Teal for fees payments
           label: 'Fees Payments',
-          route: '/student/fees/payments',
+          route: '/Student/Payments/FeesPayments',
         },
         {
           icon: <FaFileInvoiceDollar className="text-teal-500" />, // Teal for invoices
@@ -134,7 +134,7 @@ import {
             {
               icon: <FaUser className="text-red-500" />, // Red for profile
               label: 'Profile',
-              route: '/student/settings/profile',
+              route: '/Student/profile/page',
             },
             {
               icon: <FaKey className="text-red-500" />, // Red for password change

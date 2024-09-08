@@ -27,10 +27,12 @@ export interface Student extends UserBase {
   medical_info: string;
   enrollment_status: string;
   user_id: number;
+  class_id:number;
   registered_by: number;
   remarks: string | null;
   full_name: string;
   registration_number:string;
+  profile_picture:any;
 }
 
 export interface Tutor extends UserBase {

@@ -71,10 +71,12 @@ const EnrollSubject: React.FC<SelectionProps> = ({ subject_id, user }) => {
 
   let displayName = 'User';
   let studentId = 0;
+  let class_id = 0;
 
   if ('student' in user) {
     displayName = `${user.student.first_name} ${user.student.last_name}`;
     studentId = user.student.id;
+    class_id = user.student.class_id;
   }
 
   const onSubmit = async () => {
@@ -83,6 +85,7 @@ const EnrollSubject: React.FC<SelectionProps> = ({ subject_id, user }) => {
 
     const data = {
       subject_id: subject_id,
+      class_id:class_id
     };
 
     try {

@@ -107,14 +107,14 @@ const CreateSubject: React.FC = () => {
         <div className="min-h-screen flex items-center justify-center py-12">
             <div className="container mx-auto">
                 <div className="flex justify-center w-full max-w-4xl bg-white rounded-xl mx-auto shadow-lg overflow-hidden">
-                    <div className="w-full lg:w-full py-16 px-12 bg-gray-50">
-                        <h2 className="text-3xl mb-4 text-secondary text-center">Register</h2>
+                    <div className="w-full lg:w-full py-16 px-12 bg-white">
+                        <h2 className="text-3xl mb-4 text-gray-600 text-center">Register</h2>
                         <p className="mb-4 text-center">Create Subject</p>
                         <form onSubmit={handleSubmit}>
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                                 {(subjectFields || []).map((field, index) => (
                                     <div key={index} className="w-full">
-                                        <div className="mt-3 h-6 text-xs font-bold uppercase leading-8 text-secondary">
+                                        <div className="mt-3 h-6 text-xs font-bold uppercase leading-8 text-gray-600">
                                             {field.label}
                                         </div>
                                         {field.type === 'select' ? (

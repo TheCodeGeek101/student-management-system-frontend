@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
 import Select, { SingleValue, ActionMeta } from 'react-select';
 import logo from '../../../public/images/logo.png';
-import { createInitialFormState, validateForm } from '@/hooks/FormConfigHelper';
+import { createInitialFormState, validateForm, validateResults } from '@/hooks/FormConfigHelper';
 import { dropIn } from '@/Utils/motion';
 import GetLoggedInUserHelper from '@/helpers/GetLoggedInUserHelper';
 import { User } from '../../../types/user';
@@ -24,6 +24,7 @@ const UpdateExaminations: React.FC<UpdateExaminationsProps> = ({ id }) => {
   const [subjectId, setSubjectId] = useState<number>(0);
   const [loading, setLoading] = useState(false);
   const [students, setStudents] = useState<{ value: number; label: string }[]>([]);
+   const [classes, setClasses] = useState<{ value: number; label: string }[]>([]);
   const endPoint = "grades/show";
   const updateEndPoint = 'grades';
   const user: User | undefined = GetLoggedInUserHelper();
@@ -64,6 +65,12 @@ const UpdateExaminations: React.FC<UpdateExaminationsProps> = ({ id }) => {
             },
           ]);
 
+           setClasses([
+           { 
+              value: grade.class_id,
+              label: "Form"+ " " + grade.class_id,
+           }
+          ]);
           setSubjectId(grade.subject_id);
         } else {
           console.error('Unexpected response format:', response.data);
@@ -103,12 +110,27 @@ const UpdateExaminations: React.FC<UpdateExaminationsProps> = ({ id }) => {
       setErrors({ ...errors, [name]: null });
     }
   };
+  const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>, name: string) => {
+    const { checked } = e.target;
+
+    setFormData((prevFormData: any) => ({
+      ...prevFormData,
+      [name]: checked,
+    }));
+
+    if (errors[name]) {
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        [name]: '',
+      }));
+    }
+  };
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
 
-    const validationErrors: any = validateForm(resultsFields, formData);
+    const validationErrors: any = validateResults(resultsFields, formData);
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
       setLoading(false);
@@ -179,7 +201,7 @@ const UpdateExaminations: React.FC<UpdateExaminationsProps> = ({ id }) => {
                   </div>
 
                   {/* Dynamic Select Input */}
-                  {options === 'dynamic' && type === 'select' ? (
+                  {options === 'dynamic' && type === 'select' && name === 'student_id' ? (
                     <Select
                       options={students}
                       onChange={handleSelectedChange}
@@ -189,7 +211,25 @@ const UpdateExaminations: React.FC<UpdateExaminationsProps> = ({ id }) => {
                       className="my-2 border border-gray-50 w-full appearance-none rounded bg-white p-1 px-2 text-sm text-gray-800 outline-none"
                       isClearable
                     />
-                  ) : type === 'select' && Array.isArray(options) ? (
+                  ) : options === 'dynamic' && type === 'select' && name === 'class_id' ? (
+                    <Select
+                      options={classes}
+                      onChange={handleSelectedChange}
+                      value={classes.find((studentOption) => studentOption.value === formData[name]) || null}
+                      placeholder={placeholder}
+                      name={name}
+                      className="my-2 border border-gray-50 w-full appearance-none rounded bg-white p-1 px-2 text-sm text-gray-800 outline-none"
+                      isClearable
+                    />
+                  )  : type === 'checkbox' ? (
+                    <input
+                      type="checkbox"
+                      name={name}
+                      checked={formData[name] || false}
+                      onChange={(e) => handleCheckboxChange(e, name)}
+                      className="w-4 h-4 mt-2"
+                    />
+                  ): type === 'select' && Array.isArray(options) ? (
                     // Static Select Input
                     <select
                       onChange={(e) => handleChange(e, name)}

@@ -6,7 +6,7 @@ import { FaEdit, FaArrowLeft } from 'react-icons/fa';
 import axios from 'axios';
 import Link from 'next/link';
 import Loader from '@/components/Shared/Loader';
-
+import { formatDateToWords } from '@/utils/DateFormat';
 interface Assessment {
   assessment_id: number;
   assessment_score: number;
@@ -55,7 +55,7 @@ const ViewAssessments: React.FC<AssessmentProps> = ({ subject_id }) => {
       selector: (row: Assessment) => row.assessment_score,
     },
     {
-      name: 'Marks',
+      name: 'Total Marks',
       selector: (row: Assessment) => row.assessment_marks,
     },
     {
@@ -68,7 +68,7 @@ const ViewAssessments: React.FC<AssessmentProps> = ({ subject_id }) => {
     },
     {
       name: 'Date',
-      selector: (row: Assessment) => row.assessment_date,
+      selector: (row: Assessment) => formatDateToWords(row.assessment_date),
     },
     {
       name: 'Term',
@@ -164,20 +164,20 @@ const ViewAssessments: React.FC<AssessmentProps> = ({ subject_id }) => {
       >
         <div className="mb-8 mt-20 flex flex-col gap-12">
           <div className="bg-white shadow rounded-lg">
-            <div className="flex justify-between items-center bg-gray-100 p-6 rounded-t-lg">
+            <div className="flex justify-between items-center bg-blue-400 p-6 rounded-t-lg">
               <div className="flex items-center">
                 <Link href={`/Tutors/assessments/selection/${subject_id}`}>
                   <button
                     onClick={() => console.log('Back button clicked')}
-                    className="mr-4 rounded bg-gray-300 px-4 py-2 text-sm font-medium text-black transition duration-300 hover:bg-gray-400 focus:outline-none focus:ring focus:ring-gray-300"
+                    className="mr-4 rounded  px-4 py-2 text-sm font-medium text-black transition duration-300  focus:outline-none focus:ring focus:ring-gray-300"
                   >
-                    <div className="flex bg-mainColor text-white py-2 px-4 rounded-sm items-center justify-center">
+                    <div className="flex bg-white/30 text-white py-2 px-4 rounded-sm items-center hover:bg-blue-800 transition duration-300 ease-in justify-center">
                       <FaArrowLeft className="mr-2" />
                       Back
                     </div>
                   </button>
                 </Link>
-                <h2 className="text-2xl font-bold text-blue-600">Assessments</h2>
+                <h2 className="text-2xl font-bold text-white">Assessments Table</h2>
               </div>
               <select
                 id="term"

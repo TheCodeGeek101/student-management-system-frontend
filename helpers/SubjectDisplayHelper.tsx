@@ -17,7 +17,7 @@ export const getIcon = (subjectName: string) => {
     case 'geography':
       return <FaGlobe className="text-blue-500" />;
     case 'life skills':
-      return <FaHeart className="text-red-500" />;
+      return <FaHeart className="text-red" />;
     case 'social studies':
       return <FaLandmark className="text-teal-500" />;
     case 'chichewa':
@@ -53,8 +53,8 @@ export const getCardColor = (subjectName: string) => {
       return 'bg-green-200';
     case 'geography':
       return 'bg-blue-200';
-    case 'Life Skills':
-      return 'bg-red-100';
+    case 'life skills':
+      return 'bg-blue-200';
     case 'social studies':
       return 'bg-teal-100';
     case 'chichewa':
@@ -93,7 +93,7 @@ export const getTextColor = (subjectName: string) => {
     case 'geography':
       return 'text-blue-800';
     case 'life skills':
-      return 'text-red-800';
+      return 'text-primary';
     case 'social studies':
       return 'text-teal-900';
     case 'chichewa literature':
@@ -131,8 +131,8 @@ export const getButtonColor = (subjectName: string) => {
       return 'bg-green-600';
     case 'geography':
       return 'bg-blue-600';
-    case 'Life Skills':
-      return 'bg-blue-200';
+    case 'life skills':
+      return 'bg-primary';
     case 'social studies':
       return 'bg-teal-500';
     case 'chichewa ':

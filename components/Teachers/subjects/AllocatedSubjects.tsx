@@ -78,10 +78,10 @@ const AllocatedSubjects: React.FC<AllocatedSubjectsProps> = ({ user }) => {
   }
 
   return (
-    // <PageWrapper>
+   
     <div className="h-screen">
 
-<div className="rounded-sm border border-stroke bg-white px-4 pb-2.5 pt-6 shadow-default sm:px-6 xl:pb-1">
+    <div className="rounded-sm border border-stroke bg-white px-4 pb-2.5 pt-6 shadow-default sm:px-6 xl:pb-1">
       <div className="max-w-full overflow-x-auto">
         <div className="flex justify-center">
           <h1 className="font-bold text-xl text-primary p-4 mb-4 sm:text-2xl">
@@ -116,9 +116,8 @@ const AllocatedSubjects: React.FC<AllocatedSubjectsProps> = ({ user }) => {
         </div>
       </div>
     </div>
-
     </div>
-        // </PageWrapper>
+       
   );
 }
 

@@ -5,32 +5,21 @@ import { useEffect, useState } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
 import Select, { SingleValue, ActionMeta } from 'react-select';
 import logo from '../../../public/images/logo.png';
-import { createInitialFormState, validateForm } from '@/hooks/FormConfigHelper';
+import { createInitialFormState, validateResults,  } from '@/hooks/FormConfigHelper';
 import { dropIn } from '@/Utils/motion';
 import GetLoggedInUserHelper from '@/helpers/GetLoggedInUserHelper';
 import { User } from '../../../types/user';
 import { resultsFields } from '@/Utils/fields';
 import Link from "next/link";
 
-interface Tutor {
-  id: number;
-  first_name: string;
-  last_name: string;
-  department_name: string;
-  subject_name: string;
-}
-
-interface AssignSubjectProps {
-  id: number;
-}
-
-const CreateExamResults: React.FC<AssignSubjectProps> = ({ id }) => {
+const CreateExamResults: React.FC<{ id: number }> = ({ id }) => {
   const [teacherId, setTeacherId] = useState<number>(0);
   const [isSubmitting] = useState(false);
   const [errors, setErrors] = useState<Record<string, string | null>>({});
   const [formData, setFormData] = useState(createInitialFormState(resultsFields));
   const [loading, setLoading] = useState(false);
   const [students, setStudents] = useState<{ value: number; label: string }[]>([]);
+  const [classes, setClasses] = useState<{ value: number; label: string }[]>([]);
   const endPoint = "grades";
   const user: User | undefined = GetLoggedInUserHelper();
 
@@ -52,6 +41,12 @@ const CreateExamResults: React.FC<AssignSubjectProps> = ({ id }) => {
               value: student.student_id,
               label: student.student_first_name + ' ' + student.student_last_name,
             })),
+          );
+          setClasses(
+            response.data.students.map((student: any) => ({
+              value: student.class_id,
+              label: "Form" + student.class_id,
+            }))
           );
         } else {
           console.error('Unexpected response format:', response.data);
@@ -92,17 +87,35 @@ const CreateExamResults: React.FC<AssignSubjectProps> = ({ id }) => {
     }
   };
 
+  const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>, name: string) => {
+    const { checked } = e.target;
+
+    setFormData((prevFormData: any) => ({
+      ...prevFormData,
+      [name]: checked,
+    }));
+
+    if (errors[name]) {
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        [name]: '',
+      }));
+    }
+  };
+
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
 
-    const validationErrors: any = validateForm(resultsFields, formData);
+    const validationErrors: any = validateResults(resultsFields, formData);
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
       setLoading(false);
       return;
     }
 
+
+    console.log("data is" + JSON.stringify(formData));
     try {
       const response = await axios.post('/api/AssignAssessment', {
         endPoint: endPoint,
@@ -115,7 +128,8 @@ const CreateExamResults: React.FC<AssignSubjectProps> = ({ id }) => {
         toast.success('Record submitted successfully!');
         setFormData(createInitialFormState(resultsFields));
         setErrors({});
-      } else if (response.status === 429) {
+      } 
+      else if (response.status === 429) {
         toast.error('Failed to submit assessment');
       } 
     } catch (error: any) {
@@ -151,10 +165,10 @@ const CreateExamResults: React.FC<AssignSubjectProps> = ({ id }) => {
             <form onSubmit={onSubmit}>
               {resultsFields.map(({ label, type, name, placeholder, options }) => (
                 <div key={name} className="mx-2 w-full flex-1">
-                  <div className="mt-3 h-6 text-xs font-bold text-primary uppercase leading-8 text-gray-500">
+                  <div className="mt-3 h-6 text-xs font-bold text-primary uppercase leading-8">
                     {label}
                   </div>
-                  {options === 'dynamic' && type === 'select' ? (
+                  {options === 'dynamic' && type === 'select' && name === 'student_id' ? (
                     <Select
                       options={students}
                       onChange={handleSelectedChange}
@@ -163,6 +177,24 @@ const CreateExamResults: React.FC<AssignSubjectProps> = ({ id }) => {
                       name={name}
                       className="my-2 border border-gray-50 w-full appearance-none rounded bg-white p-1 px-2 text-sm text-gray-800 outline-none"
                       isClearable
+                    />
+                  ) : options === 'dynamic' && type === 'select' && name === 'class_id' ? (
+                    <Select
+                      options={classes}
+                      onChange={handleSelectedChange}
+                      value={classes.find((studentOption) => studentOption.value === formData[name]) || null}
+                      placeholder={placeholder}
+                      name={name}
+                      className="my-2 border border-gray-50 w-full appearance-none rounded bg-white p-1 px-2 text-sm text-gray-800 outline-none"
+                      isClearable
+                    />
+                  ) : type === 'checkbox' ? (
+                    <input
+                      type="checkbox"
+                      name={name}
+                      checked={formData[name] || false}
+                      onChange={(e) => handleCheckboxChange(e, name)}
+                      className="w-4 h-4 mt-2"
                     />
                   ) : type === 'select' ? (
                     <select

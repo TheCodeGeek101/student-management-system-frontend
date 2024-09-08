@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import toast, { Toaster } from "react-hot-toast";
 import { inputFields } from '@/Utils/fields';
 import { createInitialFormState, validateForm } from "../../../hooks/FormConfigHelper";
+import Link from 'next/link';
 
 type Option = {
     value: string;
@@ -101,14 +102,14 @@ const CreateStudent: React.FC = () => {
         <div className="min-h-screen flex items-center justify-center py-12">
             <div className="container mx-auto">
                 <div className="flex justify-center w-full max-w-4xl bg-white rounded-xl mx-auto shadow-lg overflow-hidden">
-                    <div className="w-full lg:w-full py-16 px-12 bg-gray-50">
-                        <h2 className="text-3xl mb-4 text-secondary text-center">Register</h2>
+                    <div className="w-full lg:w-full py-16 px-12 bg-white">
+                        <h2 className="text-3xl mb-4 text-gray-600 text-center">Register</h2>
                         <p className="mb-4 text-center">Create student</p>
                         <form onSubmit={handleSubmit}>
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                                 {(inputFields || []).map((field, index) => (
                                     <div key={index} className="w-full">
-                                        <div className="mt-3 h-6 text-xs font-bold uppercase leading-8 text-secondary">
+                                        <div className="mt-3 h-6 text-xs font-bold uppercase leading-8 text-gray-600">
                                             {field.label}
                                         </div>
                                         {field.type === 'select' ? (
@@ -117,7 +118,7 @@ const CreateStudent: React.FC = () => {
                                                 value={formData[field.name] || ''}
                                                 name={field.name}
                                                 required
-                                                className="border border-gray-400 py-2 px-4 w-full"
+                                                className="border rounded-md border-gray-400 py-2 px-4 w-full"
                                             >
                                                 <option value="">{field.placeholder}</option>
                                                 {(field.options ?? []).map((option) => (
@@ -134,7 +135,7 @@ const CreateStudent: React.FC = () => {
                                                     placeholder={field.placeholder}
                                                     value={formData[field.name] || ''}
                                                     onChange={(e) => handleChange(e, field.name)}
-                                                    className="border border-gray-400 py-2 px-4 w-full"
+                                                    className="border border-gray-400 rounded-md py-2 px-4 w-full"
                                                     required
                                                 />
                                                 {errors[field.name] && (
@@ -145,18 +146,39 @@ const CreateStudent: React.FC = () => {
                                     </div>
                                 ))}
                             </div>
-                            <div className="mt-5">
-                                <button
-                                    type="submit"
-                                    className={`w-full py-2 font-semibold uppercase transition ${
-                                        loading
-                                            ? 'cursor-not-allowed bg-primary text-white opacity-70'
-                                            : 'bg-mainColor text-white hover:border-2 hover:bg-white hover:text-primary'
-                                    } md:w-full`}
-                                >
-                                    {loading ? 'Submitting...' : 'Submit'}
-                                </button>
-                            </div>
+                           <div className="mt-5 flex justify-around">
+                <button className="flex items-center justify-center w-1/2 px-5 py-2 text-sm text-gray-700 transition-colors duration-200 bg-white border rounded-sm gap-x-2 sm:w-auto  hover:bg-gray-100  dark:border-gray-300">
+                  <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth="1.5"
+                      stroke="currentColor"
+                      className="w-5 h-5 rtl:rotate-180"
+                  >
+                      <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M6.75 15.75L3 12m0 0l3.75-3.75M3 12h18"
+                      />
+                  </svg>
+                  <Link href='#'>
+                      <span>Go Back</span>
+                  </Link>
+                </button>
+                
+                <button
+                  type='submit'
+                  className={`w-28 py-2 font-semibold uppercase transition ${
+                      loading
+                      ? 'cursor-not-allowed bg-primary text-white opacity-70'
+                      : 'bg-primary text-white hover:border-2 hover:bg-white hover:text-primary'
+                  } md:w-40`}
+                >
+                  {loading ? 'Submitting...' : 'Submit'}
+                </button>
+              </div>
+
                         </form>
                     </div>
                 </div>

@@ -194,6 +194,14 @@ export const departmentFields = [
     ],
     type: 'select',
   },
+  {
+    name: 'class_id',
+    type: 'select',
+    placeholder: 'Student\'s class',
+    label: 'Student\'s class',
+    options: 'dynamic',
+    required: true,
+  },
     {
         name:'comments',
         type:'text',
@@ -246,11 +254,29 @@ export const resultsFields = [
     type: 'select',
   },
   {
+    name: 'class_id',
+    type: 'select',
+    placeholder: 'Student\'s class',
+    label: 'Student\'s class',
+    options: 'dynamic',
+    required: true,
+  },
+  {
     name: 'graded_at',
     type: 'date',
-    placeholder: 'date',
+    placeholder: 'Examination Date',
     label: 'Examination Date',
     required: true,
+  },
+  {
+    name: 'include_assessments',
+    type: 'checkbox',  // or you can use a select dropdown if preferred
+    label: 'Include Assessments?',
+    options: [
+      { label: 'Yes', value: true },
+      { label: 'No', value: false },
+    ],
+    required: false,
   },
 ];
 

@@ -187,20 +187,20 @@ const ViewExamResults: React.FC<AssessmentProps> = ({ subject_id }) => {
       >
         <div className="mb-8 mt-20 flex flex-col gap-12">
           <div className="bg-white shadow rounded-lg">
-            <div className="flex justify-between items-center bg-gray-100 p-6 rounded-t-lg">
+            <div className="flex justify-between items-center bg-blue-400 p-6 rounded-t-lg">
               <div className="flex items-center">
                 <button
                   onClick={handleBackClick}
-                  className="mr-4 rounded bg-gray-300 px-4 py-2 text-sm font-medium text-black transition duration-300 hover:bg-gray-400 focus:outline-none focus:ring focus:ring-gray-300"
+                  className="mr-4 rounded px-4 py-2 text-sm font-medium text-black transition duration-300  focus:outline-none focus:ring focus:ring-gray-300"
                 >
                   <Link href={`/Tutors/results/selection/${subject_id}`}>
-                    <div className="flex bg-mainColor text-white py-2 px-4 rounded-sm items-center justify-center">
+                    <div className="flex bg-white/30 text-white py-2 px-4 rounded-sm items-center justify-center">
                       <FaArrowLeft className="mr-2" />
                       Back
                     </div>
                   </Link>
                 </button>
-                <h2 className="text-2xl font-bold text-blue-600">Examination Results</h2>
+                <h2 className="text-2xl font-bold text-white">Examination Results Table</h2>
               </div>
               {/* <button
                 onClick={handleClick}

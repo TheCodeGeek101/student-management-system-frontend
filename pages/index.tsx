@@ -53,24 +53,28 @@ export default function Home() {
       if (response.status === 200) {
         toast.success(response.data.message || 'Login successful');
         const authenticatedUser: User = response.data.user;
-        const data = JSON.stringify(response.data.admin);
-        console.log('Auth user:' + data);
         
-          if (response.data.superadmin) {
-            router.push('/Admin/dashboard/page');
-          } else if (response.data.admin) {
-            router.push('/Admin/dashboard/page');
-          } else if (response.data.student) {
-            router.push('/Student/dashboard/page');
-          } else if (response.data.tutor) {
-            router.push('/Tutors/dashboard/page');
-          }
-        
+        // Redirect based on user type
+        if (response.data.superadmin) {
+          router.push('/Admin/dashboard/page');
+        } else if (response.data.admin) {
+          router.push('/Admin/dashboard/page');
+        } else if (response.data.student) {
+          router.push('/Student/dashboard/page');
+        } else if (response.data.tutor) {
+          router.push('/Tutors/dashboard/page');
+        }
       } else {
         toast.error(response.data.message || 'Unexpected error');
       }
     } catch (error: any) {
-      toast.error(error.response?.data.message || 'Unexpected error occurred');
+      if (error.response?.status === 403) {
+        // Handle 403 error and redirect to forbidden page
+        router.push('/Student/Forbidden');
+        toast.error('Access forbidden. You have been withdrawn.');
+      } else {
+        toast.error(error.response?.data.message || 'Unexpected error occurred');
+      }
     } finally {
       setIsLoading(false);
     }

@@ -23,6 +23,7 @@ const CreateAssessment: React.FC<AssignSubjectProps> = ({ id }) => {
   const [formData, setFormData] = useState(createInitialFormState(assessmentFields));
   const [loading, setLoading] = useState(false);
   const [students, setStudents] = useState<{ value: number; label: string }[]>([]);
+  const [classes, setClasses] = useState<{ value: number; label: string }[]>([]);
   const endPoint = "assessments";
   const user: User | undefined = GetLoggedInUserHelper();
 
@@ -43,6 +44,12 @@ const CreateAssessment: React.FC<AssignSubjectProps> = ({ id }) => {
             response.data.students.map((student: any) => ({
               value: student.student_id,
               label: student.student_first_name + ' ' + student.student_last_name,
+            }))
+          );
+          setClasses(
+            response.data.students.map((student: any) => ({
+              value: student.class_id,
+              label: "Form" + student.class_id,
             }))
           );
         } else {
@@ -159,7 +166,7 @@ const CreateAssessment: React.FC<AssignSubjectProps> = ({ id }) => {
       </div>
 
       {/* Dynamic Select Input */}
-      {options === 'dynamic' && type === 'select' ? (
+      {options === 'dynamic' && type === 'select' && name === 'student_id' ? (
         <Select
           options={students}
           onChange={handleSelectedChange}
@@ -169,7 +176,17 @@ const CreateAssessment: React.FC<AssignSubjectProps> = ({ id }) => {
           className="my-2 border border-gray-50 w-full appearance-none rounded bg-white p-1 px-2 text-sm text-gray-800 outline-none"
           isClearable
         />
-      ) : type === 'select' && Array.isArray(options) ? (
+      ) : options === 'dynamic' && type === 'select' && name === 'class_id' ? (
+        <Select
+          options={classes}
+          onChange={handleSelectedChange}
+          value={classes.find(studentOption => studentOption.value === formData[name]) || null}
+          placeholder={placeholder}
+          name={name}
+          className="my-2 border border-gray-50 w-full appearance-none rounded bg-white p-1 px-2 text-sm text-gray-800 outline-none"
+          isClearable
+        />
+      ): type === 'select' && Array.isArray(options) ? (
         // Static Select Input
         <select
           onChange={(e) => handleChange(e, name)}

@@ -19,4 +19,6 @@ interface Student {
     user_id: number;
     registered_by: number;
     remarks?: string;
+    registration_number:string;
+    profile_picture:any;
   }

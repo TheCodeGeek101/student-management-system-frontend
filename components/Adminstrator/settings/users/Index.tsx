@@ -41,7 +41,7 @@ export default function UserManagement() {
               boxShadow: '0px 0px 8px rgb(255,255,255)',
             }}
             key={detail.name}
-            className="card text-white  mx-auto block rounded-lg border border-primary bg-primary p-10 transition duration-200 "
+            className="card text-white  mx-auto block rounded-lg border border-blue-400 bg-blue-400 p-10 transition duration-200 "
           >
             <div className="card-body">
               <h2 className="flex items-center font-bold capitalize">

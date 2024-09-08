@@ -54,6 +54,11 @@ async function handler(req, res) {
       return res.status(200).json(response.data.user);
     } else if (response.status === 401) {
       return res.status(401).json(response.data);
+    } else if (response.status === 403) {
+      // Handle the withdrawn student case
+      return res.status(403).json({
+        message: 'Access forbidden: Student has been withdrawn from the system.',
+      });
     } else if (response.status === 500) {
       return res.status(500).json(response.data);
     } else {

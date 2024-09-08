@@ -4,10 +4,6 @@ import React, { useEffect, useState } from 'react';
 import { User } from "../../../types/user";
 import Link from "next/link";
 import DataLoader from '@/components/Shared/Loaders/Loader';
-// import { getButtonColor, getCardColor, getIcon, getTextColor } from '@/helpers/SubjectDisplayHelper';
-
-import { FaAtom, FaBook, FaFlask, FaGlobe, FaGraduationCap, FaHeart, FaLandmark, FaLanguage, FaMicroscope, FaSeedling } from "react-icons/fa";
-import toast from 'react-hot-toast';
 import { fadeIn } from '@/Utils/motion';
 import { getButtonColor, getCardColor, getIcon, getTextColor } from '@/helpers/SubjectDisplayHelper';
 import UnregisteredSubjects from '@/components/Shared/Errors/UnregisteredSubjects';
@@ -39,7 +35,6 @@ const AvailableSubjects: React.FC<SubjectsProps> = ({ user }) => {
   const [subjectData, setSubjectData] = useState<SubjectData[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-   const [errors, setErrors] = useState<Record<string, string | null>>({});
   const [hasSubjects, setHasSubjects] = useState<boolean>(true);
   const [subjectId,setSubjectId] = useState<number>(0);
 
@@ -100,7 +95,7 @@ const AvailableSubjects: React.FC<SubjectsProps> = ({ user }) => {
   return (
     <div className="min-h-screen">
       <div className="flex justify-center items-center">
-              <h1 className='font-bold  text-2xl text-primary'>Register for your subjects </h1>
+              <h1 className='font-bold  text-2xl text-primary'>Subject Registration </h1>
             </div>
       <section className="m-4 grid gap-8 p-8 md:grid-cols-3">
         {subjectData.map((subject) => (

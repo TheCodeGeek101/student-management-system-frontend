@@ -64,7 +64,7 @@ const AssignedSubjects: React.FC = () => {
                   setId(row.id);
                   console.log('Edit Subject ID:', row.id);
                 }}
-                className="mr-4 rounded bg-green-500 px-2 py-2 text-white transition duration-300 hover:bg-blue-200 focus:outline-none focus:ring focus:ring-yellow-300"
+                className="mr-4 rounded bg-blue-400 px-2 py-2 text-white transition duration-300 hover:bg-blue-200 focus:outline-none focus:ring focus:ring-yellow-300"
               >
                 <FaEdit className="mr-2 inline-block" /> Re-assign
               </button>
@@ -136,13 +136,13 @@ const AssignedSubjects: React.FC = () => {
       >
         <div className="mb-8 mt-20 flex flex-col gap-12">
           <div className="bg-white shadow rounded-lg">
-            <div className="flex justify-between items-center bg-gray-100 p-6 rounded-t-lg">
+            <div className="flex justify-between items-center bg-blue-400 p-6 rounded-t-lg">
               <div className="flex items-center">
-                <h2 className="text-2xl font-bold text-blue-600">Subject Allocation</h2>
+                <h2 className="text-2xl font-bold text-white">Subject Allocation</h2>
               </div>
               <button
                 onClick={() => {}}
-                className="rounded bg-mainColor px-4 py-2 text-sm font-medium text-white transition duration-300 hover:bg-green-400 focus:outline-none focus:ring focus:ring-green-300"
+                className="rounded bg-white/50 px-4 py-2 text-sm font-medium text-white transition duration-300 hover:bg-primary focus:outline-none focus:ring focus:ring-green-300"
               >
                 <div className="flex items-center justify-center">
                   <FaFileCsv className="mr-2" />

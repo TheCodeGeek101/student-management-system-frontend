@@ -24,6 +24,16 @@ export const validateForm = (formFieldConfig, data) => {
   return newErrors;
 };
 
+export const validateResults = (formFieldConfig, data) => {
+  const newErrors = {};
+  formFieldConfig.forEach((field) => {
+    // if (!data[field.name]) {
+    //   newErrors[field.name] = 'This field is required';
+    // }
+  });
+  return newErrors;
+};
+
 // Validates individual fields based on the field type and set rules
 export const validateField = (name, value) => {
   let error = '';

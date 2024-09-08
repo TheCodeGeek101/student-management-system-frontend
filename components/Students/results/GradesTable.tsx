@@ -162,7 +162,11 @@ const StudentGradesTable: React.FC<StudentProps> = ({ studentId, registrationNum
       transition={{ ease: 'easeInOut', duration: 0.6 }}
     >
       <div className="container px-4 mx-auto mt-20">
-        <h2 className="text-2xl font-bold text-blue-600 mb-4">Examination Results</h2>
+        <div className="bg-blue-400 rounded-sm p-4">
+        <h2 className="text-2xl font-bold text-white mb-4">Examinations Table</h2>
+
+        </div>
+      
         <div className="bg-white shadow rounded-lg">
           <div className="p-4">
             <div className="flex justify-between">
@@ -174,14 +178,14 @@ const StudentGradesTable: React.FC<StudentProps> = ({ studentId, registrationNum
               Select Term
             </label>
             </div>
-            <div className="mb-4 flex justify-between">
-            <input
-              type="text"
-              id="registrationNumber"
-              className="w-full md:w-1/2 lg:w-1/5 mb-5 rounded-md border bg-gray-100 py-2 px-4 text-black focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300"
-              value={registrationNumber}
-              readOnly
-            />
+            <div className="mb-4  flex justify-between">
+                <input
+                  type="text"
+                  id="registrationNumber"
+                  className="w-full md:w-1/2 lg:w-1/5 mb-5 rounded-md border bg-gray-100 py-2 px-4 text-black focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300"
+                  value={registrationNumber}
+                  readOnly
+                />
 
               <select
                 id="term"

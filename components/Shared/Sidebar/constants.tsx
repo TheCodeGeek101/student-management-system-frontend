@@ -65,6 +65,11 @@ export const menuGroups: MenuGroup[] = [
             label: 'Add Student',
             route: '/Admin/students/create/page',
           },
+          {
+            icon: <FaUserGraduate className="text-green-500" />,
+            label: 'Withdrawn Students',
+            route: '/Admin/students/withdrawn/page',
+          },
         ],
       },
       {

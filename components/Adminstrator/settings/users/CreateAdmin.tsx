@@ -96,28 +96,28 @@ const CreateAdmin: React.FC = () => {
     <div className="min-h-screen flex items-center justify-center py-12">
       <div className="container mx-auto">
         <div className="flex justify-center w-full max-w-4xl bg-white rounded-xl mx-auto shadow-lg overflow-hidden">
-          <div className="w-full lg:w-full py-16 px-12 bg-gray-50">
-            <h2 className="text-3xl mb-4 text-center text-mainColor">Register</h2>
-            <p className="mb-4 text-center text-gray-50">Create Administrator</p>
+          <div className="w-full lg:w-full py-16 px-12 bg-gray-white">
+            <h2 className="text-3xl mb-4 text-center text-gray-600">Register</h2>
+            <p className="mb-4 text-center text-gray-400">Create Administrator</p>
             <form onSubmit={handleSubmit}>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                 {administratorFields.map((field) => (
                   <div key={field.name} className={field.type === 'textarea' ? 'col-span-2' : ''}>
-                    <label className="block mb-1 text-mainColor">{field.label}</label>
+                    <label className="block mb-1 text-gray-600">{field.label}</label>
                     {field.type === 'textarea' ? (
                       <textarea
                         name={field.name}
                         placeholder={field.placeholder}
                         value={formData[field.name as keyof FormData] as string}
                         onChange={(e) => handleChange(e as React.ChangeEvent<HTMLTextAreaElement>, field.name)}
-                        className="border border-gray-50 py-2 px-4 w-full h-32"
+                        className="border border-gray-400 rounded-md py-2 px-4 w-full h-32"
                       />
                     ) : field.type === 'select' ? (
                       <select
                         name={field.name}
                         value={formData[field.name as keyof FormData] as string}
                         onChange={(e) => handleChange(e as React.ChangeEvent<HTMLSelectElement>, field.name)}
-                        className="border border-gray-400 py-2 px-4 w-full"
+                        className="border border-gray-400 rounded-md py-2 px-4 w-full"
                         required={field.required}
                       >
                         <option value="" disabled>{field.placeholder}</option>
@@ -134,7 +134,7 @@ const CreateAdmin: React.FC = () => {
                         placeholder={field.placeholder}
                         value={field.type === 'file' ? '' : formData[field.name as keyof FormData] as string}
                         onChange={(e) => handleChange(e as React.ChangeEvent<HTMLInputElement>, field.name)}
-                        className="border border-gray-50 py-2 px-4 w-full"
+                        className="border border-gray-400 rounded-md py-2 px-4 w-full"
                         required={field.required}
                       />
                     )}
@@ -144,7 +144,7 @@ const CreateAdmin: React.FC = () => {
               </div>
               
               <div className="mt-5 flex justify-around">
-                <button className="flex items-center justify-center w-1/2 px-5 py-2 text-sm text-gray-700 transition-colors duration-200 bg-white border rounded-sm gap-x-2 sm:w-auto dark:hover:bg-gray-800 dark:bg-gray-900 hover:bg-gray-100 dark:text-gray-200 dark:border-gray-700">
+                <button className="flex items-center justify-center w-1/2 px-5 py-2 text-sm text-gray-700 transition-colors duration-200 bg-white border rounded-sm gap-x-2 sm:w-auto  hover:bg-gray-100  dark:border-gray-300">
                   <svg
                       xmlns="http://www.w3.org/2000/svg"
                       fill="none"
