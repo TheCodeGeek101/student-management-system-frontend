@@ -104,7 +104,7 @@ import {
         {
           icon: <FaMoneyCheckAlt className="text-teal-500" />, // Teal for fees payments
           label: 'Fees Payments',
-          route: '/Student/Payments/FeesPayments',
+          route: '/Student/Payments/Fees',
         },
         {
           icon: <FaFileInvoiceDollar className="text-teal-500" />, // Teal for invoices

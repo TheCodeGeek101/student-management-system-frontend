@@ -1,22 +1,118 @@
-import paychangu from '@api/paychangu';
+import axios from 'axios';
+import type { NextApiRequest, NextApiResponse } from 'next';
 
-paychangu.auth('Bearer SEC-JN3J9tcfHAh1942pK1CCKOjdz1Rz0ez0');
+interface RequestBody {
+  amount: string;
+  currency: string;
+  email: string;
+  first_name: string;
+  last_name: string;
+  callback_url: string;
+  return_url: string;
+}
 
-paychangu.levelReference({
-  amount: '10000', // Numeric string representing the transaction amount
-  currency: 'MWK', // Malawian Kwacha
-  tx_ref: 'TX123456789', // A unique transaction reference
-  first_name: 'John', // User's first name
-  last_name: 'Doe', // User's last name
-  callback_url: 'https://example.com/callback', // URL to receive transaction updates
-  return_url: 'https://example.com/return', // URL to return after payment
-  email: 'john.doe@example.com', // User's email
-  meta: 'order_98765', // Meta information, e.g., order ID
-  uuid: 'b28e433e-5f64-4f77-8c5e-66df0d50c7b1', // A unique identifier
-  customization: {
-    title: 'Payment for Order 98765', // Custom title
-    description: 'Payment for electronics purchased' // Custom description
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  // Log incoming request body
+  console.log('Request body:', req.body); 
+
+  // Restrict to POST method
+  if (req.method !== 'POST') {
+    res.setHeader('Allow', ['POST']);
+    return res.status(405).end(`Method ${req.method} Not Allowed`);
   }
-})
-  .then(({ data }) => console.log(data))
-  .catch(err => console.error(err));
+
+  // Destructure required data from the request body
+  const {endPoint, data} = req.body
+  const {
+    amount,
+    email,
+    first_name,
+    last_name,
+   description,
+   title
+  } = data;
+  const callback_url = `${process.env.NEXT_PUBLIC_CALLBACK_URL}`;
+  const return_url = `${process.env.NEXT_PUBLIC_RETURN_URL}`;
+
+  // Validate request body
+  if (!amount ||  !email || !first_name || !last_name || !callback_url || !return_url) {
+    return res.status(400).json({ error: 'Transaction failed!. Missing parameters' });
+  }
+
+  const payChanguURL =  `${process.env.NEXT_PUBLIC_PAYCHANGU_API_ENDPOINT}`;
+
+  // Log the URL for debugging
+  console.log('PayChangu URL:', payChanguURL); 
+
+  try {
+    // Send a POST request to PayChangu API
+    const response = await axios.post(
+      payChanguURL,
+      {
+        amount: amount,
+        currency:'MWK',
+        email:email,
+        first_name:first_name,
+        last_name:last_name,
+        callback_url:callback_url,
+        return_url:return_url,
+        tx_ref: `${Math.floor(Math.random() * 1000000000 + 1)}`, // Random tx_ref
+        customization: {
+          title: title,
+          description: description,
+        },
+        meta: {
+          uuid: 'uuid',
+          response: 'Response',
+        },
+      },
+      {
+        headers: {
+          Accept: 'application/json',
+          Authorization: `Bearer ${process.env.NEXT_PUBLIC_PAYCHANGU_API_KEY}`, // Replace with your actual secret key
+        },
+      }
+    );
+
+    console.log('PayChangu response:', response.data); // Log the API response
+    if (response.status === 201 || response.status === 200){
+        res.status(200).json(response.data);
+    }
+    return res.status(response.status).json(response.data);
+
+  } catch (error) {
+    console.error('Error encountered:', error);
+
+    if (axios.isAxiosError(error)) {
+      if (error.response) {
+        // Handle response errors
+        console.error('Response Error:', error.response.data);
+        return res.status(error.response.status || 500).json({
+          message: error.response.data.message || 'Payment request failed.',
+          error: error.response.data,
+        });
+      } else if (error.request) {
+        // Handle no response from the API
+        console.error('No Response:', error.request);
+        return res.status(500).json({
+          message: 'No response received from PayChangu.',
+          error: error.message,
+        });
+      } else {
+        // Handle setup or other errors
+        console.error('Request Setup Error:', error.message);
+        return res.status(500).json({
+          message: 'Error setting up request to PayChangu.',
+          error: error.message,
+        });
+      }
+    } else {
+      // Handle unexpected errors
+      console.error('Unexpected Error:', error);
+      return res.status(500).json({
+        message: 'An unexpected error occurred.',
+        error: (error as Error).message,
+      });
+    }
+  }
+}

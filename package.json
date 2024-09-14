@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@api/paychangu": "file:.api/apis/paychangu",
     "@clerk/nextjs": "^5.2.8",
     "@daiyam/next-iron-session": "^4.1.10-d1",
     "apexcharts": "^3.51.0",

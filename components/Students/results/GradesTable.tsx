@@ -20,6 +20,11 @@ interface TermData {
   id: number;
   name: string;
 }
+interface ClassData {
+  id: number;
+  name: string;
+}
+
 
 interface ResultData {
   status: string;
@@ -40,10 +45,11 @@ const StudentGradesTable: React.FC<StudentProps> = ({ studentId, registrationNum
   const [search, setSearch] = useState('');
   const [terms, setTerms] = useState<TermData[]>([]);
   const [selectedTermId, setSelectedTermId] = useState<number | null>(null);
+  const [selectedClassId, setSelectedClassId] = useState<number | null>(null);
   const [hasExaminationResults, setHasExaminationResults] = useState<boolean>(true);
   const [examinationResultData, setExaminationResultData] = useState<ResultData | null>(null);
   const endPoint = 'students';
-  
+ const [classes, setClasses ] = useState<ClassData[]>([]);
   const columns = [
     { name: 'Subject', selector: (row: ExaminationData) => row.subject_name },
     { name: 'Code', selector: (row: ExaminationData) => row.subject_code },
@@ -79,12 +85,32 @@ const StudentGradesTable: React.FC<StudentProps> = ({ studentId, registrationNum
       }
     };
 
+
     fetchTerms();
   }, []);
 
   useEffect(() => {
+    const fetchClasses = async () => {
+      try {
+        const response = await axios.post('/api/GetData', { endPoint: 'classroom' });
+        if (response.status === 200) {
+          setClasses(response.data.classes);
+          if (response.data.classes.length > 0) {
+            setSelectedClassId(response.data.classes[0].id);
+          }
+        }
+      } catch (error:any) {
+        setError(error.response?.statusText || error.message);
+      }
+    };
+
+
+    fetchClasses();
+  }, []);
+
+  useEffect(() => {
     const fetchData = async () => {
-      if (selectedTermId === null) return;
+      if (selectedTermId === null || selectedClassId === null) return;
 
       setLoading(true);
       try {
@@ -92,6 +118,7 @@ const StudentGradesTable: React.FC<StudentProps> = ({ studentId, registrationNum
           endPoint: endPoint,
           studentId: studentId,
           termId: selectedTermId,
+          classId:selectedClassId
         });
 
         if (response.status === 200) {
@@ -153,7 +180,7 @@ const StudentGradesTable: React.FC<StudentProps> = ({ studentId, registrationNum
 
   const cardBackgroundColor = examinationResultData?.status === 'Pass' ? 'bg-green-200' : 'bg-red-200';
   const resultIcon = examinationResultData?.status === 'Pass' ? <FaCheckCircle className="text-green-500" /> : <FaTimesCircle className="text-red" />;
- console.log("reg number" + registrationNumber);
+  console.log("reg number" + registrationNumber);
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -186,7 +213,18 @@ const StudentGradesTable: React.FC<StudentProps> = ({ studentId, registrationNum
                   value={registrationNumber}
                   readOnly
                 />
-
+              <select
+                id="classroom"
+                className="w-full md:w-1/2 lg:w-1/6 mb-5 rounded-md border border-gray-4 bg-white py-2 px-4 text-gray-900 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300"
+                value={selectedClassId ?? ''}
+                onChange={(e) => setSelectedClassId(Number(e.target.value))}
+              >
+                {classes.map((classroom) => (
+                  <option key={classroom.id} value={classroom.id}>
+                    {classroom.name}
+                  </option>
+                ))}
+              </select>
               <select
                 id="term"
                 className="w-full md:w-1/2 lg:w-1/6 mb-5 rounded-md border border-gray-4 bg-white py-2 px-4 text-gray-900 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300"
