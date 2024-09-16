@@ -1,21 +1,14 @@
-import { User } from '@/types/user';
-import axios from 'axios';
 import Link from 'next/link';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 
 /**
  * Component for handling and displaying a failed transaction.
  */
 
-interface TransactionProps {
-    user:User;
-  tx_ref: string; // Should be a string to account for alphanumeric references
-}
-
 interface TransactionData {
   status: string;
   message: string;
-  transaction: {
+  data: {
     tx_ref: string;
     amount: number;
     currency: string;
@@ -25,7 +18,6 @@ interface TransactionData {
       title: string;
       description: string;
     };
-  };
   customer: {
     email: string;
     first_name: string;
@@ -36,31 +28,16 @@ interface TransactionData {
     message: string;
     created_at: string;
   }[];
+  };
+
 }
 
-const FailedTransaction: React.FC<TransactionProps> = ({ tx_ref,user }) => {
-  const [transactionData, setTransactionData] = useState<TransactionData | null>(null);
-  const [error, setError] = useState<string | null>(null);
+interface TransactionProps {
+  transactionData: TransactionData | null; // transactionData can be null
+  error: string;
+}
 
-  useEffect(() => {
-    const verifyTransaction = async () => {
-      try {
-        const response = await axios.post('/api/verifyTransaction', {
-          tx_ref: tx_ref,
-        });
-
-        if (response.status === 200) {
-          setTransactionData(response.data); // Store the transaction data even if failed
-        }
-      } catch (error: any) {
-        setError(error.response?.statusText || error.message);
-      }
-    };
-
-    verifyTransaction();
-  }, [tx_ref]);
-
-  // If there's an error, display it
+const FailedTransaction: React.FC<TransactionProps> = ({ transactionData, error }) => {
   if (error) {
     return (
       <div className="container md:mt-10">
@@ -76,26 +53,46 @@ const FailedTransaction: React.FC<TransactionProps> = ({ tx_ref,user }) => {
     );
   }
 
+  if (!transactionData) {
+    return (
+      <div className="container md:mt-10">
+        <div className="flex flex-col items-center">
+          <div className="mt-3 text-xl font-semibold uppercase text-red-500">
+            Failed!
+          </div>
+          <div className="text-lg font-semibold text-gray-500">
+            No transaction data available.
+          </div>
+          <Link href="/Auth">
+            <button className="h-10 px-5 mt-5 text-[#d03434] transition-colors duration-150 border border-gray-300 rounded-lg focus:shadow-outline hover:bg-[#d03434] hover:text-green-100">
+              Close
+            </button>
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="container md:mt-10">
       <div className="flex flex-col items-center">
         <div className="wrapper">
           <svg
-            className="checkmark"
+            className="error-icon"
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 52 52"
           >
             <circle
-              className="checkmark__circle"
+              className="error-icon__circle"
               cx="26"
               cy="26"
               r="25"
               fill="none"
             />
             <path
-              className="checkmark__check"
+              className="error-icon__line"
               fill="none"
-              d="M14.1 27.2l7.1 7.2 16.7-16.8"
+              d="M14 14l24 24M14 38l24-24"
             />
           </svg>
         </div>
@@ -107,48 +104,46 @@ const FailedTransaction: React.FC<TransactionProps> = ({ tx_ref,user }) => {
           Payment has not been made!
         </div>
 
-        {transactionData && (
-          <div className="mt-5 w-full max-w-md p-4 bg-gray-100 rounded-lg shadow-md">
-            <div className="text-lg font-bold mb-2">Transaction Details</div>
-            <div className="text-sm text-gray-700">
-              <strong>Transaction Ref:</strong> {transactionData.transaction.tx_ref}
-            </div>
-            <div className="text-sm text-gray-700">
-              <strong>Amount:</strong> {transactionData.transaction.amount} {transactionData.transaction.currency}
-            </div>
-            <div className="text-sm text-gray-700">
-              <strong>Payment Type:</strong> {transactionData.transaction.type}
-            </div>
-            <div className="text-sm text-gray-700">
-              <strong>Payment Date:</strong> {new Date(transactionData.transaction.created_at).toLocaleString()}
-            </div>
-            <div className="text-sm text-gray-700 mt-2">
-              <strong>Item:</strong> {transactionData.transaction.customization.title}
-            </div>
-            <div className="text-sm text-gray-700">
-              <strong>Description:</strong> {transactionData.transaction.customization.description}
-            </div>
+        <div className="mt-5 w-full max-w-md p-4 bg-gray-100 rounded-lg shadow-md">
+          <div className="text-lg font-bold mb-2">Transaction Details</div>
+          <div className="text-sm text-gray-700">
+            <strong>Transaction Ref:</strong> {transactionData.data.tx_ref}
+          </div>
+          <div className="text-sm text-gray-700">
+            <strong>Amount:</strong> {transactionData.data.amount} {transactionData.data.currency}
+          </div>
+          <div className="text-sm text-gray-700">
+            <strong>Payment Type:</strong> {transactionData.data.type}
+          </div>
+          <div className="text-sm text-gray-700">
+            <strong>Payment Date:</strong> {new Date(transactionData.data.created_at).toLocaleString()}
+          </div>
+          <div className="text-sm text-gray-700 mt-2">
+            <strong>Item:</strong> {transactionData.data.customization.title}
+          </div>
+          <div className="text-sm text-gray-700">
+            <strong>Description:</strong> {transactionData.data.customization.description}
+          </div>
 
-            <div className="mt-5">
-              <div className="text-lg font-bold mb-2">Customer Information</div>
-              <div className="text-sm text-gray-700">
-                <strong>Name:</strong> {transactionData.customer.first_name} {transactionData.customer.last_name}
-              </div>
-              <div className="text-sm text-gray-700">
-                <strong>Email:</strong> {transactionData.customer.email}
-              </div>
+          <div className="mt-5">
+            <div className="text-lg font-bold mb-2">Customer Information</div>
+            <div className="text-sm text-gray-700">
+              <strong>Name:</strong> {transactionData.data.customer.first_name} {transactionData.data.customer.last_name}
             </div>
-
-            <div className="mt-5">
-              <div className="text-lg font-bold mb-2">Logs</div>
-              {transactionData.logs.map((log, index) => (
-                <div key={index} className="text-sm text-gray-700">
-                  <strong>{log.created_at}:</strong> {log.message}
-                </div>
-              ))}
+            <div className="text-sm text-gray-700">
+              <strong>Email:</strong> {transactionData.data.customer.email}
             </div>
           </div>
-        )}
+
+          <div className="mt-5">
+            <div className="text-lg font-bold mb-2">Logs</div>
+            {transactionData.data.logs.map((log, index) => (
+              <div key={index} className="text-sm text-gray-700">
+                <strong>{log.created_at}:</strong> {log.message}
+              </div>
+            ))}
+          </div>
+        </div>
 
         <Link href="/Auth">
           <button className="h-10 px-5 mt-5 text-[#d03434] transition-colors duration-150 border border-gray-300 rounded-lg focus:shadow-outline hover:bg-[#d03434] hover:text-green-100">

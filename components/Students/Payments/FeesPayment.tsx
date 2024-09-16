@@ -6,6 +6,7 @@ import { createInitialFormState, validateForm } from "../../../hooks/FormConfigH
 import Link from 'next/link';
 import { User } from '@/types/user';
 import { useRouter } from 'next/router';
+
 type Option = {
     value: string;
     label: string;
@@ -38,6 +39,21 @@ const PaymentDetails: React.FC<PaymentsProps> = ({user}) => {
     const [formData, setFormData] = useState(createInitialFormState(paymentForm));
     const [errors, setErrors] = useState<Errors>({});
     const router = useRouter();
+
+
+    let displayName = "User";
+  let studentId = 0;
+  let class_id =0 ;
+  let registrationNumber = '';
+
+  if ("student" in user) {
+    displayName = `${user.student.first_name} ${user.student.last_name}`;
+    studentId = user.student.id;
+    class_id =user.student.class_id;
+    registrationNumber = user.student.registration_number;
+  }
+
+
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>, name: string) => {
         const { value } = e.target;
 
@@ -73,12 +89,40 @@ const PaymentDetails: React.FC<PaymentsProps> = ({user}) => {
             });
             console.log("Response data:", response.data);
             const {data} = response.data;
-            const {checkout_url, event} = data;
+            const {checkout_url, event,tx_ref,currency,status} = data;
+            console.log("transaction reference:" + data.data.tx_ref + "currency" + data.data.currency);
+            const paymentData = {
+                amount: formData.amount,
+                student_id:studentId,
+                class_id:class_id,
+                term_id:formData.term_id,
+                tx_ref:data.data.tx_ref,
+                title:formData.title,
+                description:formData.description,
+                currency:data.data.currency,
+                payment_date:formData.payment_date,
+            };
+
 
             if (response.status === 200) {
                 toast.success(`Processing payments...`);
                 router.push(`${checkout_url}`);
                 setFormData(createInitialFormState(paymentForm));
+
+
+                const saveData = await axios.post('/api/StorePayments',{
+                    endPoint:endpoint,
+                    data:paymentData
+                });
+
+                    if(saveData.status === 200 || saveData.status === 201)
+                    {
+                        toast.success("Record created successfully");
+                    }
+                    else if(saveData.status === 500 )
+                    {
+                        toast.error(response.data);
+                    }
             } else {
                 const errorMessage = response.data.message || 'An unknown error occurred.';
                 toast.error(`Failed to submit department data`);
@@ -120,7 +164,7 @@ const PaymentDetails: React.FC<PaymentsProps> = ({user}) => {
                         placeholder={field.placeholder}
                         value={formData[field.name as keyof Tutor]}
                         onChange={(e) => handleChange(e as React.ChangeEvent<HTMLTextAreaElement>, field.name)}
-                        className="border col-span-2 border-gray-400 rounded-md py-2 px-4 w-full h-32"
+                        className="border border-gray-400 rounded-md  py-2 px-4 w-96 h-32"
                       />
                     ) : field.type === 'select' ? (
                       <select
@@ -172,7 +216,7 @@ const PaymentDetails: React.FC<PaymentsProps> = ({user}) => {
                           d="M6.75 15.75L3 12m0 0l3.75-3.75M3 12h18"
                       />
                   </svg>
-                  <Link href='/Student/dashboard'>
+                  <Link href='/Student/Payments/Index'>
                       <span>Go Back</span>
                   </Link>
                 </button>

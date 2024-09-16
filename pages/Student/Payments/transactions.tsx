@@ -3,7 +3,7 @@ import React from 'react';
 import DefaultLayout from '@/components/Layouts/DefaultLayout';
 import GetLoggedInUserHelper from '@/helpers/GetLoggedInUserHelper';
 import Loader from '@/components/Shared/Loader';
-import PaymentIndex from '@/components/Students/Payments/PaymentsIndex';
+import Transactions from '@/components/Students/Payments/Transactions';
 
 const Page = () => {
   const user = GetLoggedInUserHelper();
@@ -14,7 +14,7 @@ const Page = () => {
       <Loader /> // Handle the case where user is still being fetched
     ) : (
       <DefaultLayout user={user}>
-        <PaymentIndex  />
+        <Transactions user={user} />
       </DefaultLayout>
     )
   );

@@ -16,6 +16,20 @@
       "@/*": ["./*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "components/Shared/Sidebar.jsx", "pages/index.jsx", "Utils/motion.js", "pages/api/User.js", "middleware.ts", "components/Adminstrator/subjects/AssignSubject.jsx", "components/Shared/Sidebar/index.jsx", "pages/Student/Payments/failed/[tx_ref.tsx]", "pages/Student/Payments/success/[tx_ref.tsx]", "components/Students/Payments/FeesPayment.tsx],
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "components/Shared/Sidebar.jsx",
+    "pages/index.jsx",
+    "Utils/motion.js",
+    "pages/api/User.js",
+    "middleware.ts",
+    "components/Adminstrator/subjects/AssignSubject.jsx",
+    "components/Shared/Sidebar/index.jsx",
+    "pages/Student/Payments/failed/[tx_ref.tsx]",
+    "pages/Student/Payments/success/[tx_ref.tsx]",
+    "components/Students/Payments/FeesPayment.tsx"
+  ],
   "exclude": ["node_modules"]
 }

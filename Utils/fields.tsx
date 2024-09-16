@@ -220,18 +220,6 @@ export const departmentFields = [
         ],
         type: 'select',
       },
-      {
-        label: 'Class',
-        name: 'class_id',
-        placeholder: 'Class',
-        options: [
-          { label: 'Form 1', value: 1 },
-          { label: 'Form 2', value: 2 },
-          { label: 'Form 3', value: 3 },
-          { label: 'Form 4', value: 4}
-        ],
-        type: 'select',
-      },
         {
            name: 'description',
            type: 'textarea', 

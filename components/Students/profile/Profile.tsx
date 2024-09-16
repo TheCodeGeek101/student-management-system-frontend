@@ -19,11 +19,13 @@ const StudentProfile: React.FC<ProfileProps> = ({ user }) => {
   const [imageFile, setImageFile] = useState<File | null>(null);
   const endpoint = 'students/show';
   const uploadEndpoint = 'students';
-  let studentId = 0;
+   let studentId = 0;
   if ('student' in user) {
     studentId = user.student.id;
   }
 
+  
+  
   useShowDataHelper<Student>(endpoint, studentId, setStudentData);
 
   if (!studentData) {

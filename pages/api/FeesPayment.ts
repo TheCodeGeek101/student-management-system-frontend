@@ -43,7 +43,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   // Log the URL for debugging
   console.log('PayChangu URL:', payChanguURL); 
-
+  const port = 3000;
   try {
     // Send a POST request to PayChangu API
     const response = await axios.post(
@@ -54,9 +54,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         email:email,
         first_name:first_name,
         last_name:last_name,
-        callback_url:callback_url,
+        callback_url: callback_url,
         return_url:return_url,
-        tx_ref: `${Math.floor(Math.random() * 1000000000 + 1)}`, // Random tx_ref
+        tx_ref: `TX${Math.floor(Math.random() * 1000000000 + 1)}`, // Random tx_ref
         customization: {
           title: title,
           description: description,

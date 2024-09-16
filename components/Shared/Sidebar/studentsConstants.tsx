@@ -103,18 +103,18 @@ import {
       menuItems: [
         {
           icon: <FaMoneyCheckAlt className="text-teal-500" />, // Teal for fees payments
-          label: 'Fees Payments',
-          route: '/Student/Payments/Fees',
+          label: 'Payments',
+          route: '/Student/Payments/Index',
         },
-        {
-          icon: <FaFileInvoiceDollar className="text-teal-500" />, // Teal for invoices
-          label: 'Invoices',
-          route: '/student/fees/invoices',
-        },
+        // {
+        //   icon: <FaFileInvoiceDollar className="text-teal-500" />, // Teal for invoices
+        //   label: 'Transactions',
+        //   route: '/student/payments/verify-transaction',
+        // },
         {
           icon: <FaBalanceScaleRight className="text-teal-500" />, // Teal for balances
           label: 'Balances',
-          route: '/student/fees/balances',
+          route: '/student/payments/balances',
         },
         {
           icon: <FaUndo className="text-teal-500" />, // Teal for refunds

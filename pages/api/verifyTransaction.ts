@@ -29,7 +29,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const response = await axios.get(verifyURL, {
       headers: {
         Accept: 'application/json',
-        Authorization: `Bearer ${process.env.PAYCHANGU_API_KEY}`, // Replace with your actual secret key
+        Authorization: `Bearer ${process.env.NEXT_PUBLIC_PAYCHANGU_API_KEY}`, // Replace with your actual secret key
       },
     });
 
