@@ -1,10 +1,11 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { User } from '@/types/user';
-import SuccessfulTransaction from './SuccessfulTransaction';
-import FailedTransaction from './FailedTransaction';
-import TransactionLoader from '../../Shared/Loaders/TransactionLoader';
+import SuccessfulTransaction from './ApproveTransaction';
 import toast, { Toaster } from 'react-hot-toast';
+import TransactionLoader from '../Shared/Loaders/TransactionLoader';
+import FailedTransaction from './FailedTransaction';
+import ApproveTransaction from './ApproveTransaction';
 
 interface TransactionProps {
   user: User;
@@ -85,7 +86,7 @@ const VerifyTransaction: React.FC<TransactionProps> = ({ tx_ref, user }) => {
 
   // Handle successful transaction scenario
   if (transactionData && isTransactionSuccessful) {
-    return <SuccessfulTransaction transactionData={transactionData} user={user} />;
+    return <ApproveTransaction transactionData={transactionData} user={user} />;
   }
 
   // Show loader while waiting for transaction verification

@@ -30,10 +30,10 @@ export const bursarConstants: MenuGroup[] = [
       },
     ],
   },
+
   {
     name: 'Academic',
-    menuItems: [
-      
+    menuItems: [      
       {
         icon: <FaUserGraduate className="text-green-500" />, // Green for students
         label: 'Students',
@@ -61,7 +61,6 @@ export const bursarConstants: MenuGroup[] = [
             label: 'All Events',
             route: '/events/all',
           },
-          
           {
             icon: <FaCalendarAlt className="text-orange-500" />,
             label: 'Event Calendar',
@@ -76,33 +75,33 @@ export const bursarConstants: MenuGroup[] = [
     menuItems: [
       {
         icon: <FaMoneyCheckAlt className="text-teal-500" />, // Teal for fees payments
-        label: 'Fees payments',
+        label: 'Payments',
         route: '#',
         children: [
           {
             icon: <FaMoneyCheckAlt className="text-teal-500" />,
-            label: 'All Payments',
-            route: '/payments/all',
+            label: 'Transactions',
+            route: '/Admin/payments/transactions/index',
           },
           {
             icon: <FaCreditCard className="text-teal-500" />,
             label: 'Payment Methods',
-            route: '/payments/methods',
+            route: '/Admin/payments/methods',
           },
           {
             icon: <FaFileInvoiceDollar className="text-teal-500" />,
             label: 'Invoices',
-            route: '/payments/invoices',
+            route: '/Admin/payments/invoices',
           },
           {
             icon: <FaBalanceScaleRight className="text-teal-500" />,
             label: 'Balances',
-            route: '/payments/balances/all',
+            route: '/Admin/payments/balances/',
           },
           {
             icon: <FaUndo className="text-teal-500" />,
             label: 'Refunds',
-            route: '/payments/refunds',
+            route: '/Admin/payments/refunds',
           },
         ],
       },
