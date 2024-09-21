@@ -8,7 +8,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   const { studentId ,endPoint} = req.body as { studentId: number, endPoint: string };
 
-  if (!studentId) {
+  if (!studentId || !endPoint) {
     return res.status(400).json({ message: 'Missing / invalid studentId or endpoint' });
   }
 

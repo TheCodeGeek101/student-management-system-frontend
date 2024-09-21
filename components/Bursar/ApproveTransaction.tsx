@@ -48,54 +48,49 @@ interface SuccessfulTransactionProps {
 
 const ApproveTransaction: React.FC<SuccessfulTransactionProps> = ({ transactionData, user }) => {
   const [loading, setIsLoading] = useState<boolean>(false);
-  let displayName = "User";
+  let displayName = 'User';
   let adminId = 0;
-  let class_id =0 ;
-  let registrationNumber = '';
 
-  if ("admin" in user) {
+  if ('admin' in user) {
     displayName = `${user.admin.full_name} `;
-    adminId = user.admin.id; 
+    adminId = user.admin.id;
   }
 
-  const approvePayment = async () => {
-    const response = await axios.post('api/approvePayment',{
-      adminId:adminId,
-      data:transactionData.data.tx_ref
-    });
+   const approvePayment = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    console.log('tx reference:', transactionData.data.tx_ref);
+    console.log('admin ID:', adminId);
+    setIsLoading(true); // Set loading to true before starting the request
 
-    if(response.status === 200)
-    {
-      toast.success('Payment confirmed successfully');
-      const res = await axios.post('api/storeTransaction',{
-        data:transactionData
+    try {
+      const response = await axios.post(`/api/validatePayment`, {
+        adminId: adminId,
+        data: {
+          tx_ref:transactionData.data.tx_ref
+        },
       });
-      if(res.status === 200){
-          console.log('transaction recorded');
+
+      if (response.status === 200) {
+        toast.success('Payment confirmed successfully');
       }
+      else {
+        toast.error(response.data.error || 'Unexpected error occured');
+      }
+    } catch (error) {
+      console.error('Error during payment approval:', error);
+      toast.error('An error occurred while approving the payment.');
+    } finally {
+      setIsLoading(false); // Set loading to false after the request is complete
     }
-  }
+  };
+
   return (
     <div className="container md:mt-10">
       <div className="flex flex-col items-center">
         <div className="wrapper">
-          <svg
-            className="checkmark"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 52 52"
-          >
-            <circle
-              className="checkmark__circle"
-              cx="26"
-              cy="26"
-              r="25"
-              fill="none"
-            />
-            <path
-              className="checkmark__check"
-              fill="none"
-              d="M14.1 27.2l7.1 7.2 16.7-16.8"
-            />
+          <svg className="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
+            <circle className="checkmark__circle" cx="26" cy="26" r="25" fill="none" />
+            <path className="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8" />
           </svg>
         </div>
 
@@ -154,7 +149,7 @@ const ApproveTransaction: React.FC<SuccessfulTransactionProps> = ({ transactionD
               </div>
               {transactionData.data.authorization.card_number && (
                 <div className="text-sm text-gray-700">
-                  <strong>Card Number:</strong> {transactionData.data.authorization.card_number || 'N/A'} 
+                  <strong>Card Number:</strong> {transactionData.data.authorization.card_number || 'N/A'}
                 </div>
               )}
               {transactionData.data.authorization.brand && (
@@ -164,57 +159,36 @@ const ApproveTransaction: React.FC<SuccessfulTransactionProps> = ({ transactionD
               )}
               {transactionData.data.authorization.expiry && (
                 <div className="text-sm text-gray-700">
-                  <strong>Expiry:</strong> {transactionData.data.authorization.expiry  || 'N/A'}
+                  <strong>Expiry:</strong> {transactionData.data.authorization.expiry || 'N/A'}
                 </div>
               )}
             </div>
-
-            {/* Uncomment below if you want to include logs */}
-            {/* <div className="mt-5">
-              <div className="text-lg font-bold mb-2">Logs</div>
-              {transactionData.data.logs.map((log, index) => (
-                <div key={index} className="text-sm text-gray-700">
-                  <strong>{new Date(log.created_at).toLocaleString()}:</strong> {log.message}
-                </div>
-              ))}
-            </div> */}
           </div>
         )}
+        <form onSubmit={approvePayment}>
+            <div className="container bottom-1 mb-4 mt-4 flex space-x-20 justify-center">
+              <Link href={`/Admin/payments/transactions/recent`}>
+                <button className="text-lg text-primary font-semibold px-5 py-2 hover:border-2 hover:bg-mainColor transition duration-300 hover:text-white border border-mainColor">
+                  &larr; Back
+                </button>
+              </Link>
 
-        <div className="mt-5 flex justify-around">
-          <button className="flex items-center justify-center w-1/2 px-5 py-2 text-sm text-gray-700 transition-colors duration-200 bg-white border rounded-sm gap-x-2 sm:w-auto hover:bg-gray-100 dark:border-gray-300">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth="1.5"
-              stroke="currentColor"
-              className="w-5 h-5 rtl:rotate-180"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M6.75 15.75L3 12m0 0l3.75-3.75M3 12h18"
-              />
-            </svg>
-            <Link href="/Student/Payments/transactions">
-              <span>Go Back</span>
-            </Link>
-          </button>
+              <button
+                type="submit"
+                disabled={loading}
+                className={`w-28 py-2 font-semibold uppercase transition ${
+                  loading
+                    ? 'cursor-not-allowed bg-primary text-white opacity-70'
+                    : 'bg-primary text-white hover:border-2 hover:bg-white hover:text-primary'
+                } md:w-40`}
+              >
+                {loading ? 'Confirming...' : 'Confirm payment'}
+              </button>
+            </div>
+          </form>
 
-          <button
-            type="submit"
-            className={`w-28 py-2 font-semibold uppercase transition ${
-              loading
-                ? 'cursor-not-allowed bg-primary text-white opacity-70'
-                : 'bg-primary text-white hover:border-2 hover:bg-white hover:text-primary'
-            } md:w-40`}
-          >
-            {loading ? 'Approving...' : 'Approve'}
-          </button>
-        </div>
       </div>
-      <Toaster position='top-center'/>
+      <Toaster position="top-center" />
     </div>
   );
 };

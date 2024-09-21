@@ -58,7 +58,7 @@ const VerifyTransaction: React.FC<TransactionProps> = ({ tx_ref, user }) => {
   useEffect(() => {
     const verifyTransaction = async () => {
       try {
-        const response = await axios.post('/api/verifyTransaction', { tx_ref });
+        const response = await axios.post('/api/verifyTransaction', { tx_ref:tx_ref });
 
         if (response.status === 200) {
           toast.success('Transaction verified successfully!');
