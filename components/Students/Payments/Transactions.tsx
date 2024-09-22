@@ -132,7 +132,7 @@ const Transactions: React.FC<TransactionProps> = ({user}) => {
       transaction.title.toLowerCase().includes(search.toLowerCase())
     );
     setFilter(result);
-  }, [search]);
+  }, [search,transactionData]);
 
   if (loading) {
     return <Loader />;

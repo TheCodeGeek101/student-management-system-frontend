@@ -50,8 +50,6 @@ const ApproveTransaction: React.FC<SuccessfulTransactionProps> = ({ transactionD
   const [loading, setIsLoading] = useState<boolean>(false);
   let displayName = "User";
   let adminId = 0;
-  let class_id =0 ;
-  let registrationNumber = '';
 
   if ("admin" in user) {
     displayName = `${user.admin.full_name} `;
@@ -59,6 +57,7 @@ const ApproveTransaction: React.FC<SuccessfulTransactionProps> = ({ transactionD
   }
 
   const approvePayment = async () => {
+    setIsLoading(true);
     const response = await axios.post('api/approvePayment',{
       adminId:adminId,
       data:transactionData.data.tx_ref
@@ -203,7 +202,7 @@ const ApproveTransaction: React.FC<SuccessfulTransactionProps> = ({ transactionD
           </button>
 
           <button
-            type="submit"
+            onClick={() => approvePayment()}
             className={`w-28 py-2 font-semibold uppercase transition ${
               loading
                 ? 'cursor-not-allowed bg-primary text-white opacity-70'
