@@ -27,14 +27,14 @@ interface TransactionProps {
   user:User
 }
 
-const Transactions: React.FC<TransactionProps> = ({user}) => {
+const ConfirmedTransactions: React.FC<TransactionProps> = ({user}) => {
   const [search, setSearch] = useState('');
   const [transactionData, setTransactionData] = useState<Transaction[]>([]);
   const [filter, setFilter] = useState<Transaction[]>([]);
   const [id, setId] = useState<string>('');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const endPoint = 'payments';
+  const endPoint = 'payments/confirmed';
 
   let studentId = 0;
   if ('student' in user) {
@@ -65,36 +65,36 @@ const Transactions: React.FC<TransactionProps> = ({user}) => {
     {
       name: 'Transaction Ref',
       selector: (row: Transaction) => row.tx_ref,
-      grow:3,
+      grow:2
     },
     {
       name: 'Confirmed',
       selector: (row: Transaction) => (row.confirmed ? 'Yes' : 'No'),
-      grow:2
+      
     },
-    {
-      name: 'Action',
-      grow: 3,
-      cell: (row: Transaction) => (
-        <div className="flex justify-around">
-          <Link href={`/Admin/payments/transactions/validate/${row.tx_ref}`}>
-            <button
-            onClick={() => setId(row.tx_ref)}
-            className="mr-4 rounded bg-blue-500 px-2 py-2 text-white transition duration-300 hover:bg-blue-400"
-          >
-            <FaEye className="mr-2 inline-block" /> Verify
-          </button>
-          </Link>
+    // {
+    //   name: 'Action',
+    //   grow: 3,
+    //   cell: (row: Transaction) => (
+    //     <div className="flex justify-around">
+    //       <Link href={`/Admin/payments/transactions/validate/${row.tx_ref}`}>
+    //         <button
+    //         onClick={() => setId(row.tx_ref)}
+    //         className="mr-4 rounded bg-blue-500 px-2 py-2 text-white transition duration-300 hover:bg-blue-400"
+    //       >
+    //         <FaEye className="mr-2 inline-block" /> Verify
+    //       </button>
+    //       </Link>
         
           
-          {/* <button
-            className="mr-4 rounded bg-blue-400 px-2 py-2 text-white transition duration-300 hover:bg-blue-200"
-          >
-            <FaEdit className="mr-2 inline-block" /> Edit
-          </button> */}
-        </div>
-      ),
-    },
+    //       {/* <button
+    //         className="mr-4 rounded bg-blue-400 px-2 py-2 text-white transition duration-300 hover:bg-blue-200"
+    //       >
+    //         <FaEdit className="mr-2 inline-block" /> Edit
+    //       </button> */}
+    //     </div>
+    //   ),
+    // },
   ];
 
   const tableHeaderStyle = {
@@ -164,7 +164,7 @@ const Transactions: React.FC<TransactionProps> = ({user}) => {
                     </div>
                   </button>
                 </Link>
-                <h2 className="text-2xl font-bold text-white"> Recent Transactions Table</h2>
+                <h2 className="text-2xl font-bold text-white"> Confirmed Payments Table</h2>
                 <button
                   onClick={() => console.log('Export CSV clicked')}
                   className="rounded bg-white/30 px-4 py-2 text-sm font-medium text-white transition duration-300 hover:bg-primary focus:outline-none focus:ring focus:ring-green-300"
@@ -206,4 +206,4 @@ const Transactions: React.FC<TransactionProps> = ({user}) => {
   );
 };
 
-export default Transactions;
+export default ConfirmedTransactions;

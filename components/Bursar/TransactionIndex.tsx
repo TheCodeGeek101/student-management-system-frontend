@@ -14,13 +14,13 @@ export default function TransactionIndex() {
   const cardDetails: CardDetail[] = [
     {
       title: 'Recent Transactions',
-      description: 'Click here to verify and approve the recent transactions made',
+      description: 'Click here to verify and confirm the recent payments made',
       name: 'view',
       link: '/Admin/payments/transactions/recent'
     },
     {
-      title: 'Approved Transactions',
-      description: 'Click here to view all approved transactions',
+      title: 'Confirmed Transactions',
+      description: 'Click here to view all approved payments',
       name: 'create',
       link:'/Admin/payments/transactions/approved'
     }

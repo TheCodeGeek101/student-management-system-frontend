@@ -3,7 +3,7 @@ import React from 'react';
 import DefaultLayout from '@/components/Layouts/DefaultLayout';
 import GetLoggedInUserHelper from '@/helpers/GetLoggedInUserHelper';
 import Loader from '@/components/Shared/Loader';
-import Transactions from '@/components/Bursar/Transactions';
+import ConfirmedTransactions from '@/components/Bursar/ConfirmedTransactions';
 
 const Page = () => {
   const user = GetLoggedInUserHelper();
@@ -14,7 +14,7 @@ const Page = () => {
       <Loader /> // Handle the case where user is still being fetched
     ) : (
       <DefaultLayout user={user}>
-        <Transactions user={user} />
+        <ConfirmedTransactions user={user} />
       </DefaultLayout>
     )
   );
