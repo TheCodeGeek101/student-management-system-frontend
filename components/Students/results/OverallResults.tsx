@@ -28,17 +28,20 @@ const OverallResults: React.FC<ResultsProps> = ({ user }) => {
 
   if ("student" in user) {
     studentId = user.student.id;
-    classId = user.student.class_id;
+    classId = user.student.class_id - 1;
     registrationNumber = user.student.registration_number;
   }
-  
+  console.log(
+    "Class id:" + classId + "student id:" + studentId
+  );
   useEffect(() => {
+    
     const fetchData = async () => {
       try {
         const response = await axios.post('/api/getOverallResults', {
           studentId,
           endPoint,
-          classId,
+          classId ,
         });
 
         console.log("Response data:", response.data);
@@ -60,7 +63,7 @@ const OverallResults: React.FC<ResultsProps> = ({ user }) => {
     };
 
     fetchData();
-  }, [endPoint, studentId]);
+  }, [classId, endPoint, studentId]);
 
   if (loading) return <div><DataLoader /></div>;
   if (error) return <div>Error: {error}</div>;

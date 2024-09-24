@@ -125,7 +125,7 @@ const Transactions: React.FC<TransactionProps> = ({user}) => {
       }
     };
     fetchData();
-  }, []);
+  }, [studentId]);
 
   useEffect(() => {
     const result = transactionData.filter((transaction) =>

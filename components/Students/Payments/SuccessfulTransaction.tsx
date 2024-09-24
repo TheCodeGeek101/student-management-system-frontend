@@ -2,6 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 import { User } from '@/types/user';
 import { formatDateToWords } from '@/utils/DateFormat';
+
 interface TransactionData {
   status: string;
   message: string;

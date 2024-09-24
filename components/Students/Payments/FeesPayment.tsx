@@ -201,6 +201,8 @@ const PaymentDetails: React.FC<PaymentsProps> = ({user}) => {
                                 ))}
                             </div>
                             <div className="mt-5 flex justify-around">
+                  <Link href='/Student/Payments/Index'>
+
                 <button className="flex items-center justify-center w-1/2 px-5 py-2 text-sm text-gray-700 transition-colors duration-200 bg-white border rounded-sm gap-x-2 sm:w-auto  hover:bg-gray-100  dark:border-gray-300">
                   <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -216,10 +218,9 @@ const PaymentDetails: React.FC<PaymentsProps> = ({user}) => {
                           d="M6.75 15.75L3 12m0 0l3.75-3.75M3 12h18"
                       />
                   </svg>
-                  <Link href='/Student/Payments/Index'>
                       <span>Go Back</span>
-                  </Link>
                 </button>
+                </Link>
                 
                 <button
                   type='submit'

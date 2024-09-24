@@ -4,13 +4,13 @@ import jwt from 'jsonwebtoken';
 import cookie from 'cookie';
 
 // Ensure environment variables are set
-const SECRET_KEY = process.env.SECRET_KEY || 'defaultSecretKey'; // Replace with your strong secret key
+const SECRET_KEY = process.env.NEXT_PUBLIC_SECRET_KEY || 'defaultSecretKeyThatIsLongEnough';
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000'; // Default to localhost if not set
 
 // Define session options
 export const sessionOptions = {
   cookieName: 'myapp_session',
-  password: process.env.SECRET_COOKIE_PASSWORD || 'defaultCookiePassword', // Replace with your strong cookie password
+  password: process.env.SECRET_COOKIE_PASSWORD || 'defaultCookiePasswordThatIsLongEnough',
   cookieOptions: {
     secure: process.env.NODE_ENV === 'production',
   },
@@ -55,7 +55,6 @@ async function handler(req, res) {
     } else if (response.status === 401) {
       return res.status(401).json(response.data);
     } else if (response.status === 403) {
-      // Handle the withdrawn student case
       return res.status(403).json({
         message: 'Access forbidden: Student has been withdrawn from the system.',
       });

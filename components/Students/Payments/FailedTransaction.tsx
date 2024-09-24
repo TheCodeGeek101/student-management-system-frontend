@@ -43,7 +43,7 @@ const FailedTransaction: React.FC<TransactionProps> = ({ transactionData, error 
       <div className="container md:mt-10">
         <div className="flex flex-col items-center">
           <div className="text-red-500 font-semibold">{error}</div>
-          <Link href="/Auth">
+          <Link href="/Student/Payments/Index">
             <button className="h-10 px-5 text-red-500 transition-colors duration-150 border border-gray-300 rounded-lg focus:shadow-outline hover:bg-red-500 hover:text-white mt-5">
               Close
             </button>

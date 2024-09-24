@@ -152,8 +152,8 @@ export default function Home() {
                           type="submit"
                           className="bg-mainColor hover:bg-darkMainColor text-white font-bold py-2 px-4 rounded-lg"
                         >
-                          {isLoading ? (
-                            <BallTriangle height={30} width={30} color="white" />
+                          {isLoading ? (       
+                            <BallTriangle height={30} width={30} color="white" /> 
                           ) : (
                             'Login'
                           )}

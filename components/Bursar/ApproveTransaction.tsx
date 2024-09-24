@@ -184,6 +184,7 @@ const ApproveTransaction: React.FC<SuccessfulTransactionProps> = ({ transactionD
             {loading ? 'Approving...' : 'Approve'}
           </button>
         </div>
+        </form>
       </div>
       <Toaster position="top-center" />
     </div>

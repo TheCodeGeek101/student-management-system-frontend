@@ -8,7 +8,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return res.status(405).end(`Method ${req.method} Not Allowed`);
   }
 
-  const { endPoint, studentId, termId, classId }: { endPoint?: string, studentId?: number, termId?: number, classId?:number } = req.body;
+  const { endPoint, studentId, termId, classId }: { endPoint?: string, studentId?: number, termId?: number, classId?: number } = req.body;
 
   // Ensure all required parameters are present
   if (!endPoint || !studentId || !termId || !classId) {
@@ -16,13 +16,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   // Construct the backend URL
-  const backendURL = `${process.env.NEXT_PUBLIC_API_URL}/api/${endPoint}/${studentId}/term/${termId}/class/${classId}/subjects/grades`;
+  const backendURL = `${process.env.NEXT_PUBLIC_API_URL}/api/${endPoint}/${studentId}/term/${termId}/subjects/grades`;
   console.log('Attempting to fetch from URL:', backendURL); // Log the final URL
 
   try {
     const response = await fetch(backendURL, {
-      method: 'GET',
+      method: 'POST',
       headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        class_id: classId
+      }) // Stringify the body for POST requests
     });
 
     if (!response.ok) {

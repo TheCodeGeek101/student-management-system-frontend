@@ -49,7 +49,9 @@ const StudentGradesTable: React.FC<StudentProps> = ({ studentId, registrationNum
   const [hasExaminationResults, setHasExaminationResults] = useState<boolean>(true);
   const [examinationResultData, setExaminationResultData] = useState<ResultData | null>(null);
   const endPoint = 'students';
+
  const [classes, setClasses ] = useState<ClassData[]>([]);
+ 
   const columns = [
     { name: 'Subject', selector: (row: ExaminationData) => row.subject_name },
     { name: 'Code', selector: (row: ExaminationData) => row.subject_code },
@@ -158,7 +160,7 @@ const StudentGradesTable: React.FC<StudentProps> = ({ studentId, registrationNum
     };
 
     fetchData();
-  }, [studentId, selectedTermId]);
+  }, [studentId, selectedTermId, selectedClassId]);
 
   useEffect(() => {
     setFilter(

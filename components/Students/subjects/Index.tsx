@@ -7,6 +7,7 @@ import DataLoader from '@/components/Shared/Loaders/Loader';
 import { fadeIn } from '@/Utils/motion';
 import { getButtonColor, getCardColor, getIcon, getTextColor } from '@/helpers/SubjectDisplayHelper';
 import UnregisteredSubjects from '@/components/Shared/Errors/UnregisteredSubjects';
+import UnregisteredStatus from '@/components/Shared/Errors/UnregisteredStatus';
 
 interface SubjectData {
   subject_id: number;
@@ -18,6 +19,14 @@ interface SubjectData {
   cardColor: string;
   textColor: string;
   buttonColor: string;
+}
+
+interface CalendarData {
+  id: number;
+  term_id: number;
+  start_date: string;
+  end_date: string;
+  description: string;
 }
 
 interface SubjectsProps {
@@ -36,20 +45,44 @@ const AvailableSubjects: React.FC<SubjectsProps> = ({ user }) => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [hasSubjects, setHasSubjects] = useState<boolean>(true);
-  const [subjectId,setSubjectId] = useState<number>(0);
+  const [subjectId, setSubjectId] = useState<number>(0);
+  const [calendars, setCalendars] = useState<CalendarData[]>([]);
+  const [canRegister, setCanRegister] = useState<boolean>(true); // To track registration status
+  const [amountNeeded, setAmountNeeded] = useState<number>(0);   // To track amount needed
 
-  const endPoint = 'students'; // Updated endpoint for student data
+  const endPoint = 'students'; 
 
   let displayName = 'User';
   let studentId = 0;
+  let classId = 0;
 
   if ('student' in user) {
     displayName = `${user.student.first_name} ${user.student.last_name}`;
     studentId = user.student.id;
+    classId = user.student.class_id;
   }
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchCalendars = async () => {
+      try {
+        const response = await axios.post(`/api/GetData`, {
+          endPoint: 'calendars',
+        });
+        if (response.status === 200) {
+          setCalendars(response.data.calendars);
+        }
+      } catch (error: any) {
+        setError(error.response?.statusText || error.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCalendars();
+  }, [endPoint]);
+
+  useEffect(() => {
+    const fetchSubjects = async () => {
       try {
         const response = await axios.post(`/api/getStudentSubjects`, {
           id: studentId,
@@ -69,8 +102,7 @@ const AvailableSubjects: React.FC<SubjectsProps> = ({ user }) => {
             buttonColor: getButtonColor(subject.name),
           }));
           setSubjectData(subjects);
-          setSubjectId(subjects.subject_id);
-          console.log("ID:" + subjectId);
+          setSubjectId(subjects[0]?.subject_id || 0);
           setHasSubjects(subjects.length > 0);
         } else {
           setHasSubjects(false);
@@ -83,24 +115,61 @@ const AvailableSubjects: React.FC<SubjectsProps> = ({ user }) => {
       }
     };
 
-    fetchData();
+    fetchSubjects();
   }, [endPoint, studentId]);
+
+  useEffect(() => {
+    const canStudentRegister = async () => {
+      if (calendars.length === 0) return; // Ensure calendars are loaded
+  
+      console.log('endpoint:' + endPoint + "term id:" + calendars[0]?.term_id + 'class:' + classId);
+      try {
+        const response = await axios.post(`/api/CanRegister`, {
+          endPoint: endPoint,
+          data: {
+            term_id:calendars[0]?.term_id,
+            class_id:classId
+          },  // Assuming the first calendar term is the current one
+          studentId: studentId,
+        });
+  
+        if (response.status === 200 && response.data.decision) {
+          // Check if decision is a boolean or an object
+          if (typeof response.data.decision === 'boolean' && response.data.decision === true) {
+            setCanRegister(true);  // Allow registration
+          } else if (typeof response.data.decision === 'object') {
+            const { can_register, amount_needed } = response.data.decision;
+            setCanRegister(can_register);
+            setAmountNeeded(amount_needed);
+          }
+        }
+      } catch (error: any) {
+        setError(error.response?.statusText || error.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+  
+    canStudentRegister();
+  }, [calendars, classId, endPoint]);
+  
 
   if (loading) return <div><DataLoader /></div>;
   if (error) return <div>Error: {error}</div>;
-  if (!hasSubjects) return <UnregisteredSubjects />;
 
-   
-  
+  // Render UnregisteredStatus if registration is blocked
+  if (!canRegister) return <UnregisteredStatus amountNeeded={amountNeeded} />;
+
+  // if (!hasSubjects) return <UnregisteredSubjects />;
+
   return (
     <div className="min-h-screen">
       <div className="flex justify-center items-center">
-              <h1 className='font-bold  text-2xl text-primary'>Subject Registration </h1>
-            </div>
+        <h1 className='font-bold text-2xl text-primary'>Subject Registration</h1>
+      </div>
       <section className="m-4 grid gap-8 p-8 md:grid-cols-3">
         {subjectData.map((subject) => (
           <motion.div
-           
             whileHover={{
               scale: 1.1,
               textShadow: '0px 0px 8px rgb(255,255,255)',
@@ -109,7 +178,6 @@ const AvailableSubjects: React.FC<SubjectsProps> = ({ user }) => {
             key={subject.subject_id}
             className={`card mx-auto block rounded-lg p-10 transition duration-200 hover:bg-white/30 ${subject.cardColor}`}
           >
-            
             <div className="card-body">
               <div className="flex items-center justify-between">
                 <h2 className={`font-bold capitalize ${subject.textColor}`}>
@@ -124,8 +192,7 @@ const AvailableSubjects: React.FC<SubjectsProps> = ({ user }) => {
               <p className={`mt-4 ${subject.textColor}`}>Credits: {subject.credits}</p>
               <div className="card-actions mt-5 justify-end">
                 <Link href={`/Student/subjects/Enroll/${subject.subject_id}`}>
-                  <button
-                  className={`rounded-sm px-4 py-2 ${subject.buttonColor} text-white `}                  >
+                  <button className={`rounded-sm px-4 py-2 ${subject.buttonColor} text-white`}>
                     View
                   </button>
                 </Link>

@@ -1,30 +1,33 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  console.log('Request body:', req.body); // Log to see what is received
+  console.log('Request body:', req.body); // Log the received request body
 
   if (req.method !== 'POST') {
     res.setHeader('Allow', ['POST']);
     return res.status(405).end(`Method ${req.method} Not Allowed`);
   }
 
-  const { endPoint, studentId }: { endPoint?: string, studentId?:number } = req.body;
-  if (!endPoint) {
-    return res
-      .status(400)
-      .json({ error: 'Missing required parameter: endPoint' });
+  const { endPoint, studentId, data }: { endPoint?: string; studentId?: number; data?: object } = req.body;
+
+  // Check for missing required parameters
+  if (!endPoint || !studentId || !data) {
+    return res.status(400).json({ error: 'Missing required parameters: endPoint, studentId, or data' });
   }
 
-  // Correct the URL construction
+  // Construct the backend URL properly
   const backendURL = `${process.env.NEXT_PUBLIC_API_URL}/api/${endPoint}/student/${studentId}/subjects/results`;
-  console.log('Attempting to fetch from URL:', backendURL); // Log the final URL
+  console.log('Attempting to send request to:', backendURL); // Log the constructed URL
 
   try {
+    // Send the POST request to the backend API
     const response = await fetch(backendURL, {
-      method: 'GET',
+      method: 'POST',
       headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data), // Directly stringify the 'data' object
     });
 
+    // Handle non-2xx responses
     if (!response.ok) {
       console.error(`Failed to fetch ${endPoint}:`, response.statusText);
       return res.status(response.status).json({
@@ -32,13 +35,17 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       });
     }
 
-    const data = await response.json();
-    console.log(`Data fetched for ${endPoint}:`, data); // Successful data fetch log
-    res.status(200).json(data);
+    // Parse the response JSON
+    const responseData = await response.json();
+    console.log(`Data received for ${endPoint}:`, responseData); // Log the success
+
+    // Send the received data back to the client
+    return res.status(200).json(responseData);
   } catch (error: any) {
-    console.error('Error encountered fetching data:', error);
-    res.status(500).json({
-      message: `Failed to retrieve ${endPoint}.`,
+    // Log and send the error response
+    console.error('Error encountered during fetch:', error);
+    return res.status(500).json({
+      message: `Failed to retrieve data for ${endPoint}.`,
       error: error.message,
     });
   }
