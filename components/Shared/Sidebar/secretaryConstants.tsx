@@ -59,11 +59,37 @@ export const secretaryConstants: MenuGroup[] = [
         label: 'Scheduling',
         route: '#',
         children: [
-          
           {
             icon: <FaCalendarAlt className="text-orange-500" />,
             label: 'Event Calendar',
             route: '/events/calendar',
+          },
+          {
+            icon: <FaCalendarAlt className="text-orange-500" />,
+            label: 'Create Event',
+            route: '/events/create',
+          },
+        ],
+      },
+    ],
+  },
+  {
+    name: 'Academic calendar',
+    menuItems: [
+      {
+        icon: <FaMoneyCheckAlt className="text-red-500" />, // Red for document management
+        label: 'Calendar',
+        route: '#',
+        children: [
+          {
+            icon: <FaCalendarAlt className="text-orange-500" />,
+            label: 'Create Calendar',
+            route: '/calendar/academic/create',
+          },
+          {
+            icon: <FaMoneyCheckAlt className="text-blue-500" />, // Blue for reports
+            label: 'Calendar',
+            route: '/calendar/academic/index',
           },
         ],
       },
@@ -77,11 +103,7 @@ export const secretaryConstants: MenuGroup[] = [
         label: 'Documents',
         route: '#',
         children: [
-          {
-            icon: <FaFileAlt className="text-red-500" />,
-            label: 'Document Uploads',
-            route: '/documents/uploads',
-          },
+          
           {
             icon: <FaMoneyCheckAlt className="text-blue-500" />, // Blue for reports
             label: 'Reports',

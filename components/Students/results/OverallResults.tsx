@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import DataLoader from '@/components/Shared/Loaders/Loader';
 import { User } from '@/types/user';
 import { FaGraduationCap } from 'react-icons/fa'; // Import graduation icon
+import NoEndOfYearResults from '@/components/Shared/Errors/NoEndOfYearResults';
 
 interface TermAverage {
   term: string;
@@ -28,20 +29,20 @@ const OverallResults: React.FC<ResultsProps> = ({ user }) => {
 
   if ("student" in user) {
     studentId = user.student.id;
-    classId = user.student.class_id - 1;
+    classId = user.student.class_id;
     registrationNumber = user.student.registration_number;
   }
   console.log(
     "Class id:" + classId + "student id:" + studentId
   );
+
   useEffect(() => {
-    
     const fetchData = async () => {
       try {
         const response = await axios.post('/api/getOverallResults', {
           studentId,
           endPoint,
-          classId ,
+          classId,
         });
 
         console.log("Response data:", response.data);
@@ -67,6 +68,11 @@ const OverallResults: React.FC<ResultsProps> = ({ user }) => {
 
   if (loading) return <div><DataLoader /></div>;
   if (error) return <div>Error: {error}</div>;
+
+  // Render NoExaminationsUploaded if no term averages are found
+  if (termAverages.length === 0) {
+    return <NoEndOfYearResults />;
+  }
 
   const getStatusClasses = (status: string | null) => {
     if (status === 'Withdraw') return 'bg-red';

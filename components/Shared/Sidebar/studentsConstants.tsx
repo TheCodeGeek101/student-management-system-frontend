@@ -111,16 +111,16 @@ import {
         //   label: 'Transactions',
         //   route: '/student/payments/verify-transaction',
         // },
-        {
-          icon: <FaBalanceScaleRight className="text-teal-500" />, // Teal for balances
-          label: 'Balances',
-          route: '/student/payments/balances',
-        },
-        {
-          icon: <FaUndo className="text-teal-500" />, // Teal for refunds
-          label: 'Refunds',
-          route: '/student/fees/refunds',
-        },
+        // {
+        //   icon: <FaBalanceScaleRight className="text-teal-500" />, // Teal for balances
+        //   label: 'Balances',
+        //   route: '/student/payments/balances',
+        // },
+        // {
+        //   icon: <FaUndo className="text-teal-500" />, // Teal for refunds
+        //   label: 'Refunds',
+        //   route: '/student/fees/refunds',
+        // },
       ],
     },
     {
