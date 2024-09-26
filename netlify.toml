@@ -1,0 +1,17 @@
+[build]
+  # Install TypeScript and @types/node before building the project
+  command = "npm install --save-dev typescript @types/node && npm run build"
+  publish = ".next"
+
+# Specify the production context and Node.js version
+[context.production]
+  environment = { NODE_ENV = "production" }
+
+# Set specific environment variables for production
+[context.production.environment]
+  NODE_VERSION = "16.x"
+
+# Optionally, if you want to set caching to speed up future builds, you can add:
+[build]
+  functions = "netlify/functions"
+  cache = ["node_modules", ".next/cache"]
