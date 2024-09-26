@@ -147,7 +147,7 @@ const PaymentDetails: React.FC<PaymentsProps> = ({user}) => {
                 <div className="flex justify-center w-full max-w-2xl bg-white rounded-xl mx-auto shadow-lg overflow-hidden">
                     <div className="w-full lg:w-full py-16 px-12 bg-white">
                         {/* <h2 className="text-3xl mb-4 text-secondary text-center">Register</h2> */}
-                        <p className="mb-4 text-center font-semibold text-2xl">Make Payments</p>
+                        <p className="mb-4 text-center font-semibold text-2xl">Payment Details</p>
                         <form onSubmit={handleSubmit}>
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                                 {(paymentForm || []).map((field, index) => (

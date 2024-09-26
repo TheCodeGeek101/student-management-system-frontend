@@ -61,7 +61,10 @@ const Withdrawn: React.FC = () => {
       name: 'Action',
       grow: 2,
       cell: (row: Student) => (
+        <>
         <div className="flex justify-around">
+
+          <Link href={`/Admin/students/withdrawn/student/${row.id}`}>
           <button
             onClick={() => {
               setId(row.id);
@@ -71,6 +74,7 @@ const Withdrawn: React.FC = () => {
           >
             <FaEye className="mr-2 inline-block" /> View
           </button>
+          </Link>
           
             <button
              onClick={() => {
@@ -82,6 +86,8 @@ const Withdrawn: React.FC = () => {
             </button>
         
         </div>
+        </>
+        
       ),
     },
   ];

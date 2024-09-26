@@ -54,7 +54,7 @@ const AssignedSubjects: React.FC = () => {
     },
     {
         name: 'Action',
-        
+        grow:2,
         cell: (row: Subject) => (
           <div className="flex justify-around">
            

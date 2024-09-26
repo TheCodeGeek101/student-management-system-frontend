@@ -13,7 +13,7 @@ interface ShowStudentProps {
   studentId: number;
 }
 
-const ShowStudent: React.FC<ShowStudentProps> = ({ studentId }) => {
+const ShowWithdrawnStudent: React.FC<ShowStudentProps> = ({ studentId }) => {
   const [studentData, setStudentData] = useState<Student | null>(null);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [imageFile, setImageFile] = useState<File | null>(null);
@@ -94,7 +94,7 @@ console.log("student data is:" + studentData);
 
       {/* Back Button */}
       <div className="my-4">
-        <Link href='/Admin/students/all/page'>
+        <Link href='/Admin/students/withdrawn/page'>
           <button className="flex items-center justify-center w-1/2 px-5 py-2 text-sm text-gray-700 transition-colors duration-200 bg-white border rounded-sm gap-x-2 sm:w-auto hover:bg-gray-100 dark:border-gray-300">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -234,4 +234,4 @@ console.log("student data is:" + studentData);
   );
 };
 
-export default ShowStudent;
+export default ShowWithdrawnStudent;

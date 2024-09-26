@@ -56,9 +56,11 @@ const Students: React.FC = () => {
       grow: 3,
       cell: (row: Student) => (
         <div className="flex justify-around">
+          <Link href={`/Admin/students/show/student/${row.id}`}>
+
           <button
             onClick={() => {
-              setShowStudentModal(true);
+            
               setId(row.id);
               console.log('Student ID:', row.id);
             }}
@@ -66,9 +68,11 @@ const Students: React.FC = () => {
           >
             <FaEye className="mr-2 inline-block" /> View
           </button>
+          </Link>
+
           <Link href={`/Admin/students/edit/student/${row.id}`}>
             <button
-              className="mr-4 rounded bg-blue-400 px-2 py-2 text-white transition duration-300 hover:bg-yellow-400 focus:outline-none focus:ring focus:ring-yellow-300"
+              className="mr-4 rounded bg-blue-400 px-2 py-2 text-white transition duration-300 hover:bg-opacity-70 focus:outline-none focus:ring focus:ring-blue-400"
             >
               <FaEdit className="mr-2 inline-block" /> Edit
             </button>

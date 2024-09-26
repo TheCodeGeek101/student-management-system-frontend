@@ -229,6 +229,41 @@ export const departmentFields = [
   ];
 
 
+
+  export const calendarFields = [
+   { 
+     type: 'date', 
+     name: 'start_date',
+      placeholder: 'Start date',
+       label: 'Start Date'
+    },
+    { 
+      type: 'date', 
+      name: 'end_date',
+       placeholder: 'End date',
+        label: 'End Date'
+     },  
+      {
+       label: 'Term',
+       name: 'term_id',
+       placeholder: 'Term',
+       options: [
+         { label: 'Term 1', value: 1 },
+         { label: 'Term 2', value: 2 },
+         { label: 'Term 3', value: 3 }
+       ],
+       type: 'select',
+     },
+       {
+          name: 'description',
+          type: 'text', 
+          placeholder: 'description',
+          label: 'Description' 
+       }
+ ];
+
+
+
   // assessments
    export const assessmentFields = [
     {
