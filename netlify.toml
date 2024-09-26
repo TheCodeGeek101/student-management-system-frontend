@@ -8,7 +8,7 @@
   environment = { NODE_ENV = "production" }
 
 # Set specific environment variables for production
-[context.production.environment]
+
   NODE_VERSION = "20.x"
 
 # Optionally, if you want to set caching to speed up future builds, you can add:
