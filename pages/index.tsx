@@ -57,9 +57,29 @@ export default function Home() {
         // Redirect based on user type
         if (response.data.superadmin) {
           router.push('/Admin/dashboard/page');
-        } else if (response.data.admin) {
-          router.push('/Admin/dashboard/page');
-        } else if (response.data.student) {
+        } 
+        else if (response.data.admin) {
+                const { position } = response.data.admin;
+          
+                switch (position) {
+                  case "Bursar":
+                     return router.push('/Admin/bursar/dashboard/page');
+                  case "Assistant Bursar":
+                     return router.push('/Admin/bursar/dashboard/page');
+                  case "Secretary":
+                     return router.push('/Admin/secretary/dashboard/page');                  
+                  case "It Officer":
+                     return  router.push('/Admin/it-officer/dashboard/page');  
+                  case "Head Teacher":
+                     return router.push('/Admin/dashboard/page');
+                  case "Deputy Head Teacher":
+                    return router.push('/Admin/dashboard/page');                   
+                  default:
+                    return router.push('/Admin/bursar/dashboard/page');
+                 }
+           }
+            
+         else if (response.data.student) {
           router.push('/Student/dashboard/page');
         } else if (response.data.tutor) {
           router.push('/Tutors/dashboard/page');

@@ -98,7 +98,7 @@ const CreateDepartment: React.FC = () => {
         }
     };
 
-    return (
+    return ( 
         <div className="h-screen flex items-center justify-center py-12">
             <div className="container mx-auto">
                 <div className="flex justify-center w-full max-w-2xl bg-white rounded-xl mx-auto shadow-lg overflow-hidden">

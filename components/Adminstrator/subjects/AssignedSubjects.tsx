@@ -56,8 +56,7 @@ const AssignedSubjects: React.FC = () => {
         name: 'Action',
         grow:2,
         cell: (row: Subject) => (
-          <div className="flex justify-around">
-           
+          <div className="flex justify-around">          
            <Link href='#'>
               <button
                 onClick={() => {
@@ -69,9 +68,6 @@ const AssignedSubjects: React.FC = () => {
                 <FaEdit className="mr-2 inline-block" /> Re-assign
               </button>
             </Link>
-            
-          
-            
           </div>
         ),
       }

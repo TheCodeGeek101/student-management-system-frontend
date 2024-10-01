@@ -8,8 +8,8 @@ const SECRET_KEY = process.env.SECRET_KEY as string; // Ensure this is the same 
 export async function middleware(req: NextRequest) {
   const cookies = cookie.parse(req.headers.get('cookie') || '');
   const token = cookies['auth_token'];
-  console.log("token is:" + token);
-
+  const user = cookies['auth_user'];
+  console.log("user is:" + user);
   try {
     // Verify JWT token
     if (token) {
@@ -29,8 +29,7 @@ export async function middleware(req: NextRequest) {
 export const config = {
   matcher: [
     '/Admin/:path*',
-    // '/Student/:path*',
-    // '/Tutor/:path*',
-    // '/Guardian/:path*'
+    '/Student/:path*',
+    '/Tutor/:path*',
   ],
 };

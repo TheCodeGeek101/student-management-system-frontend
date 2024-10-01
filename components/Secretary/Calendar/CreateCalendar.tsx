@@ -35,7 +35,7 @@ interface AdminProps {
 
 const CreateCalendar: React.FC<AdminProps> = ({user}) => {
     const [loading, setIsLoading] = useState<boolean>(false);
-    const endpoint = "calendars/create";
+    const endpoint = "terms/create";
     const [formData, setFormData] = useState(createInitialFormState(calendarFields));
     const [errors, setErrors] = useState<Errors>({});
     const router = useRouter();
@@ -50,7 +50,11 @@ const CreateCalendar: React.FC<AdminProps> = ({user}) => {
   }
 
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>, name: string) => {
+    const handleChange = (e: 
+        React.ChangeEvent<HTMLInputElement | 
+        HTMLSelectElement |
+         HTMLTextAreaElement>, 
+         name: string) => {
         const { value } = e.target;
 
         setFormData((prevFormData:any) => ({
@@ -68,47 +72,55 @@ const CreateCalendar: React.FC<AdminProps> = ({user}) => {
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        const validationErrors:any = validateForm(calendarFields, formData);
-
+    
+        // Validate form data
+        const validationErrors: any = validateForm(calendarFields, formData);
         if (Object.keys(validationErrors).length > 0) {
             setErrors(validationErrors);
             setIsLoading(false);
             return;
         }
-
+    
         console.log("Form data:", JSON.stringify(formData));
-        const data = JSON.stringify(formData);
         try {
             setIsLoading(true);
             
-                const response = await axios.post('/api/post/PostDataApi',{
-                    endPoint:endpoint,
-                    data:formData
-                });
-
-                    if(response.status === 200 || response.status === 201)
-                    {
-                        toast.success("Record created successfully");
-                        setFormData(createInitialFormState(calendarFields));
-                    }
-                    else if(response.status === 500 )
-                    {
-                        toast.error(response.data);
-                    }
-            
+            // Post the form data to the API
+            const response = await axios.post('/api/PostAcademicTerm', {
+                endPoint: endpoint,
+                data: formData,
+            });
+    
+            // Handle successful responses
+            if (response.status === 200 || response.status === 201) {
+                toast.success("Record created successfully");
+                setFormData(createInitialFormState(calendarFields)); // Reset form data
+            }
         } catch (error: any) {
             console.error('Submission error:', error);
+            
+            // Handle errors
             if (error.response) {
-                toast.error(`Failed to create client: ${error.response.data.error || error.message}`);
+                // Handle specific status codes from the server
+                if (error.response.status === 409) {
+                    toast.error(error.response.data.message || 'A term already exists within the specified dates.');
+                } else if (error.response.status === 500) {
+                    toast.error('Server error occurred');
+                } else {
+                    toast.error('Operation Failed: ' + (error.response.data.error || 'Unknown error'));
+                }
             } else if (error.request) {
+                // No response received from the server
                 toast.error('No response from server');
             } else {
+                // Some other error occurred
                 toast.error('Error encountered: ' + error.message);
             }
         } finally {
             setIsLoading(false);
         }
     };
+    
 
     return (
         <div className="min-h-screen flex items-center justify-center p-12">

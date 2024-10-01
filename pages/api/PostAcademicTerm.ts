@@ -3,10 +3,15 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 
 interface RequestBody {
   endPoint: string;
-  data: any;
+  data: any; // Replace `any` with a more specific type if possible
 }
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+interface ApiResponse {
+  message?: string;
+  error?: string;
+}
+
+export default async function handler(req: NextApiRequest, res: NextApiResponse<ApiResponse>) {
   console.log('Request body:', req.body); // Log incoming request body
 
   if (req.method !== 'POST') {
@@ -16,47 +21,46 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   const { endPoint, data }: RequestBody = req.body;
   if (!endPoint || !data) {
-    return res
-      .status(400)
-      .json({ error: 'Missing required parameters: endPoint or data' });
+    return res.status(400).json({ error: 'Missing required parameters: endPoint or data' });
   }
 
   const backendURL = `${process.env.NEXT_PUBLIC_API_URL}/api/${endPoint}`;
   try {
     const response = await axios.post(backendURL, data);
     console.log(`Data fetched for ${endPoint}:`, response.data);
+
+    // Handle 200 and 201 success responses
     if (response.status === 200 || response.status === 201) {
       return res.status(200).json(response.data);
     }
-    else if(response.status === 409)
-    {
-      const {message} = response.data;
-      return res.status(409).json(message);
+    // Handle 409 Conflict response
+    else if (response.status === 409) {
+      const message = response.data.message || 'A conflict occurred.';
+      console.log('Conflict occurred:', message);
+      return res.status(409).json({ message });
     }
+    // Handle any other status code
     else {
       return res.status(response.status).json(response.data);
     }
-  } catch (error) {
-    console.error('Error encountered fetching data:', error);
+  } catch (error:any) {
+    console.error('Error encountered fetching data:', error.response?.data || error.message);
     if (axios.isAxiosError(error)) {
       if (error.response) {
-        // The request was made and the server responded with a status code
-        // that falls out of the range of 2xx
+        // Server responded with a status code outside 2xx
         console.error(error.response.data);
-        console.error(error.response.status);
-        console.error(error.response.headers);
         return res.status(error.response.status).json({ error: error.response.data });
       } else if (error.request) {
-        // The request was made but no response was received
+        // No response from the server
         console.error(error.request);
         return res.status(500).json({ error: 'No response from the server' });
       } else {
-        // Something happened in setting up the request that triggered an Error
+        // Axios error during setup
         console.error('Error message:', error.message);
         return res.status(500).json({ error: error.message });
       }
     } else {
-      // Handle other errors (non-Axios)
+      // Non-Axios errors
       return res.status(500).json({ error: 'An unknown error occurred' });
     }
   }

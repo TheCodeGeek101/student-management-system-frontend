@@ -94,11 +94,11 @@ export const bursarConstants: MenuGroup[] = [
             label: "Transactions",
             route: "/Admin/payments/transactions/transaction",
           },
-          {
-            icon: <FaCreditCard className="text-teal-500" />,
-            label: "Payment Methods",
-            route: "/Admin/payments/methods",
-          },
+          // {
+          //   icon: <FaCreditCard className="text-teal-500" />,
+          //   label: "Payment Methods",
+          //   route: "/Admin/payments/methods",
+          // },
           {
             icon: <FaFileInvoiceDollar className="text-teal-500" />,
             label: "Invoices",

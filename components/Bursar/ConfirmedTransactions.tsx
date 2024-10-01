@@ -70,31 +70,7 @@ const ConfirmedTransactions: React.FC<TransactionProps> = ({user}) => {
     {
       name: 'Confirmed',
       selector: (row: Transaction) => (row.confirmed ? 'Yes' : 'No'),
-      
-    },
-    // {
-    //   name: 'Action',
-    //   grow: 3,
-    //   cell: (row: Transaction) => (
-    //     <div className="flex justify-around">
-    //       <Link href={`/Admin/payments/transactions/validate/${row.tx_ref}`}>
-    //         <button
-    //         onClick={() => setId(row.tx_ref)}
-    //         className="mr-4 rounded bg-blue-500 px-2 py-2 text-white transition duration-300 hover:bg-blue-400"
-    //       >
-    //         <FaEye className="mr-2 inline-block" /> Verify
-    //       </button>
-    //       </Link>
-        
-          
-    //       {/* <button
-    //         className="mr-4 rounded bg-blue-400 px-2 py-2 text-white transition duration-300 hover:bg-blue-200"
-    //       >
-    //         <FaEdit className="mr-2 inline-block" /> Edit
-    //       </button> */}
-    //     </div>
-    //   ),
-    // },
+    }
   ];
 
   const tableHeaderStyle = {

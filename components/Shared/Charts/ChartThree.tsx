@@ -49,15 +49,19 @@ const options: ApexOptions = {
   ],
 };
 
-const ChartThree: React.FC = () => {
-  const series = [65, 34, 12];
+interface ChartProps {
+  pending_payments:number ;
+  full_payments:number;
+}
+const ChartThree: React.FC<ChartProps> = (pending_payments, full_payments) => {
+  const series = [pending_payments ?? 0,full_payments ?? 0,3];
 
   return (
     <div className="col-span-12 rounded-sm border border-stroke bg-white px-5 pb-5 pt-7.5 shadow-default  sm:px-7.5 xl:col-span-5">
       <div className="mb-3 justify-between gap-4 sm:flex">
         <div>
           <h5 className="text font-semibold text-black">
-          Summary of Students' School Fee Payment Status
+          Summary of School fees payments
           </h5>
         </div>
         <div>
@@ -134,11 +138,7 @@ const ChartThree: React.FC = () => {
         </div>
         <div className="w-full px-8 sm:w-1/2">
           <div className="flex w-full items-center">
-            {/* <span className="mr-2 block h-3 w-full max-w-3 rounded-full bg-[#0FADCF]"></span> */}
-            {/* <p className="flex w-full justify-between text-sm font-medium text-black dark:text-white">
-              <span> Unknown </span>
-              <span> 12% </span>
-            </p> */}
+          
           </div>
         </div>
       </div>

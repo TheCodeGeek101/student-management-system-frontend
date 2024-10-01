@@ -40,6 +40,21 @@ const Sidebar: React.FC<SidebarProps> = ({ sidebarOpen, setSidebarOpen }) => {
           const { position } = loggedInUser.admin;
           switch (position) {
             case "Bursar":
+              return bursarConstants.map((group, groupIndex) => (
+                <div key={groupIndex}>
+                  <h3 className="mb-4 ml-4 text-sm font-semibold">{group.name}</h3>
+                  <ul className="mb-6 flex flex-col gap-1.5">
+                    {group.menuItems.map((menuItem, menuIndex) => (
+                      <SidebarItem
+                        key={menuIndex}
+                        item={menuItem}
+                        pageName={pageName}
+                        setPageName={setPageName}
+                      />
+                    ))}
+                  </ul>
+                </div>
+              ));
             case "Assistant Bursar":
               return bursarConstants.map((group, groupIndex) => (
                 <div key={groupIndex}>

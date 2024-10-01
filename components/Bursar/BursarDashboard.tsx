@@ -1,21 +1,58 @@
 "use client";
 import dynamic from "next/dynamic";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import ChartOne from "@/components/Shared/Charts/ChartOne";
 import ChartTwo from "@/components/Shared/Charts/ChartTwo";
 import CardDataStats from "@/components/Shared/CardDataStats";
 import ChatCard from "@/components/Shared/Chat/ChatCard";
 import TableOne from "@/components/Shared/Tables/TableOne";
+import axios from "axios";
+import toast from "react-hot-toast";
 
-const MapOne = dynamic(() => import("@/components/Shared/Maps/MapOne"), {
-  ssr: false,
-});
+interface PaymentData{
+    full_payments_count: number;
+    pending_payments_count:number;
+}
 
 const ChartThree = dynamic(() => import("@/components/Shared/Charts/ChartThree"), {
   ssr: false,
 });
 
-const AdminDashboard: React.FC = () => {
+const BursarDashboard: React.FC = () => {
+    const [paymentData, setPaymentData] = useState<PaymentData>();
+    const [fullPayments, setFullpayments] = useState<number>(0);
+    const [pendingPayments, setPendingPayments] = useState<number>(0);
+
+    const endPoint = 'adminstrator';
+
+    useEffect(() => {
+        const getPaymentsCount =  async () => {
+            try{
+             const response = await axios.post('/api/paymentsCount', {
+                endPoint:endPoint
+             });
+
+             if (response.status === 200)
+             {
+                setFullpayments(response.data.full_payments_count);
+                setPendingPayments(response.data.pending_payments_count);
+                console.log("Pending payments" + response.data.pending_payments_count);
+             }
+             else if(response.status === 500)
+             {
+                toast.error('Internal server error!');
+             }
+            }
+            catch(error:any) {
+                console.error('Error encountered is : ' +  error);
+                if(error.response){
+                    toast.error(error.response.data || 'Unknown error occured');
+                }
+            }
+        };
+        getPaymentsCount();
+    },[endPoint]);
+
   return (
     <>
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 xl:grid-cols-4 2xl:gap-7.5">
@@ -108,8 +145,9 @@ const AdminDashboard: React.FC = () => {
       <div className="mt-4 grid grid-cols-12 gap-4 md:mt-6 md:gap-6 2xl:mt-7.5 2xl:gap-7.5">
         <ChartOne />
         <ChartTwo />
-        {/* <ChartThree /> */}
-        <MapOne />
+        
+        <ChartThree pending_payments={pendingPayments} full_payments={fullPayments}/>
+        {/* <MapOne /> */}
         <div className="col-span-12 xl:col-span-8">
           <TableOne />
         </div>
@@ -119,4 +157,4 @@ const AdminDashboard: React.FC = () => {
   );
 };
 
-export default AdminDashboard;
+export default BursarDashboard;
