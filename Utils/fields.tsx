@@ -289,15 +289,15 @@ export const departmentFields = [
         required:true
     },
     {
-    label: 'Term',
-    name: 'term_id',
-    placeholder: 'Term',
-    options: [
-      { label: 'Term 1', value: 1 },
-      { label: 'Term 2', value: 2 },
-      { label: 'Term 3', value: 3 }
-    ],
-    type: 'select',
+        label: 'Term',
+        name: 'term_id',
+        placeholder: 'Term',
+        options: [
+          { label: 'Term 1', value: 1 },
+          { label: 'Term 2', value: 2 },
+          { label: 'Term 3', value: 3 }
+        ],
+        type: 'select',
   },
   {
     name: 'class_id',

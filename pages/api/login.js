@@ -46,13 +46,6 @@ async function handler(req, res) {
         path: '/',
       }));
 
-      // Set user cookie with JWT token 
-      // res.setHeader('Set-User', cookie.serialize('auth_user', user, {
-      //   httpOnly: true,
-      //   secure: process.env.NODE_ENV === 'production',
-      //   maxAge: 259200, // 3 days
-      //   path: '/',
-      // }));
       // Set user and token in session
       req.session.set('user', response.data.user);
       req.session.set('token', response.data.token);
