@@ -35,7 +35,7 @@ interface AdminProps {
 
 const CreateCalendar: React.FC<AdminProps> = ({user}) => {
     const [loading, setIsLoading] = useState<boolean>(false);
-    const endpoint = "terms/create";
+    const endpoint = "academic/calendars/create";
     const [formData, setFormData] = useState(createInitialFormState(calendarFields));
     const [errors, setErrors] = useState<Errors>({});
     const router = useRouter();
@@ -103,7 +103,7 @@ const CreateCalendar: React.FC<AdminProps> = ({user}) => {
             if (error.response) {
                 // Handle specific status codes from the server
                 if (error.response.status === 409) {
-                    toast.error(error.response.data.message || 'A term already exists within the specified dates.');
+                    toast.error(error.response.data.message || 'A term in the calendar already exists within the specified dates.');
                 } else if (error.response.status === 500) {
                     toast.error('Server error occurred');
                 } else {
@@ -182,7 +182,7 @@ const CreateCalendar: React.FC<AdminProps> = ({user}) => {
                                 ))}
                             </div>
                             <div className="mt-5 flex justify-around">
-                  <Link href='/Admin/dashboard/page'>
+                  <Link href='/Admin/secretary/dashboard/page'>
 
                 <button className="flex items-center justify-center w-1/2 px-5 py-2 text-sm text-gray-700 transition-colors duration-200 bg-white border rounded-sm gap-x-2 sm:w-auto  hover:bg-gray-100  dark:border-gray-300">
                   <svg

@@ -152,6 +152,7 @@ const ShowAssessment: React.FC<AssessmentSummaryProps> = ({ user, assessment_id 
           </div>
 
           <div className="flex items-center justify-center w-full mt-6 gap-x-3 shrink-0 sm:w-auto">
+          <Link href='/Student/assessments/Index'>
             <button className={`flex items-center justify-center w-1/2 px-5 py-2 text-sm ${dynamicTextColor} transition duration-300 ease-in-out bg-white border border-${dynamicBgColor} rounded-lg gap-x-2 sm:w-auto  hover:${dynamicButtonColor} dark:text-gray-200 dark:border-gray-700`}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -167,10 +168,10 @@ const ShowAssessment: React.FC<AssessmentSummaryProps> = ({ user, assessment_id 
                   d="M6.75 15.75L3 12m0 0l3.75-3.75M3 12h18"
                 />
               </svg>
-              <Link href='/Student/assessments/Index'>
                 <span>Go back</span>
-              </Link>
             </button>
+            </Link>
+
           </div>
         </div>
 

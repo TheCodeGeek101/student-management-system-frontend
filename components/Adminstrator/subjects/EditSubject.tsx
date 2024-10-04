@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import toast, { Toaster } from "react-hot-toast";
 import { subjectFields } from '@/Utils/fields';
 import { createInitialFormState, validateForm } from "../../../hooks/FormConfigHelper";
+import Link from 'next/link';
 
 type Option = {
     value: string;
@@ -161,18 +162,40 @@ const EditSubject: React.FC<Props> = ({ subjectId }) => {
                                     </div>
                                 ))}
                             </div>
-                            <div className="mt-5">
-                                <button
-                                    type="submit"
-                                    className={`w-full py-2 font-semibold uppercase transition ${
-                                        loading
-                                            ? 'cursor-not-allowed bg-primary text-white opacity-70'
-                                            : 'bg-mainColor text-white hover:border-2 hover:bg-white hover:text-primary'
-                                    } md:w-full`}
-                                >
-                                    {loading ? 'Submitting...' : 'Submit'}
-                                </button>
-                            </div>
+                            <div className="mt-5 flex justify-around">
+                  <Link href='/Admin/subjects/all/page'>
+
+                <button className="flex items-center justify-center w-1/2 px-5 py-2 text-sm text-gray-700 transition-colors duration-200 bg-white border rounded-sm gap-x-2 sm:w-auto  hover:bg-gray-100  dark:border-gray-300">
+                  <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth="1.5"
+                      stroke="currentColor"
+                      className="w-5 h-5 rtl:rotate-180"
+                  >
+                      <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M6.75 15.75L3 12m0 0l3.75-3.75M3 12h18"
+                      />
+                  </svg>
+                      <span>Go Back</span>
+                </button>
+                </Link>
+
+                
+                <button
+                  type='submit'
+                  className={`w-28 py-2 font-semibold uppercase transition ${
+                      loading
+                      ? 'cursor-not-allowed bg-primary text-white opacity-70'
+                      : 'bg-primary text-white hover:border-2 hover:bg-white hover:text-primary'
+                  } md:w-40`}
+                >
+                  {loading ? 'Submitting...' : 'Submit'}
+                </button>
+              </div>
                         </form>
                     </div>
                 </div>

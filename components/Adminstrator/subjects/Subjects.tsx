@@ -57,7 +57,7 @@ const Subjects: React.FC = () => {
     },
     {
       name: 'Action',
-      grow: 3,
+      grow: 4,
       cell: (row: Subject) => (
         <div className="flex justify-around">
           <button

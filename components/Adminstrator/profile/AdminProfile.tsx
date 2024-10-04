@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import { useState } from 'react';
-import { User, Student } from '@/types/user';
+import { User, Admin } from '@/types/user';
 import useShowDataHelper from '@/helpers/ShowDataHelper';
 import toast,{Toaster} from 'react-hot-toast';
 import DataLoader from '@/components/Shared/Loaders/Loader';
@@ -12,47 +12,52 @@ interface ProfileProps {
   user: User;
 }
 
-const StudentProfile: React.FC<ProfileProps> = ({ user }) => {
+const AdminProfile: React.FC<ProfileProps> = ({ user }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [studentData, setStudentData] = useState<Student | null>(null);
+  const [adminData, setAdminData] = useState<Adminstrator | null>(null);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [imageFile, setImageFile] = useState<File | null>(null);
-  const endpoint = 'students/show';
-  const uploadEndpoint = 'students';
-   let studentId = 0;
-  if ('student' in user) {
-    studentId = user.student.id;
+  const endpoint = 'admin/show';
+  const uploadEndpoint = 'admin';
+  let adminId = 0;
+
+  if ('admin' in user) {
+    adminId = user.admin.id;
   }
 
   
   
-  useShowDataHelper<Student>(endpoint, studentId, setStudentData);
+  useShowDataHelper<Adminstrator>(endpoint, adminId, setAdminData);
 
-  if (!studentData) {
+  if (!adminData) {
     toast('Loading student data...', { duration: 1500 });
     return <DataLoader />;
   }
 
   const {
-    first_name,
-    last_name,
+    full_name,
+    emergency_contact_email,
+    emergency_contact_phone,
+    emergency_contact_name,
+    emergency_contact_relationship,
+    state,
+    street,
+    position,
+    employee_id,
+    employment_type,
+    date_of_hire,
+    department,
+    postal_code,
+    country,
+    city,
     gender,
     date_of_birth,
     phone_number,
     email,
-    address,
-    postal_address,
-    guardian_name,
-    guardian_contact,
-    admission_date,
-    emergency_contact,
-    previous_school,
-    medical_info,
-    registration_number,
     profile_picture // Include the profile_picture attribute
-  } = studentData;
+  } = adminData;
 
-  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
       const file = event.target.files[0];
       setImageFile(file);
@@ -69,11 +74,11 @@ const StudentProfile: React.FC<ProfileProps> = ({ user }) => {
     
     try {
       // eslint-disable-next-line react-hooks/rules-of-hooks
-      useShowDataHelper<Student>(endpoint, studentId, setStudentData);
+      useShowDataHelper<Adminstrator>(endpoint, adminId, setAdminData);
 
       const response = await axios.post(`/api/uploadImage`, {
         endPoint:uploadEndpoint,
-        id:studentId,
+        id:adminId,
         data:formData
       });
       if(response.status === 200){
@@ -92,7 +97,7 @@ const StudentProfile: React.FC<ProfileProps> = ({ user }) => {
         <div className="flex flex-col max-w-screen-xl px-4 mx-auto md:items-center md:justify-between md:flex-row md:px-6 lg:px-8">
           <div className="p-4 flex flex-row items-center justify-between">
             <a href="#" className="text-lg text-blue-400 font-semibold tracking-widest uppercase rounded-lg focus:outline-none focus:shadow-outline">
-              Student Profile
+              My Profile
             </a>
             <button
               className="md:hidden rounded-lg focus:outline-none focus:shadow-outline"
@@ -140,7 +145,7 @@ const StudentProfile: React.FC<ProfileProps> = ({ user }) => {
                   Upload Image
                 </button>
               </div>
-              <h1 className="font-bold text-xl leading-8 my-1 text-blue-400">{`${first_name} ${last_name}`}</h1>
+              <h1 className="font-bold text-xl leading-8 my-1 text-blue-400">{`${full_name}`}</h1>
               
               <ul className="bg-blue-400 text-white hover:shadow py-2 px-3 mt-3 divide-y rounded shadow-sm">
                 <li className="flex items-center py-3">
@@ -149,7 +154,7 @@ const StudentProfile: React.FC<ProfileProps> = ({ user }) => {
                 </li>
                 <li className="flex items-center py-3">
                   <span>Member since</span>
-                  <span className="ml-auto">{formatDateToWords(admission_date)}</span>
+                  <span className="ml-auto">{formatDateToWords(date_of_hire)}</span>
                 </li>
               </ul>
             </div>
@@ -164,7 +169,7 @@ const StudentProfile: React.FC<ProfileProps> = ({ user }) => {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                   </svg>
                 </span>
-                <span className="tracking-wide">Student Information</span>
+                <span className="tracking-wide">My Profile</span>
               </div>
               <div className="text-gray-700">
                 <div className="grid md:grid-cols-2 text-sm">
@@ -176,38 +181,54 @@ const StudentProfile: React.FC<ProfileProps> = ({ user }) => {
                     <div className="px-4 py-2 font-semibold">Phone Number</div>
                     <div className="px-4 py-2">{phone_number}</div>
                   </div>
+
+                  <div className="grid grid-cols-2">
+                    <div className="px-4 py-2 font-semibold">Employment Type</div>
+                    <div className="px-4 py-2">{employment_type}</div>
+                  </div>
+
                    <div className="grid grid-cols-2">
-                    <div className="px-4 py-2 font-semibold">Registration Number</div>
-                    <div className="px-4 py-2">{registration_number}</div>
+                    <div className="px-4 py-2 font-semibold">Employment ID</div>
+                    <div className="px-4 py-2">{employee_id}</div>
+                  </div>
+
+                  <div className="grid grid-cols-2">
+                    <div className="px-4 py-2 font-semibold">Department</div>
+                    <div className="px-4 py-2">{department}</div>
+                  </div>
+
+                  <div className="grid grid-cols-2">
+                    <div className="px-4 py-2 font-semibold">Position</div>
+                    <div className="px-4 py-2">{position}</div>
                   </div>
                   
                   <div className="grid grid-cols-2">
                     <div className="px-4 py-2 font-semibold">Address</div>
-                    <div className="px-4 py-2">{address}</div>
+                    <div className="px-4 py-2">{state} {city} {street}</div>
                   </div>
                   <div className="grid grid-cols-2">
                     <div className="px-4 py-2 font-semibold">Postal Address</div>
-                    <div className="px-4 py-2">{postal_address}</div>
+                    <div className="px-4 py-2">{postal_code}</div>
                   </div>
                   <div className="grid grid-cols-2">
-                    <div className="px-4 py-2 font-semibold">Guardian Name</div>
-                    <div className="px-4 py-2">{guardian_name}</div>
+                    <div className="px-4 py-2 font-semibold">Emergency Contact Name</div>
+                    <div className="px-4 py-2">{emergency_contact_name}</div>
                   </div>
                   <div className="grid grid-cols-2">
-                    <div className="px-4 py-2 font-semibold">Guardian Contact</div>
-                    <div className="px-4 py-2">{guardian_contact}</div>
+                    <div className="px-4 py-2 font-semibold">Guardian Contact Number</div>
+                    <div className="px-4 py-2">{emergency_contact_phone}</div>
                   </div>
                   <div className="grid grid-cols-2">
-                    <div className="px-4 py-2 font-semibold">Emergency Contact</div>
-                    <div className="px-4 py-2">{emergency_contact}</div>
+                    <div className="px-4 py-2 font-semibold">Emergency Contact Email</div>
+                    <div className="px-4 py-2">{emergency_contact_email}</div>
                   </div>
                   <div className="grid grid-cols-2">
-                    <div className="px-4 py-2 font-semibold">Previous School</div>
-                    <div className="px-4 py-2">{previous_school}</div>
+                    <div className="px-4 py-2 font-semibold">Emergency Contact Relationship</div>
+                    <div className="px-4 py-2">{emergency_contact_relationship}</div>
                   </div>
                   <div className="grid grid-cols-2">
-                    <div className="px-4 py-2 font-semibold">Medical Info</div>
-                    <div className="px-4 py-2">{medical_info}</div>
+                    <div className="px-4 py-2 font-semibold">Country</div>
+                    <div className="px-4 py-2">{country}</div>
                   </div>
                  
                   <div className="grid grid-cols-2">
@@ -226,4 +247,4 @@ const StudentProfile: React.FC<ProfileProps> = ({ user }) => {
   );
 };
 
-export default StudentProfile;
+export default AdminProfile;

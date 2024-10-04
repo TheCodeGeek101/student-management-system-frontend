@@ -23,11 +23,17 @@ interface SubjectData {
 
 interface CalendarData {
   id: number;
-  term_id: number;
+  name: string | null;
   start_date: string;
   end_date: string;
   description: string;
+  is_active: number;
+  term_id: number;
+  created_at: string;
+  updated_at: string;
+  term_name: string | null;
 }
+
 
 interface SubjectsProps {
   user: User;
@@ -46,7 +52,7 @@ const AvailableSubjects: React.FC<SubjectsProps> = ({ user }) => {
   const [error, setError] = useState<string | null>(null);
   const [hasSubjects, setHasSubjects] = useState<boolean>(true);
   const [subjectId, setSubjectId] = useState<number>(0);
-  const [calendars, setCalendars] = useState<CalendarData[]>([]);
+  const [calendars, setCalendars] = useState<CalendarData | null >(null);
   const [canRegister, setCanRegister] = useState<boolean>(true); // To track registration status
   const [amountNeeded, setAmountNeeded] = useState<number>(0);   // To track amount needed
 
@@ -66,10 +72,11 @@ const AvailableSubjects: React.FC<SubjectsProps> = ({ user }) => {
     const fetchCalendars = async () => {
       try {
         const response = await axios.post(`/api/GetData`, {
-          endPoint: 'calendars',
+          endPoint: 'academic/terms/active',
         });
-        if (response.status === 200) {
-          setCalendars(response.data.calendars);
+        if (response.status === 200 && response.data.term) {
+          const { term } = response.data;
+          setCalendars(term); // Set the term data including term_id
         }
       } catch (error: any) {
         setError(error.response?.statusText || error.message);
@@ -77,9 +84,10 @@ const AvailableSubjects: React.FC<SubjectsProps> = ({ user }) => {
         setLoading(false);
       }
     };
-
+  
     fetchCalendars();
   }, [endPoint]);
+  
 
   useEffect(() => {
     const fetchSubjects = async () => {
@@ -120,21 +128,21 @@ const AvailableSubjects: React.FC<SubjectsProps> = ({ user }) => {
 
   useEffect(() => {
     const canStudentRegister = async () => {
-      if (calendars.length === 0) return; // Ensure calendars are loaded
+      if (!calendars) return; // Ensure calendars are loaded
   
-      console.log('endpoint:' + endPoint + "term id:" + calendars[0]?.term_id + 'class:' + classId);
+      const { term_id } = calendars; // Extract the term_id from the calendar data
+  
       try {
         const response = await axios.post(`/api/CanRegister`, {
           endPoint: endPoint,
           data: {
-            term_id:calendars[0]?.term_id,
-            class_id:classId
-          },  // Assuming the first calendar term is the current one
+            term_id: term_id,   // Use the retrieved term_id
+            class_id: classId,
+          },
           studentId: studentId,
         });
   
         if (response.status === 200 && response.data.decision) {
-          // Check if decision is a boolean or an object
           if (typeof response.data.decision === 'boolean' && response.data.decision === true) {
             setCanRegister(true);  // Allow registration
           } else if (typeof response.data.decision === 'object') {
@@ -151,7 +159,8 @@ const AvailableSubjects: React.FC<SubjectsProps> = ({ user }) => {
     };
   
     canStudentRegister();
-  }, [calendars, classId, endPoint]);
+  }, [calendars, classId, endPoint, studentId]);
+  
   
 
   if (loading) return <div><DataLoader /></div>;
@@ -159,8 +168,6 @@ const AvailableSubjects: React.FC<SubjectsProps> = ({ user }) => {
 
   // Render UnregisteredStatus if registration is blocked
   if (!canRegister) return <UnregisteredStatus amountNeeded={amountNeeded} />;
-
-  // if (!hasSubjects) return <UnregisteredSubjects />;
 
   return (
     <div className="min-h-screen">

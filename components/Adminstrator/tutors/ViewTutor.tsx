@@ -9,26 +9,21 @@ import { formatDateToWords } from '@/utils/DateFormat';
 import axios from 'axios';
 
 interface ProfileProps {
-  user: User;
+  tutorId:number;
 }
 
-const StudentProfile: React.FC<ProfileProps> = ({ user }) => {
+const ViewTutor: React.FC<ProfileProps> = ({ tutorId }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [studentData, setStudentData] = useState<Student | null>(null);
+  const [tutorData, setTutorData] = useState<Tutor | null>(null);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [imageFile, setImageFile] = useState<File | null>(null);
-  const endpoint = 'students/show';
-  const uploadEndpoint = 'students';
-   let studentId = 0;
-  if ('student' in user) {
-    studentId = user.student.id;
-  }
-
+  const endpoint = 'tutors/show';
+  const uploadEndpoint = 'tutors';
   
   
-  useShowDataHelper<Student>(endpoint, studentId, setStudentData);
+  useShowDataHelper<Tutor>(endpoint, tutorId, setTutorData);
 
-  if (!studentData) {
+  if (!tutorData) {
     toast('Loading student data...', { duration: 1500 });
     return <DataLoader />;
   }
@@ -36,21 +31,12 @@ const StudentProfile: React.FC<ProfileProps> = ({ user }) => {
   const {
     first_name,
     last_name,
-    gender,
-    date_of_birth,
-    phone_number,
     email,
-    address,
-    postal_address,
-    guardian_name,
-    guardian_contact,
-    admission_date,
-    emergency_contact,
-    previous_school,
-    medical_info,
-    registration_number,
-    profile_picture // Include the profile_picture attribute
-  } = studentData;
+    hire_date,
+    department,
+    phone,
+    bio
+  } = tutorData;
 
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
@@ -69,11 +55,11 @@ const StudentProfile: React.FC<ProfileProps> = ({ user }) => {
     
     try {
       // eslint-disable-next-line react-hooks/rules-of-hooks
-      useShowDataHelper<Student>(endpoint, studentId, setStudentData);
+      useShowDataHelper<Tutor>(endpoint, tutorId, setTutorData);
 
       const response = await axios.post(`/api/uploadImage`, {
         endPoint:uploadEndpoint,
-        id:studentId,
+        id:tutorId,
         data:formData
       });
       if(response.status === 200){
@@ -92,7 +78,7 @@ const StudentProfile: React.FC<ProfileProps> = ({ user }) => {
         <div className="flex flex-col max-w-screen-xl px-4 mx-auto md:items-center md:justify-between md:flex-row md:px-6 lg:px-8">
           <div className="p-4 flex flex-row items-center justify-between">
             <a href="#" className="text-lg text-blue-400 font-semibold tracking-widest uppercase rounded-lg focus:outline-none focus:shadow-outline">
-              Student Profile
+              Teacher Details
             </a>
             <button
               className="md:hidden rounded-lg focus:outline-none focus:shadow-outline"
@@ -119,7 +105,7 @@ const StudentProfile: React.FC<ProfileProps> = ({ user }) => {
               <div className="image overflow-hidden">
                 <Image
                   className="h-auto w-full mx-auto rounded-lg"
-                  src={selectedImage || (profile_picture ? `/storage/${profile_picture}` : placeholder)}
+                  src={placeholder}
                   width={500}
                   height={500}
                   alt="profile"
@@ -133,23 +119,23 @@ const StudentProfile: React.FC<ProfileProps> = ({ user }) => {
                   onChange={handleImageChange} 
                   className="block w-full px-3 py-2 mt-2 text-sm text-gray-600 bg-white border border-gray-200 rounded-lg file:bg-blue-400 file:text-white file:text-sm file:px-4 file:py-1 file:border-none file:rounded-full dark:file:bg-gray-800 dark:file:text-gray-200 dark:text-gray-300 placeholder-gray-400/70 dark:placeholder-gray-500 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300 focus:ring-opacity-40 dark:border-gray-600 dark:bg-gray-900 dark:focus:border-blue-300"
                 />
-                <button 
+                {/* <button 
                   onClick={handleImageUpload} 
                   className="mt-2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
                   Upload Image
-                </button>
+                </button> */}
               </div>
               <h1 className="font-bold text-xl leading-8 my-1 text-blue-400">{`${first_name} ${last_name}`}</h1>
               
               <ul className="bg-blue-400 text-white hover:shadow py-2 px-3 mt-3 divide-y rounded shadow-sm">
                 <li className="flex items-center py-3">
                   <span>Gender</span>
-                  <span className="ml-auto">{gender === 'M' ? 'Male' : 'Female'}</span>
+                  {/* <span className="ml-auto">{gender === 'M' ? 'Male' : 'Female'}</span> */}
                 </li>
                 <li className="flex items-center py-3">
                   <span>Member since</span>
-                  <span className="ml-auto">{formatDateToWords(admission_date)}</span>
+                  <span className="ml-auto">{formatDateToWords(hire_date)}</span>
                 </li>
               </ul>
             </div>
@@ -164,50 +150,30 @@ const StudentProfile: React.FC<ProfileProps> = ({ user }) => {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                   </svg>
                 </span>
-                <span className="tracking-wide">Student Information</span>
+                <span className="tracking-wide">Teacher Information</span>
               </div>
               <div className="text-gray-700">
                 <div className="grid md:grid-cols-2 text-sm">
-                  <div className="grid grid-cols-2">
+                  {/* <div className="grid grid-cols-2">
                     <div className="px-4 py-2 font-semibold">Date of Birth</div>
                     <div className="px-4 py-2">{formatDateToWords(date_of_birth)}</div>
-                  </div>
+                  </div> */}
                   <div className="grid grid-cols-2">
                     <div className="px-4 py-2 font-semibold">Phone Number</div>
-                    <div className="px-4 py-2">{phone_number}</div>
+                    <div className="px-4 py-2">{phone}</div>
                   </div>
-                   <div className="grid grid-cols-2">
+                   {/* <div className="grid grid-cols-2">
                     <div className="px-4 py-2 font-semibold">Registration Number</div>
                     <div className="px-4 py-2">{registration_number}</div>
-                  </div>
-                  
-                  <div className="grid grid-cols-2">
-                    <div className="px-4 py-2 font-semibold">Address</div>
-                    <div className="px-4 py-2">{address}</div>
-                  </div>
-                  <div className="grid grid-cols-2">
-                    <div className="px-4 py-2 font-semibold">Postal Address</div>
-                    <div className="px-4 py-2">{postal_address}</div>
-                  </div>
-                  <div className="grid grid-cols-2">
-                    <div className="px-4 py-2 font-semibold">Guardian Name</div>
-                    <div className="px-4 py-2">{guardian_name}</div>
-                  </div>
-                  <div className="grid grid-cols-2">
-                    <div className="px-4 py-2 font-semibold">Guardian Contact</div>
-                    <div className="px-4 py-2">{guardian_contact}</div>
-                  </div>
-                  <div className="grid grid-cols-2">
-                    <div className="px-4 py-2 font-semibold">Emergency Contact</div>
-                    <div className="px-4 py-2">{emergency_contact}</div>
-                  </div>
-                  <div className="grid grid-cols-2">
-                    <div className="px-4 py-2 font-semibold">Previous School</div>
-                    <div className="px-4 py-2">{previous_school}</div>
-                  </div>
+                  </div> */}
+                 
                   <div className="grid grid-cols-2">
                     <div className="px-4 py-2 font-semibold">Medical Info</div>
-                    <div className="px-4 py-2">{medical_info}</div>
+                    <div className="px-4 py-2">
+                        <p className='flex text-center'>
+                             {bio}
+                        </p>
+                    </div>
                   </div>
                  
                   <div className="grid grid-cols-2">
@@ -226,4 +192,4 @@ const StudentProfile: React.FC<ProfileProps> = ({ user }) => {
   );
 };
 
-export default StudentProfile;
+export default ViewTutor;

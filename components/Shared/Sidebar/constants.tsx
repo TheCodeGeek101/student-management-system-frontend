@@ -140,29 +140,29 @@ export const menuGroups: MenuGroup[] = [
       },
     ],
   },
-  {
-    name: 'Finance',
-    menuItems: [
-      {
-        icon: <FaMoneyCheckAlt className="text-teal-500" />, // Teal for fees payments
-        label: 'Payments',
-        route: '#',
-        children: [
-          {
-            icon: <FaMoneyCheckAlt className="text-teal-500" />,
-            label: 'All Payments',
-            route: '/payments/all',
-          },
+  // {
+  //   name: 'Finance',
+  //   menuItems: [
+  //     {
+  //       icon: <FaMoneyCheckAlt className="text-teal-500" />, // Teal for fees payments
+  //       label: 'Payments',
+  //       route: '#',
+  //       children: [
+  //         {
+  //           icon: <FaMoneyCheckAlt className="text-teal-500" />,
+  //           label: 'All Payments',
+  //           route: '/payments/all',
+  //         },
          
-          {
-            icon: <FaFileInvoiceDollar className="text-teal-500" />,
-            label: 'Invoices',
-            route: '/payments/invoices',
-          }
-        ],
-      },
-    ],
-  },
+  //         {
+  //           icon: <FaFileInvoiceDollar className="text-teal-500" />,
+  //           label: 'Invoices',
+  //           route: '/payments/invoices',
+  //         }
+  //       ],
+  //     },
+  //   ],
+  // },
   {
     name: 'Settings',
     menuItems: [
@@ -174,7 +174,7 @@ export const menuGroups: MenuGroup[] = [
           {
             icon: <FaUser className="text-red-500" />, // Red for profile
             label: 'Profile',
-            route: '/profile',
+            route: '/Admin/profile/page',
           },
           {
             icon: <FaUsers className="text-red-500" />, // Red for user management

@@ -153,19 +153,7 @@ const MonthlyPayments: React.FC<MonthlyPaymentsProps> = ({ monthlyPayments }) =>
             </div>
           </div>
         </div>
-        <div className="flex w-full max-w-45 justify-end">
-          <div className="inline-flex items-center rounded-md bg-whiter p-1.5">
-            <button className="rounded bg-white px-3 py-1 text-xs font-medium text-black shadow-card hover:bg-white hover:shadow-card">
-              Day
-            </button>
-            <button className="rounded px-3 py-1 text-xs font-medium text-black hover:bg-white hover:shadow-card">
-              Week
-            </button>
-            <button className="rounded px-3 py-1 text-xs font-medium text-black hover:bg-white hover:shadow-card">
-              Month
-            </button>
-          </div>
-        </div>
+        
       </div>
 
       <div>

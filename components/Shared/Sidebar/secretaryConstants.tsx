@@ -84,7 +84,7 @@ export const secretaryConstants: MenuGroup[] = [
           {
             icon: <FaCalendarAlt className="text-orange-500" />,
             label: 'Create Calendar',
-            route: '/Admin/calendar/create',
+            route: '/Admin/secretary/calendar/create',
           },
           {
             icon: <FaMoneyCheckAlt className="text-blue-500" />, // Blue for reports

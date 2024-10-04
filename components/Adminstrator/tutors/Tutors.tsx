@@ -62,15 +62,13 @@ const Tutors: React.FC = () => {
       grow: 2,
       cell: (row: Tutor) => (
         <div className="flex justify-around">
-          <button
-            onClick={() => {
-              setShowTutorModal(true);
-              setId(row.id);
-            }}
-            className="mr-4 rounded bg-blue-500 px-2 py-2 text-white hover:bg-blue-400"
-          >
-            <FaEye className="mr-2 inline-block" /> View
-          </button>
+          <Link href={`/Admin/tutors/show/${row.id}`}>
+            <button
+              className="mr-4 rounded bg-blue-500 px-2 py-2 text-white hover:bg-blue-400"
+            >
+              <FaEye className="mr-2 inline-block" /> View
+            </button>
+          </Link>
           <Link href={`/Admin/tutors/edit/tutor/${row.id}`}>
             <button
               className="mr-4 rounded bg-blue-400 px-2 py-2 text-white hover:bg-yellow-400"
@@ -164,7 +162,7 @@ const Tutors: React.FC = () => {
             </div>
           </div>
         </motion.div>
-        {showTutorModal && <ShowTutor id={id} setShowTutorModal={setShowTutorModal} />}
+        {/* {showTutorModal && <ShowTutor id={id} setShowTutorModal={setShowTutorModal} />} */}
       </div>
     </>
   );

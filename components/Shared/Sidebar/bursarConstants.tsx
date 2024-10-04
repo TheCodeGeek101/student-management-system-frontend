@@ -38,7 +38,7 @@ export const bursarConstants: MenuGroup[] = [
       {
         icon: <FaHome className="text-blue-500" />, // Blue for home/dashboard
         label: "Dashboard",
-        route: "/Admin/dashboard/page",
+        route: "/Admin/bursar/dashboard/page",
       },
     ],
   },
@@ -129,7 +129,7 @@ export const bursarConstants: MenuGroup[] = [
           {
             icon: <FaUser className="text-red-500" />, // Red for profile
             label: "Profile",
-            route: "/profile",
+            route: "/Admin/bursar/profile/page",
           },
         ],
       },
