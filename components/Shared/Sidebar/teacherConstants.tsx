@@ -128,7 +128,7 @@ export const teacherMenuGroups: MenuGroup[] = [
           {
             icon: <FaUser className="text-red-500" />, // Red for profile
             label: 'Profile',
-            route: '/teacher/profile',
+            route: '/Tutors/profile/page',
           },
           {
             icon: <FaUsers className="text-red-500" />, // Red for user management

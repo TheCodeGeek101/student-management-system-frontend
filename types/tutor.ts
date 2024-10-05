@@ -4,6 +4,7 @@ interface Tutor {
     email: string;
     phone?: string; // Optional field
     hire_date: string;
-    department?: string; // Optional field
+    gender:string;
+    department_name?: string; // Optional field
     bio?: string; // Optional field
 }

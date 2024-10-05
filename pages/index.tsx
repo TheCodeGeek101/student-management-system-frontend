@@ -13,6 +13,7 @@ import axios from 'axios';
 import toast, { Toaster } from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
 import { User } from '../types/user';
+import React from 'react';
 
 interface FormErrors {
   email?: string;
