@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import { useState } from 'react';
-import { User, Student } from '@/types/user';
+import { User } from '@/types/user';
 import useShowDataHelper from '@/helpers/ShowDataHelper';
 import toast,{Toaster} from 'react-hot-toast';
 import DataLoader from '@/components/Shared/Loaders/Loader';
@@ -24,7 +24,7 @@ const ViewTutor: React.FC<ProfileProps> = ({ tutorId }) => {
   useShowDataHelper<Tutor>(endpoint, tutorId, setTutorData);
 
   if (!tutorData) {
-    toast('Loading student data...', { duration: 1500 });
+    toast('Loading tutor data...', { duration: 1500 });
     return <DataLoader />;
   }
 
@@ -33,7 +33,8 @@ const ViewTutor: React.FC<ProfileProps> = ({ tutorId }) => {
     last_name,
     email,
     hire_date,
-    department,
+    gender,
+    department_name,
     phone,
     bio
   } = tutorData;
@@ -131,7 +132,7 @@ const ViewTutor: React.FC<ProfileProps> = ({ tutorId }) => {
               <ul className="bg-blue-400 text-white hover:shadow py-2 px-3 mt-3 divide-y rounded shadow-sm">
                 <li className="flex items-center py-3">
                   <span>Gender</span>
-                  {/* <span className="ml-auto">{gender === 'M' ? 'Male' : 'Female'}</span> */}
+                  <span className="ml-auto">{gender === 'M' ? 'Male' : 'Female'}</span>
                 </li>
                 <li className="flex items-center py-3">
                   <span>Member since</span>
@@ -162,13 +163,13 @@ const ViewTutor: React.FC<ProfileProps> = ({ tutorId }) => {
                     <div className="px-4 py-2 font-semibold">Phone Number</div>
                     <div className="px-4 py-2">{phone}</div>
                   </div>
-                   {/* <div className="grid grid-cols-2">
-                    <div className="px-4 py-2 font-semibold">Registration Number</div>
-                    <div className="px-4 py-2">{registration_number}</div>
-                  </div> */}
+                   <div className="grid grid-cols-2">
+                    <div className="px-4 py-2 font-semibold">Department</div>
+                    <div className="px-4 py-2">{department_name}</div>
+                  </div>
                  
                   <div className="grid grid-cols-2">
-                    <div className="px-4 py-2 font-semibold">Medical Info</div>
+                    <div className="px-4 py-2 font-semibold">Teacher bio</div>
                     <div className="px-4 py-2">
                         <p className='flex text-center'>
                              {bio}

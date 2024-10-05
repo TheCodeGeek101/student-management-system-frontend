@@ -1,14 +1,15 @@
 "use client";
-
 import { ApexOptions } from "apexcharts";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
+import axios from "axios";
+import toast from "react-hot-toast";
+import DataLoader from "../Loaders/Loader"; // Ensure you have this loader component
 
 const ReactApexChart = dynamic(() => import("react-apexcharts"), {
   ssr: false,
 });
 
-// Chart options configuration
 const options: ApexOptions = {
   legend: {
     show: true,
@@ -79,7 +80,7 @@ const options: ApexOptions = {
   xaxis: {
     type: "category",
     title: {
-      text: "Subject Code",
+      text: "Students",
     },
     axisBorder: {
       show: false,
@@ -98,54 +99,132 @@ const options: ApexOptions = {
 };
 
 interface ChartOneProps {
-  series: {
-    name: string;
-    data: number[];
-  }[];
-  categories: string[];
+  teacherId: number;
 }
 
-const ChartOne: React.FC<ChartOneProps> = ({ series, categories }) => {
+interface TermData {
+  id: number;
+  name: string;
+}
+
+interface Grade {
+  student_id: number;
+  student_first_name:string;
+  student_last_name:string;
+  grade_value: number;
+}
+
+interface StatisticsData {
+  statistics: {
+    subject_code: string;
+    subject_name: string;
+    grades: Grade[];
+  }[];
+}
+
+const TutorChart: React.FC<ChartOneProps> = ({ teacherId }) => {
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [terms, setTerms] = useState<TermData[]>([]);
+  const [selectedTermId, setSelectedTermId] = useState<number | null>(null);
+  const [academicPerformanceData, setAcademicPerformanceData] = useState<
+    StatisticsData["statistics"]
+  >([]);
+
+  const endPoint = "teachers";
+
+  useEffect(() => {
+    const fetchTerms = async () => {
+      try {
+        const response = await axios.post("/api/GetData", {
+          endPoint: "terms",
+        });
+        if (response.status === 200) {
+          setTerms(response.data.terms);
+          if (response.data.terms.length > 0) {
+            setSelectedTermId(response.data.terms[0].id);
+          }
+        }
+      } catch (error: any) {
+        setError(error.response?.statusText || error.message);
+      }
+    };
+    fetchTerms();
+  }, []);
+
+  useEffect(() => {
+    const getPerformanceData = async () => {
+      if (selectedTermId === null) return;
+      try {
+        const response = await axios.post("/api/studentSubjectsApi", {
+          endPoint: endPoint,
+          termId: selectedTermId,
+          teacherId: teacherId,
+        });
+        if (response.status === 200) {
+          setAcademicPerformanceData(response.data.statistics);
+        } else {
+          throw new Error("Failed to load data.");
+        }
+      } catch (error: any) {
+        toast.error(error.response?.data || "An error occurred.");
+        setError(error.response?.data || "An error occurred.");
+      }
+    };
+    getPerformanceData();
+  }, [selectedTermId, teacherId]);
+
   return (
     <div className="col-span-12 rounded-sm border border-stroke bg-white px-5 pb-5 pt-7.5 shadow-default sm:px-7.5 xl:col-span-8">
       <div className="flex flex-wrap items-start justify-between gap-3 sm:flex-nowrap">
-        {/* Legend and Filter Buttons */}
         <div className="flex w-full flex-wrap gap-3 sm:gap-5">
-          {/* Add legend items here based on the series names */}
-          { series.map((s, index) => (
-            <div key={index} className="flex min-w-47.5">
-              <span className="mr-2 mt-1 flex h-4 w-full max-w-4 items-center justify-center rounded-full border border-primary">
-                <span className="block h-2.5 w-full max-w-2.5 rounded-full" style={{ backgroundColor: options.colors[index % options.colors.length] }}></span>
-              </span>
-              <div className="w-full">
-                <p className="font-semibold text-primary">{s.name}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-        {/* Optional Filter Buttons */}
-        <div className="flex w-full max-w-45 justify-end">
-          <div className="inline-flex items-center rounded-md bg-whiter p-1.5">
-            <button className="rounded bg-white px-3 py-1 text-xs font-medium text-black shadow-card hover:bg-white hover:shadow-card">Day</button>
-            <button className="rounded px-3 py-1 text-xs font-medium text-black hover:bg-white hover:shadow-card">Week</button>
-            <button className="rounded px-3 py-1 text-xs font-medium text-black hover:bg-white hover:shadow-card">Month</button>
+          <div className="flex min-w-47.5">
+            <p className="font-semibold text-primary">Graphical Analysis of Student Performance in different terms</p>
           </div>
         </div>
+        <select
+                id="term"
+                className="w-full md:w-1/2 lg:w-1/6 mb-5 rounded-md border border-gray-4 bg-white py-2 px-4 text-gray-900 focus:border-blue-400 focus:outline-none focus:ring focus:ring-blue-300"
+                value={selectedTermId ?? ''}
+                onChange={(e) => setSelectedTermId(Number(e.target.value))}
+              >
+                {terms.map((term) => (
+                  <option key={term.id} value={term.id}>
+                    {term.name}
+                  </option>
+                ))}
+              </select>
       </div>
 
       <div>
-        <div id="chartOne" className="-ml-5">
-          <ReactApexChart
-            options={{ ...options, xaxis: { ...options.xaxis, categories } }}
-            series={series}
-            type="area"
-            height={350}
-            width={"100%"}
-          />
-        </div>
+        {
+          academicPerformanceData.map((stat) => {
+            // Prepare data for each subject chart
+            const categories = stat.grades.map((grade) => grade.student_first_name); // Extract student IDs
+            const series = [
+              {
+                name: stat.subject_name,
+                data: stat.grades.map((grade) => grade.grade_value),
+              },
+            ];
+
+            return (
+              <div key={stat.subject_code} className="-ml-5 mb-5">
+                <h3 className="text-lg font-semibold">{stat.subject_name}</h3>
+                <ReactApexChart
+                  options={{ ...options, xaxis: { ...options.xaxis, categories } }}
+                  series={series}
+                  type="area"
+                  height={350}
+                  width={"100%"}
+                />
+              </div>
+            );
+          })
+        }
       </div>
     </div>
   );
 };
 
-export default ChartOne;
+export default TutorChart;

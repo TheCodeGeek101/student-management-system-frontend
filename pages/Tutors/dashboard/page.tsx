@@ -14,7 +14,7 @@ const Page = () => {
       <Loader /> // Handle the case where user is still being fetched
     ) : (
       <DefaultLayout user={user}>
-        <TeachersDashboard/>
+        <TeachersDashboard user={user}/>
       </DefaultLayout>
     )
   );

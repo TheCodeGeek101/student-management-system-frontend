@@ -85,12 +85,7 @@ export const teacherMenuGroups: MenuGroup[] = [
             icon: <FaCheckCircle className="text-green-500" />,
             label: 'End of term',
             route: '/Tutors/results/Index',
-          },
-          {
-            icon: <FaCheckCircle className="text-green-500" />,
-            label: 'End Of Year Results',
-            route: '/teacher/subjects/grades/exam-results',
-          },
+          }
         ],
       },
     ],
