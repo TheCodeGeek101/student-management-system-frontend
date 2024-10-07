@@ -8,6 +8,8 @@ import DataLoader from "@/components/Shared/Loaders/Loader";
 import PerformanceChart from "@/components/Shared/Charts/performanceChart";
 import TeacherPerformanceChart from "@/components/Shared/Charts/TeacherPerformanceChart";
 import ChartTwo from "@/components/Shared/Charts/ChartTwo";
+// import AdminEvents from "./eventsim/ADminEvents";
+import ClassChart from "@/components/Shared/Charts/ClassChart";
 const MapOne = dynamic(() => import("@/components/Shared/Maps/MapOne"), {
   ssr: false,
 });
@@ -68,8 +70,9 @@ const AdminDashboard: React.FC = () => {
           throw new Error("Failed to load data.");
         }
       } catch (error: any) {
-        toast.error(error.response?.data || "An error occurred.");
-        setError(error.response?.data || "An error occurred.");
+        const errorMessage = error.response?.data?.message || "An error occurred.";
+        toast.error(errorMessage);
+        setError(errorMessage); // Ensure this is a string
       }
     };
 
@@ -84,8 +87,9 @@ const AdminDashboard: React.FC = () => {
           throw new Error("Failed to load data.");
         }
       } catch (error: any) {
-        toast.error(error.response?.data || "An error occurred.");
-        setError(error.response?.data || "An error occurred.");
+        const errorMessage = error.response?.data?.message || "An error occurred.";
+        toast.error(errorMessage);
+        setError(errorMessage); // Ensure this is a string
       }
     };
 
@@ -100,8 +104,9 @@ const AdminDashboard: React.FC = () => {
           throw new Error("Failed to load data.");
         }
       } catch (error: any) {
-        toast.error(error.response?.data || "An error occurred.");
-        setError(error.response?.data || "An error occurred.");
+        const errorMessage = error.response?.data?.message || "An error occurred.";
+        toast.error(errorMessage);
+        setError(errorMessage); // Ensure this is a string
       }
     };
 
@@ -116,8 +121,9 @@ const AdminDashboard: React.FC = () => {
           throw new Error("Failed to load data.");
         }
       } catch (error: any) {
-        toast.error(error.response?.data || "An error occurred.");
-        setError(error.response?.data || "An error occurred.");
+        const errorMessage = error.response?.data?.message || "An error occurred.";
+        toast.error(errorMessage);
+        setError(errorMessage); // Ensure this is a string
       }
     };
 
@@ -132,8 +138,9 @@ const AdminDashboard: React.FC = () => {
           throw new Error("Failed to load data.");
         }
       } catch (error: any) {
-        toast.error(error.response?.data || "An error occurred.");
-        setError(error.response?.data || "An error occurred.");
+        const errorMessage = error.response?.data?.message || "An error occurred.";
+        toast.error(errorMessage);
+        setError(errorMessage); // Ensure this is a string
       } finally {
         setLoading(false);
       }
@@ -147,32 +154,28 @@ const AdminDashboard: React.FC = () => {
   }, []);
 
   // if (loading) return <DataLoader />;
-  if (error) return <div>Error loading data: {error}</div>;
+//   if (error) return <div>Error loading data: {error}</div>;
 
   return (
     <>
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 xl:grid-cols-4 2xl:gap-7.5">
         {totalStudents && totalActiveTeachers && withdrawnStudents && paymentData ? (
           <>
-            <CardDataStats title="Total Active Students" total={totalStudents.students.toString()} rate="" levelUp  >
-            <svg className="fill-primary dark:fill-white" width="22" height="16" viewBox="0 0 22 16">
+            <CardDataStats title="Total Active Students" total={totalStudents.students.toString()} rate="" levelUp>
+              <svg className="fill-primary dark:fill-white" width="22" height="16" viewBox="0 0 22 16">
                 {/* SVG Content */}
               </svg>
-              </CardDataStats>
-            <CardDataStats title="Total Withdrawn Students" total={withdrawnStudents.students.toString()} rate="" levelUp >
-            <svg className="fill-primary dark:fill-white" width="22" height="16" viewBox="0 0 22 16">
-                {/* SVG Content */}
-              </svg>
-
             </CardDataStats>
-            <CardDataStats title="Total Active Teachers" total={totalActiveTeachers.totalTeachers.toString()} rate="" levelUp >
-            <svg className="fill-primary dark:fill-white" width="22" height="16" viewBox="0 0 22 16">
+            <CardDataStats title="Total Withdrawn Students" total={withdrawnStudents.students.toString()} rate="" levelUp>
+              <svg className="fill-primary dark:fill-white" width="22" height="16" viewBox="0 0 22 16">
                 {/* SVG Content */}
               </svg>
-
-
             </CardDataStats>
-
+            <CardDataStats title="Total Active Teachers" total={totalActiveTeachers.totalTeachers.toString()} rate="" levelUp>
+              <svg className="fill-primary dark:fill-white" width="22" height="16" viewBox="0 0 22 16">
+                {/* SVG Content */}
+              </svg>
+            </CardDataStats>
             <CardDataStats
               title="Full Fees Payments"
               total={paymentData.full_payments_count.toString()}
@@ -183,49 +186,39 @@ const AdminDashboard: React.FC = () => {
                 {/* SVG Content */}
               </svg>
             </CardDataStats>
-
           </>
         ) : null}
       </div>
-
-        {/* Performance Chart - Pass the relevant performance data as props */}
-        {
-          academicPerformanceData ? (
-            <>
-            <div className="mt-5 ">
+      {/* Performance Chart - Pass the relevant performance data as props */}
+      {academicPerformanceData ? (
+        <>
+          <div className="mt-5 ">
             <TeacherPerformanceChart 
-            teacherPerformanceData={{
-              labels: academicPerformanceData.performance.teacher_performance_graph.labels,
-              dataPoints: academicPerformanceData.performance.teacher_performance_graph.dataPoints,
-            }}
-          />
-            </div>
-             
-      <div className="mt-4 grid grid-cols-12 gap-4 md:mt-6 md:gap-6 2xl:mt-7.5 2xl:gap-7.5">
-
+              teacherPerformanceData={{
+                labels: academicPerformanceData.performance.teacher_performance_graph.labels,
+                dataPoints: academicPerformanceData.performance.teacher_performance_graph.dataPoints,
+              }}
+            />
+          </div>
+          <div className="mt-4 grid grid-cols-12 gap-4 md:mt-6 md:gap-6 2xl:mt-7.5 2xl:gap-7.5">
             <PerformanceChart 
-            performanceData={{
-              name: "Students",
-              data: academicPerformanceData.performance.performance_graph.dataPoints,
-            }}
-            topPerformingData={{
-              name: "Top Performing Students",
-              data: academicPerformanceData.performance.top_performing_graph.dataPoints,
-            }}
-            strugglingData={{
-              name: "Struggling Students",
-              data: academicPerformanceData.performance.struggling_students_graph.dataPoints,
-            }}
-          />
-      <ChartTwo/>
-
-          
-      </div>
-     
-            </>
-            
-          ) : null
-        }
+              performanceData={{
+                name: "Students",
+                data: academicPerformanceData.performance.performance_graph.dataPoints,
+              }}
+              topPerformingData={{
+                name: "Top Performing Students",
+                data: academicPerformanceData.performance.top_performing_graph.dataPoints,
+              }}
+              strugglingData={{
+                name: "Struggling Students",
+                data: academicPerformanceData.performance.struggling_students_graph.dataPoints,
+              }}
+            />
+            <ClassChart/>
+          </div>
+        </>
+      ) : null}
     </>
   );
 };

@@ -9,7 +9,7 @@ import TableOne from "@/components/Shared/Tables/TableOne";
 import axios from "axios";
 import TutorChart from "@/components/Shared/Charts/TutorChart";
 import { User } from "@/types/user";
-import StudentSubjectChart from "@/components/Shared/Charts/StudentSubjectChart";
+import StudentChart from "@/components/Shared/Charts/StudentChart";
 
 
 interface DashboardProps {
@@ -27,27 +27,28 @@ const ChartThree = dynamic(() => import("@/components/Shared/Charts/ChartThree")
 
 
 
-const TeachersDashboard: React.FC<DashboardProps> = ({user}) => {
-    // const [teacherId, setTeacherId] = useState<number>(0);
-    let teacherId = 0;
-
-    if ('tutor' in user ) {
-      // displayName = `${user.admin.full_name} `;
-      teacherId = user.tutor.id;
+const StudentDashboard: React.FC<DashboardProps> = ({user}) => {
+    let studentId = 0;
+    let classId = 0;
+    let registrationNumber = '';
+  
+    if ("student" in user) {
+      studentId = user.student.id;
+      classId = user.student.class_id;
+      registrationNumber = user.student.registration_number;
     }
- 
 
   return (
     <>
      
       <div className="mt-4">
-      <TutorChart teacherId={teacherId} />
+      {/* <TutorChart teacherId={teacherId} /> */}
 
       </div>
 
       <div className="mt-4 grid grid-cols-12 gap-4 md:mt-6 md:gap-6 2xl:mt-7.5 2xl:gap-7.5">
-        <ChartOne/>
-        <StudentSubjectChart tutorId={teacherId} />
+        <StudentChart studentId={studentId}/>
+        <ChartTwo />
            <div className="col-span-12 xl:col-span-8">
           {/* <TableOne /> */}
         </div>
@@ -57,4 +58,4 @@ const TeachersDashboard: React.FC<DashboardProps> = ({user}) => {
   );
 };
 
-export default TeachersDashboard;
+export default StudentDashboard;

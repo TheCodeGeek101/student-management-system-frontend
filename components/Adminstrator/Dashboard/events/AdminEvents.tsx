@@ -1,16 +1,16 @@
-"use client"
-import FullCalendar from '@fullcalendar/react'
-import dayGridPlugin from '@fullcalendar/daygrid'
-import interactionPlugin, { Draggable, DropArg } from '@fullcalendar/interaction'
-import timeGridPlugin from '@fullcalendar/timegrid'
-import { Fragment, useEffect, useState } from 'react'
-import { Dialog, Transition } from '@headlessui/react'
-import { CheckIcon, ExclamationTriangleIcon } from '@heroicons/react/20/solid'
-import { EventSourceInput } from '@fullcalendar/core/index.js'
-import React from 'react'
-import { User } from '@/types/user'
-import axios from 'axios'
-import toast, { Toaster } from 'react-hot-toast'
+"use client";
+import FullCalendar from '@fullcalendar/react';
+import dayGridPlugin from '@fullcalendar/daygrid';
+import interactionPlugin, { Draggable, DropArg } from '@fullcalendar/interaction';
+import timeGridPlugin from '@fullcalendar/timegrid';
+import { Fragment, useEffect, useState } from 'react';
+import { Dialog, Transition } from '@headlessui/react';
+import { CheckIcon, ExclamationTriangleIcon } from '@heroicons/react/20/solid';
+import { EventSourceInput } from '@fullcalendar/core/index.js';
+import React from 'react';
+import { User } from '@/types/user';
+import axios from 'axios';
+import toast, { Toaster } from 'react-hot-toast';
 
 interface Event {
   title: string;
@@ -20,18 +20,18 @@ interface Event {
 }
 
 interface EventProps {
-  user: User
+  user: User;
 }
 
-const CreateEvent: React.FC<EventProps> = ({ user }) => {
+const AdminEvents: React.FC = () => {
   const [loading, setIsLoading] = useState<boolean>(false);
   const endpoint = 'events/create';
-  const [events, setEvents] = useState([
-    { title: 'event 1', id: '1' },
-    { title: 'event 2', id: '2' },
-    { title: 'event 3', id: '3' },
-    { title: 'event 4', id: '4' },
-    { title: 'event 5', id: '5' },
+  const [events, setEvents] = useState<Event[]>([
+    { title: 'event 1', start: '', allDay: false, id: 1 },
+    { title: 'event 2', start: '', allDay: false, id: 2 },
+    { title: 'event 3', start: '', allDay: false, id: 3 },
+    { title: 'event 4', start: '', allDay: false, id: 4 },
+    { title: 'event 5', start: '', allDay: false, id: 5 },
   ]);
   const [allEvents, setAllEvents] = useState<Event[]>([]);
   const [showModal, setShowModal] = useState(false);
@@ -45,14 +45,14 @@ const CreateEvent: React.FC<EventProps> = ({ user }) => {
   });
 
   useEffect(() => {
-    let draggableEl = document.getElementById('draggable-el');
+    const draggableEl = document.getElementById('draggable-el');
     if (draggableEl) {
       new Draggable(draggableEl, {
         itemSelector: ".fc-event",
         eventData: function (eventEl) {
-          let title = eventEl.getAttribute("title");
-          let id = eventEl.getAttribute("data");
-          let start = eventEl.getAttribute("start");
+          const title = eventEl.getAttribute("title");
+          const id = eventEl.getAttribute("data");
+          const start = eventEl.getAttribute("start");
           return { title, id, start };
         }
       });
@@ -60,7 +60,7 @@ const CreateEvent: React.FC<EventProps> = ({ user }) => {
   }, []);
 
   function handleDateClick(arg: { date: Date, allDay: boolean }) {
-    setNewEvent({ ...newEvent, start: arg.date, allDay: arg.allDay, id: new Date().getTime() });
+    setNewEvent({ ...newEvent, start: arg.date.toISOString(), allDay: arg.allDay, id: new Date().getTime() });
     setShowModal(true);
   }
 
@@ -75,7 +75,7 @@ const CreateEvent: React.FC<EventProps> = ({ user }) => {
   }
 
   function handleDelete() {
-    setAllEvents(allEvents.filter(event => Number(event.id) !== Number(idToDelete)));
+    setAllEvents(allEvents.filter(event => event.id !== idToDelete));
     setShowDeleteModal(false);
     setIdToDelete(null);
   }
@@ -114,13 +114,13 @@ const CreateEvent: React.FC<EventProps> = ({ user }) => {
       setIsLoading(true);
 
       // Prepare the data for the API
-      const { title, start } = newEvent; // Destructure title and start
+      const { title, start } = newEvent; 
       console.log('title: ' + title + " date: " + start); 
       const response = await axios.post('/api/post/PostDataApi', {
         endPoint: endpoint,
         data: {
-          event_name: title,  // Changed from title to event_name
-          event_date: start.toString() // Changed from start to event_date
+          event_name: title,
+          event_date: start.toString()
         },
       });
 
@@ -133,7 +133,6 @@ const CreateEvent: React.FC<EventProps> = ({ user }) => {
 
       // Handle errors
       if (error.response) {
-        // Handle specific status codes from the server
         if (error.response.status === 409) {
           toast.error(error.response.data.message || 'A term in the calendar already exists within the specified dates.');
         } else if (error.response.status === 500) {
@@ -142,10 +141,8 @@ const CreateEvent: React.FC<EventProps> = ({ user }) => {
           toast.error('Operation Failed: ' + (error.response.data.error || 'Unknown error'));
         }
       } else if (error.request) {
-        // No response received from the server
         toast.error('No response from server');
       } else {
-        // Some other error occurred
         toast.error('Error encountered: ' + error.message);
       }
     } finally {
@@ -163,11 +160,7 @@ const CreateEvent: React.FC<EventProps> = ({ user }) => {
         <div className="grid grid-cols-10">
           <div className="col-span-8">
             <FullCalendar
-              plugins={[
-                dayGridPlugin,
-                interactionPlugin,
-                timeGridPlugin
-              ]}
+              plugins={[dayGridPlugin, interactionPlugin, timeGridPlugin]}
               headerToolbar={{
                 left: 'prev,next today',
                 center: 'title',
@@ -191,6 +184,8 @@ const CreateEvent: React.FC<EventProps> = ({ user }) => {
                 className="fc-event border-2 p-1 m-2 w-full rounded-md ml-auto text-center bg-white"
                 title={event.title}
                 key={event.id}
+            
+                
               >
                 {event.title}
               </div>
@@ -231,7 +226,7 @@ const CreateEvent: React.FC<EventProps> = ({ user }) => {
                           <ExclamationTriangleIcon className="h-6 w-6 text-red-600" aria-hidden="true" />
                         </div>
                         <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
-                          <Dialog.Title as="h3" className="text-base font-semibold leading-6 text-gray-900">
+                          <Dialog.Title as="h3" className="text-lg font-medium leading-6 text-gray-900">
                             Delete Event
                           </Dialog.Title>
                           <div className="mt-2">
@@ -242,17 +237,17 @@ const CreateEvent: React.FC<EventProps> = ({ user }) => {
                         </div>
                       </div>
                     </div>
-                    <div className="flex flex-row-reverse px-4 py-3 sm:px-6">
+                    <div className="bg-gray-100 px-4 py-3 sm:flex sm:flex-row-reverse">
                       <button
                         type="button"
-                        className="inline-flex justify-center rounded-md border border-transparent bg-red-600 px-4 py-2 text-sm font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
+                        className="inline-flex w-full justify-center rounded-md border border-transparent bg-red-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 sm:ml-3 sm:w-auto sm:text-sm"
                         onClick={handleDelete}
                       >
                         Delete
                       </button>
                       <button
                         type="button"
-                        className="mt-3 inline-flex justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:mt-0 sm:ml-3 sm:w-auto"
+                        className="mt-3 inline-flex w-full justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-base font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:mt-0 sm:w-auto sm:text-sm"
                         onClick={() => setShowDeleteModal(false)}
                       >
                         Cancel
@@ -267,7 +262,7 @@ const CreateEvent: React.FC<EventProps> = ({ user }) => {
 
         {/* Modal for adding event */}
         <Transition.Root show={showModal} as={Fragment}>
-          <Dialog as="div" className="relative z-10" onClose={handleCloseModal}>
+          <Dialog as="div" className="relative z-10" onClose={() => setShowModal(false)}>
             <Transition.Child
               as={Fragment}
               enter="ease-out duration-300"
@@ -298,53 +293,39 @@ const CreateEvent: React.FC<EventProps> = ({ user }) => {
                           <CheckIcon className="h-6 w-6 text-green-600" aria-hidden="true" />
                         </div>
                         <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
-                          <Dialog.Title as="h3" className="text-base font-semibold leading-6 text-gray-900">
-                            Add Event
+                          <Dialog.Title as="h3" className="text-lg font-medium leading-6 text-gray-900">
+                            Add New Event
                           </Dialog.Title>
                           <div className="mt-2">
-                            <p className="text-sm text-gray-500">
-                              Fill out the information below to create a new event.
-                            </p>
+                            <form onSubmit={handleSubmit}>
+                              <input
+                                type="text"
+                                value={newEvent.title}
+                                onChange={handleChange}
+                                required
+                                placeholder="Event Title"
+                                className="border p-2 mb-4 w-full rounded"
+                              />
+                              <button
+                                type="submit"
+                                disabled={loading}
+                                className={`inline-flex justify-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 sm:ml-3 sm:w-auto sm:text-sm ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
+                              >
+                                {loading ? 'Saving...' : 'Save'}
+                              </button>
+                            </form>
                           </div>
                         </div>
                       </div>
                     </div>
-                    <div className="px-4 pb-4 sm:p-6">
-                      <form onSubmit={handleSubmit}>
-                        <div className="mt-2">
-                          <input
-                            type="text"
-                            placeholder="Event Title"
-                            value={newEvent.title}
-                            onChange={handleChange}
-                            className="w-full p-2 border border-gray-300 rounded-md"
-                            required
-                          />
-                        </div>
-                        <div className="mt-4">
-                          <label className="inline-flex items-center">
-                            <input
-                              type="checkbox"
-                              checked={newEvent.allDay}
-                              onChange={() => setNewEvent({
-                                ...newEvent,
-                                allDay: !newEvent.allDay
-                              })}
-                              className="form-checkbox h-4 w-4 text-indigo-600"
-                            />
-                            <span className="ml-2 text-gray-700">All Day</span>
-                          </label>
-                        </div>
-                        <div className="mt-4">
-                          <button
-                            type="submit"
-                            className="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                            disabled={loading}
-                          >
-                            {loading ? 'Saving...' : 'Add Event'}
-                          </button>
-                        </div>
-                      </form>
+                    <div className="bg-gray-100 px-4 py-3 sm:flex sm:flex-row-reverse">
+                      <button
+                        type="button"
+                        className="mt-3 inline-flex w-full justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-base font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:mt-0 sm:w-auto sm:text-sm"
+                        onClick={handleCloseModal}
+                      >
+                        Cancel
+                      </button>
                     </div>
                   </Dialog.Panel>
                 </Transition.Child>
@@ -357,4 +338,4 @@ const CreateEvent: React.FC<EventProps> = ({ user }) => {
   );
 };
 
-export default CreateEvent;
+export default AdminEvents;

@@ -62,12 +62,12 @@ export const secretaryConstants: MenuGroup[] = [
           {
             icon: <FaCalendarAlt className="text-orange-500" />,
             label: 'Event Calendar',
-            route: '/events/calendar',
+            route: '/Admin/secretary/events/calendar',
           },
           {
             icon: <FaCalendarAlt className="text-orange-500" />,
             label: 'Create Event',
-            route: '/events/create',
+            route: '/Admin/secretary/events/page',
           },
         ],
       },

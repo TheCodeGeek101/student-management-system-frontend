@@ -3,8 +3,7 @@ import React from 'react';
 import DefaultLayout from '@/components/Layouts/DefaultLayout';
 import GetLoggedInUserHelper from '@/helpers/GetLoggedInUserHelper';
 import Loader from '@/components/Shared/Loader';
-import SecretaryDashboard from '@/components/Secretary/dashboard/SecretaryDashboard';
-
+import CreateEvent from '@/components/Secretary/Events/CreateEvent';
 const Page = () => {
   const user = GetLoggedInUserHelper();
 
@@ -14,7 +13,7 @@ const Page = () => {
       <Loader /> // Handle the case where user is still being fetched
     ) : (
       <DefaultLayout user={user}>
-        <SecretaryDashboard/>
+        <CreateEvent user={user} />
       </DefaultLayout>
     )
   );

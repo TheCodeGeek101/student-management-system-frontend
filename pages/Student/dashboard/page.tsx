@@ -3,7 +3,7 @@ import React from 'react';
 import DefaultLayout from '@/components/Layouts/DefaultLayout';
 import GetLoggedInUserHelper from '@/helpers/GetLoggedInUserHelper';
 import Loader from '@/components/Shared/Loader';
-
+import StudentDashboard from '@/components/Students/dashboard/Dashboard';
 
 const Page = () => {
   const user = GetLoggedInUserHelper();
@@ -14,9 +14,7 @@ const Page = () => {
       <Loader /> // Handle the case where user is still being fetched
     ) : (
       <DefaultLayout user={user}>
-        <div>
-            <h1>Welcome to Students dashboard</h1>
-        </div>
+        <StudentDashboard user={user}/>
       </DefaultLayout>
     )
   );
