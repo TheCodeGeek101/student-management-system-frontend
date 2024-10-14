@@ -23,7 +23,7 @@ interface EventProps {
   user: User
 }
 
-const CreateEvent: React.FC<EventProps> = ({ user }) => {
+const AdminEvents: React.FC<EventProps> = ({ user }) => {
   const [loading, setIsLoading] = useState<boolean>(false);
   const endpoint = 'events/create';
   const [allEvents, setAllEvents] = useState<Event[]>([]);
@@ -380,4 +380,4 @@ const handleDelete = async () => {
   );
 };
 
-export default CreateEvent;
+export default AdminEvents;

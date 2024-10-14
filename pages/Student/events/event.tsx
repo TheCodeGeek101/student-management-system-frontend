@@ -3,7 +3,8 @@ import React from 'react';
 import DefaultLayout from '@/components/Layouts/DefaultLayout';
 import GetLoggedInUserHelper from '@/helpers/GetLoggedInUserHelper';
 import Loader from '@/components/Shared/Loader';
-import ViewCalendar from '@/components/Secretary/Calendar/ViewCalendar';
+import Events from '@/components/Students/events/CreateEvent';
+
 const Page = () => {
   const user = GetLoggedInUserHelper();
 
@@ -13,7 +14,7 @@ const Page = () => {
       <Loader /> // Handle the case where user is still being fetched
     ) : (
       <DefaultLayout user={user}>
-        <ViewCalendar user={user} />
+        <Events user={user}/>
       </DefaultLayout>
     )
   );

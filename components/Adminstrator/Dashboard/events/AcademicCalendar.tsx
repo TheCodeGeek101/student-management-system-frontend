@@ -19,7 +19,7 @@ interface EventProps {
   user: any; // replace with the actual user type if necessary
 }
 
-const ViewCalendar: React.FC<EventProps> = ({ user }) => {
+const ViewAcademicCalendar: React.FC<EventProps> = ({ user }) => {
   const [allEvents, setAllEvents] = useState<Event[]>([]);
 
   // Fetch Academic Calendar from the backend
@@ -85,4 +85,4 @@ const ViewCalendar: React.FC<EventProps> = ({ user }) => {
   );
 };
 
-export default ViewCalendar;
+export default ViewAcademicCalendar;

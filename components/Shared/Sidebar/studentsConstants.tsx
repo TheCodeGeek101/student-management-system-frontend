@@ -63,8 +63,21 @@ import {
         },
         {
           icon: <FaCalendarAlt className="text-orange-500" />, // Orange for events
-          label: 'Events',
-          route: '/student/events',
+          label: 'Scheduling',
+          route: '#',
+          children: [
+            {
+              icon: <FaCalendarAlt className="text-orange-500" />,
+              label: 'Academic calendar',
+              route: '/Student/events/calendar',
+            },
+            {
+              icon: <FaCalendarAlt className="text-orange-500" />,
+              label: 'Events',
+              route: '/Student/events/event',
+            },
+            
+          ],
         },
         {
         icon: <FaClipboardList className="text-indigo-500" />, // Indigo for assessments

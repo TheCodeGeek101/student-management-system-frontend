@@ -100,13 +100,13 @@ export const teacherMenuGroups: MenuGroup[] = [
         children: [
           {
             icon: <FaCalendarAlt className="text-orange-500" />,
-            label: 'All Events',
-            route: '/teacher/events/all',
+            label: 'Events',
+            route: '/Tutors/events/event',
           },
           {
             icon: <FaCalendarAlt className="text-orange-500" />,
-            label: 'Add Event',
-            route: '/teacher/events/add',
+            label: 'Academic calendar',
+            route: '/Tutors/events/calendar',
           },
         ],
       },
