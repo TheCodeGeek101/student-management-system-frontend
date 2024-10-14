@@ -23,7 +23,7 @@ export const secretaryConstants: MenuGroup[] = [
       {
         icon: <FaHome className="text-blue-500" />, // Blue for home/dashboard
         label: 'Dashboard',
-        route: '/dashboard',
+        route: '/Admin/secretary/dashboard/page',
       },
     ],
   },
@@ -61,12 +61,12 @@ export const secretaryConstants: MenuGroup[] = [
         children: [
           {
             icon: <FaCalendarAlt className="text-orange-500" />,
-            label: 'Event Calendar',
-            route: '/Admin/secretary/events/calendar',
+            label: 'Timetable',
+            route: '#',
           },
           {
             icon: <FaCalendarAlt className="text-orange-500" />,
-            label: 'Create Event',
+            label: 'Event Calendar',
             route: '/Admin/secretary/events/page',
           },
         ],

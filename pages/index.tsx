@@ -14,6 +14,7 @@ import toast, { Toaster } from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
 import { User } from '../types/user';
 import React from 'react';
+import TwoFactor from './TwoFactor/[data]';
 
 interface FormErrors {
   email?: string;
@@ -54,37 +55,40 @@ export default function Home() {
       if (response.status === 200) {
         toast.success(response.data.message || 'Login successful');
         const authenticatedUser: User = response.data.user;
-        
-        // Redirect based on user type
-        if (response.data.superadmin) {
-          router.push('/Admin/dashboard/page');
-        } 
-        else if (response.data.admin) {
-                const { position } = response.data.admin;
-          
-                switch (position) {
-                  case "Bursar":
-                     return router.push('/Admin/bursar/dashboard/page');
-                  case "Assistant Bursar":
-                     return router.push('/Admin/bursar/dashboard/page');
-                  case "Secretary":
-                     return router.push('/Admin/secretary/dashboard/page');                  
-                  case "It Officer":
-                     return  router.push('/Admin/it-officer/dashboard/page');  
-                  case "Head Teacher":
-                     return router.push('/Admin/dashboard/page');
-                  case "Deputy Head Teacher":
-                    return router.push('/Admin/dashboard/page');                   
-                  default:
-                    return router.push('/Admin/bursar/dashboard/page');
-                 }
-           }
-            
-         else if (response.data.student) {
-          router.push('/Student/dashboard/page');
-        } else if (response.data.tutor) {
-          router.push('/Tutors/dashboard/page');
+          // <TwoFactor data={response.data}/>
+          const data = response.data;
+          if (data.superadmin) {
+            router.push('/Admin/dashboard/page');
+        } else if (data.admin) {
+            const { position } = data.admin;
+
+            switch (position) {
+                case "Bursar":
+                case "Assistant Bursar":
+                    router.push('/Admin/bursar/dashboard/page');
+                    break;
+                case "Secretary":
+                    router.push('/Admin/secretary/dashboard/page');
+                    break;
+                case "It Officer":
+                    router.push('/Admin/it-officer/dashboard/page');
+                    break;
+                case "Head Teacher":
+                case "Deputy Head Teacher":
+                    router.push('/Admin/dashboard/page');
+                    break;
+                default:
+                    router.push('/Admin/bursar/dashboard/page');
+                    break;
+            }
+        } else if (data.student) {
+            router.push('/Student/dashboard/page');
+        } else if (data.tutor) {
+            router.push('/Tutors/dashboard/page');
         }
+
+
+          // router.push(`/Twofactor/${data}`);
       } else {
         toast.error(response.data.message || 'Unexpected error');
       }
@@ -170,11 +174,15 @@ export default function Home() {
                       </div>
                       <div className="flex flex-col items-center justify-center">
                         <button
+                          disabled={isLoading}
                           type="submit"
                           className="bg-mainColor hover:bg-darkMainColor text-white font-bold py-2 px-4 rounded-lg"
                         >
-                          {isLoading ? (       
-                            <BallTriangle height={30} width={30} color="white" /> 
+                          {isLoading ? ( 
+                              <>
+                                <BallTriangle height={30} width={30} color="white" /> 
+                              </>      
+      
                           ) : (
                             'Login'
                           )}

@@ -30,6 +30,6 @@
     "pages/Student/Payments/failed/[tx_ref.tsx]",
     "pages/Student/Payments/success/[tx_ref.tsx]",
     "components/Students/Payments/FeesPayment.tsx"
-  ],
+, "pages/api/qrcode.js", "pages/api/qrcode.js"  ],
   "exclude": ["node_modules"]
 }

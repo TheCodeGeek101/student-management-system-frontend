@@ -78,11 +78,11 @@ const StudentSubjectChart: React.FC<{ tutorId: number }> = ({ tutorId }) => {
       enabled: false,
     },
     xaxis: {
-      categories: ["Biology", "Chemistry"], // Update categories based on your data
+      categories: subjectNames, // Corrected: use subjectNames directly, not wrapped in an array
     },
     yaxis: {
       labels: {
-        formatter: (value) => Math.floor(value).toString(), // Ensure no decimals
+        formatter: (value) => Math.floor(value).toString(),
       },
     },
     legend: {
@@ -91,16 +91,12 @@ const StudentSubjectChart: React.FC<{ tutorId: number }> = ({ tutorId }) => {
       fontFamily: "Satoshi",
       fontWeight: 500,
       fontSize: "14px",
-      markers: {
-        // Remove the radius property
-        // radius: 99, // This line should be removed
-      },
     },
     fill: {
       opacity: 1,
     },
   };
-  
+   
 
   const series = [
     {

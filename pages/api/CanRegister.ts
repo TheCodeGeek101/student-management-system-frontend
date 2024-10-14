@@ -29,13 +29,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const response = await axios.post(backendURL, data);
     console.log(`API response for ${endPoint}:`, response.data);
 
-    // Directly forward the 409 error response from the backend to the client
-    if (response.status === 409) {
-      return res.status(409).json({
-        message: 'Student already enrolled in this subject',
-      });
-    }
-
     // Forward any other successful response
     return res.status(response.status).json(response.data);
 

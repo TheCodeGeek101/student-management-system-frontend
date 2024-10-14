@@ -63,7 +63,7 @@ const AvailableSubjects: React.FC<SubjectsProps> = ({ user }) => {
   let classId = 0;
 
   if ('student' in user) {
-    displayName = `${user.student.first_name} ${user.student.last_name}`;
+    displayName = `${user.student.first_name}  ${user.student.last_name}`;
     studentId = user.student.id;
     classId = user.student.class_id;
   }

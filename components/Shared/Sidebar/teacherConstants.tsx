@@ -38,7 +38,7 @@ export const teacherMenuGroups: MenuGroup[] = [
           {
             icon: <FaCalendarAlt className="text-orange-500" />,
             label: 'Timetable',
-            route: '/schedules/classes',
+            route: '/Tutors/timetables/page',
           },
           {
             icon: <FaChalkboardTeacher className="text-yellow-500" />,

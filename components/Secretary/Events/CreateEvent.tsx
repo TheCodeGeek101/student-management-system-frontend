@@ -26,13 +26,6 @@ interface EventProps {
 const CreateEvent: React.FC<EventProps> = ({ user }) => {
   const [loading, setIsLoading] = useState<boolean>(false);
   const endpoint = 'events/create';
-  const [events, setEvents] = useState([
-    { title: 'event 1', id: '1' },
-    { title: 'event 2', id: '2' },
-    { title: 'event 3', id: '3' },
-    { title: 'event 4', id: '4' },
-    { title: 'event 5', id: '5' },
-  ]);
   const [allEvents, setAllEvents] = useState<Event[]>([]);
   const [showModal, setShowModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -59,26 +52,91 @@ const CreateEvent: React.FC<EventProps> = ({ user }) => {
     }
   }, []);
 
+  // Get Events from the backend 
+  useEffect(() => {
+    const getAllEvents = async () => {
+      try {
+        const response = await axios.post('/api/GetData', {
+          endPoint: 'events'
+        });
+
+        // checking if the response is successful
+        if (response.status === 200) {
+          const eventsData = response.data.events.map((event: any) => ({
+            title: event.event_name,
+            start: event.event_date,
+            allDay: true,
+            id: event.id,
+          }));
+          setAllEvents(eventsData); // Set retrieved events to allEvents state
+        }
+      } catch (error) {
+        console.error('Error fetching events:', error);
+        toast.error('Failed to load events');
+      }
+    }
+    getAllEvents();
+  }, []);
+
   function handleDateClick(arg: { date: Date, allDay: boolean }) {
-    setNewEvent({ ...newEvent, start: arg.date, allDay: arg.allDay, id: new Date().getTime() });
+    const formattedDate = arg.date.toISOString().split('T')[0];
+    setNewEvent({ ...newEvent, start: formattedDate, allDay: arg.allDay, id: new Date().getTime() });
     setShowModal(true);
   }
 
   function addEvent(data: DropArg) {
-    const event = { ...newEvent, start: data.date.toISOString(), title: data.draggedEl.innerText, allDay: data.allDay, id: new Date().getTime() };
+    const formattedDate = data.date.toISOString().split('T')[0];
+    const event = { ...newEvent, start: formattedDate, title: data.draggedEl.innerText, allDay: data.allDay, id: new Date().getTime() };
     setAllEvents([...allEvents, event]);
   }
 
-  function handleDeleteModal(data: { event: { id: string } }) {
-    setShowDeleteModal(true);
-    setIdToDelete(Number(data.event.id));
-  }
+ // Update this function to set the correct ID for the selected event
+function handleDeleteModal(data: { event: { id: string } }) {
+  console.log('id to delete :' + data.event.id);
+  setShowDeleteModal(true);
+  setIdToDelete(Number(data.event.id)); // Make sure you're setting the correct ID
 
-  function handleDelete() {
-    setAllEvents(allEvents.filter(event => Number(event.id) !== Number(idToDelete)));
+
+}
+
+// Update the handleDelete function
+const handleDelete = async () => {
+  if (idToDelete === null) return; // Ensure idToDelete is not null
+
+  try {
+    // Make a delete request to the server with the idToDelete
+    const response = await axios.post('/api/deleteEvent', {
+      id: idToDelete, // Use idToDelete directly
+      endPoint: 'events'
+    });
+
+    if (response.status === 200) {
+      // Remove the event from the state after successful deletion
+      setAllEvents(allEvents.filter(event => event.id !== idToDelete));
+      toast.success('Event deleted successfully');
+    }
+  } catch (error: any) {
+    console.error('Submission error:', error);
+
+    if (error.response) {
+      if (error.response.status === 409) {
+        toast.error(error.response.data.message || 'Failed to delete event');
+      } else if (error.response.status === 500) {
+        toast.error('Server error occurred');
+      } else {
+        toast.error('Operation Failed: ' + (error.response.data.error || 'Unknown error'));
+      }
+    } else if (error.request) {
+      toast.error('No response from server');
+    } else {
+      toast.error('Error encountered: ' + error.message);
+    }
+  } finally {
+    // Close the delete modal
     setShowDeleteModal(false);
-    setIdToDelete(null);
+    setIdToDelete(null); // Reset the idToDelete
   }
+}
 
   function handleCloseModal() {
     setShowModal(false);
@@ -112,28 +170,24 @@ const CreateEvent: React.FC<EventProps> = ({ user }) => {
 
     try {
       setIsLoading(true);
+      const { title, start } = newEvent;
+      const formattedStart = new Date(start).toISOString().split('T')[0]; // Ensure correct format
 
-      // Prepare the data for the API
-      const { title, start } = newEvent; // Destructure title and start
-      console.log('title: ' + title + " date: " + start); 
       const response = await axios.post('/api/post/PostDataApi', {
         endPoint: endpoint,
         data: {
-          event_name: title,  // Changed from title to event_name
-          event_date: start.toString() // Changed from start to event_date
+          event_name: title,
+          event_date: formattedStart // Sending the correctly formatted date
         },
       });
 
-      // Handle successful responses
       if (response.status === 200 || response.status === 201) {
         toast.success("Record created successfully");
       }
     } catch (error: any) {
       console.error('Submission error:', error);
 
-      // Handle errors
       if (error.response) {
-        // Handle specific status codes from the server
         if (error.response.status === 409) {
           toast.error(error.response.data.message || 'A term in the calendar already exists within the specified dates.');
         } else if (error.response.status === 500) {
@@ -142,10 +196,8 @@ const CreateEvent: React.FC<EventProps> = ({ user }) => {
           toast.error('Operation Failed: ' + (error.response.data.error || 'Unknown error'));
         }
       } else if (error.request) {
-        // No response received from the server
         toast.error('No response from server');
       } else {
-        // Some other error occurred
         toast.error('Error encountered: ' + error.message);
       }
     } finally {
@@ -157,17 +209,13 @@ const CreateEvent: React.FC<EventProps> = ({ user }) => {
     <>
       <Toaster />
       <nav className="flex justify-between mb-12 border-b border-violet-100 p-4">
-        <h1 className="font-bold text-2xl text-gray-700">Calendar</h1>
+        <h1 className="font-bold text-2xl text-gray-700"> Event Calendar</h1>
       </nav>
       <main className="flex min-h-screen flex-col items-center justify-between p-24">
         <div className="grid grid-cols-10">
           <div className="col-span-8">
             <FullCalendar
-              plugins={[
-                dayGridPlugin,
-                interactionPlugin,
-                timeGridPlugin
-              ]}
+              plugins={[dayGridPlugin, interactionPlugin, timeGridPlugin]}
               headerToolbar={{
                 left: 'prev,next today',
                 center: 'title',
@@ -184,18 +232,7 @@ const CreateEvent: React.FC<EventProps> = ({ user }) => {
               eventClick={(data) => handleDeleteModal(data)}
             />
           </div>
-          <div id="draggable-el" className="ml-8 w-full border-2 p-2 rounded-md mt-16 lg:h-1/2 bg-violet-50">
-            <h1 className="font-bold text-lg text-center">Drag Event</h1>
-            {events.map(event => (
-              <div
-                className="fc-event border-2 p-1 m-2 w-full rounded-md ml-auto text-center bg-white"
-                title={event.title}
-                key={event.id}
-              >
-                {event.title}
-              </div>
-            ))}
-          </div>
+         
         </div>
 
         {/* Delete Modal */}
@@ -224,35 +261,33 @@ const CreateEvent: React.FC<EventProps> = ({ user }) => {
                   leaveFrom="opacity-100 translate-y-0 sm:scale-100"
                   leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
                 >
-                  <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
-                    <div className="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
-                      <div className="sm:flex sm:items-start">
-                        <div className="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
-                          <ExclamationTriangleIcon className="h-6 w-6 text-red-600" aria-hidden="true" />
-                        </div>
-                        <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
-                          <Dialog.Title as="h3" className="text-base font-semibold leading-6 text-gray-900">
-                            Delete Event
-                          </Dialog.Title>
-                          <div className="mt-2">
-                            <p className="text-sm text-gray-500">
-                              Are you sure you want to delete this event? This action cannot be undone.
-                            </p>
-                          </div>
+                  <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left shadow-xl transition-all sm:my-8 sm:w-full">
+                    <div>
+                      <div className="mx-auto flex items-center justify-center rounded-full bg-red-100 p-3">
+                        <ExclamationTriangleIcon className="h-6 w-6 text-red-600" aria-hidden="true" />
+                      </div>
+                      <div className="mt-4 text-center sm:mt-5">
+                        <Dialog.Title as="h3" className="text-lg font-medium leading-6 text-gray-900">
+                          Delete Event
+                        </Dialog.Title>
+                        <div className="mt-2">
+                          <p className="text-sm text-gray-500">
+                            Are you sure you want to delete this event?
+                          </p>
                         </div>
                       </div>
                     </div>
-                    <div className="flex flex-row-reverse px-4 py-3 sm:px-6">
+                    <div className="mt-5 sm:mt-6">
                       <button
                         type="button"
-                        className="inline-flex justify-center rounded-md border border-transparent bg-red-600 px-4 py-2 text-sm font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
+                        className="inline-flex w-full justify-center rounded-md border border-transparent bg-red-100 px-4 py-2 text-sm font-medium text-red-900 hover:bg-red-200 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 sm:text-sm"
                         onClick={handleDelete}
                       >
                         Delete
                       </button>
                       <button
                         type="button"
-                        className="mt-3 inline-flex justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:mt-0 sm:ml-3 sm:w-auto"
+                        className="mt-3 inline-flex w-full justify-center rounded-md border border-transparent bg-gray-200 px-4 py-2 text-sm font-medium text-gray-900 hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 sm:mt-0 sm:ml-3 sm:w-auto"
                         onClick={() => setShowDeleteModal(false)}
                       >
                         Cancel
@@ -265,7 +300,7 @@ const CreateEvent: React.FC<EventProps> = ({ user }) => {
           </Dialog>
         </Transition.Root>
 
-        {/* Modal for adding event */}
+        {/* Modal for Event Creation */}
         <Transition.Root show={showModal} as={Fragment}>
           <Dialog as="div" className="relative z-10" onClose={handleCloseModal}>
             <Transition.Child
@@ -281,7 +316,7 @@ const CreateEvent: React.FC<EventProps> = ({ user }) => {
             </Transition.Child>
 
             <div className="fixed inset-0 z-10 overflow-y-auto">
-              <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+              <div className="flex min-h-full items-center justify-center p-4 text-center sm:items-center sm:p-0">
                 <Transition.Child
                   as={Fragment}
                   enter="ease-out duration-300"
@@ -291,57 +326,45 @@ const CreateEvent: React.FC<EventProps> = ({ user }) => {
                   leaveFrom="opacity-100 translate-y-0 sm:scale-100"
                   leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
                 >
-                  <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
-                    <div className="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
-                      <div className="sm:flex sm:items-start">
-                        <div className="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-green-100 sm:mx-0 sm:h-10 sm:w-10">
-                          <CheckIcon className="h-6 w-6 text-green-600" aria-hidden="true" />
-                        </div>
-                        <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
-                          <Dialog.Title as="h3" className="text-base font-semibold leading-6 text-gray-900">
-                            Add Event
-                          </Dialog.Title>
-                          <div className="mt-2">
-                            <p className="text-sm text-gray-500">
-                              Fill out the information below to create a new event.
-                            </p>
-                          </div>
-                        </div>
+                  <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left shadow-xl transition-all sm:my-8 sm:w-full">
+                    <div>
+                      <div className="mt-2">
+                        <h1 className="text-lg font-bold">Create Event</h1>
                       </div>
-                    </div>
-                    <div className="px-4 pb-4 sm:p-6">
                       <form onSubmit={handleSubmit}>
-                        <div className="mt-2">
+                        <div>
+                          <label htmlFor="event" className="block text-sm font-medium text-gray-700">
+                            Event Title
+                          </label>
                           <input
                             type="text"
-                            placeholder="Event Title"
+                            name="event"
                             value={newEvent.title}
                             onChange={handleChange}
-                            className="w-full p-2 border border-gray-300 rounded-md"
                             required
+                            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
                           />
                         </div>
-                        <div className="mt-4">
-                          <label className="inline-flex items-center">
-                            <input
-                              type="checkbox"
-                              checked={newEvent.allDay}
-                              onChange={() => setNewEvent({
-                                ...newEvent,
-                                allDay: !newEvent.allDay
-                              })}
-                              className="form-checkbox h-4 w-4 text-indigo-600"
-                            />
-                            <span className="ml-2 text-gray-700">All Day</span>
+                        <div>
+                          <label htmlFor="eventDate" className="block text-sm font-medium text-gray-700">
+                            Event Date
                           </label>
+                          <input
+                            type="date"
+                            name="eventDate"
+                            value={newEvent.start as any}
+                            readOnly
+                            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                          />
                         </div>
-                        <div className="mt-4">
+                        <div className="mt-5">
                           <button
                             type="submit"
-                            className="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                             disabled={loading}
+                            className={`inline-flex justify-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${loading ? 'opacity-50 cursor-not-allowed' : ''
+                              }`}
                           >
-                            {loading ? 'Saving...' : 'Add Event'}
+                            {loading ? 'Creating...' : 'Create Event'}
                           </button>
                         </div>
                       </form>
