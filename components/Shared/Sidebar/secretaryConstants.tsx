@@ -62,7 +62,7 @@ export const secretaryConstants: MenuGroup[] = [
           {
             icon: <FaCalendarAlt className="text-orange-500" />,
             label: 'Timetable',
-            route: '#',
+            route: '/Admin/secretary/timetable/Index',
           },
           {
             icon: <FaCalendarAlt className="text-orange-500" />,
@@ -119,7 +119,7 @@ export const secretaryConstants: MenuGroup[] = [
       {
         icon: <FaUser className="text-gray-500" />, // Gray for profile settings
         label: 'Profile Settings',
-        route: '/profile',
+        route: '/Admin/secretary/profile/page',
       },
      
     ],

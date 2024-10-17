@@ -30,12 +30,12 @@ export const itOfficerConstants: MenuGroup[] = [
       {
         icon: <FaUser className="text-red-500" />, // Red for profile
         label: 'Profile',
-        route: '/profile',
+        route: '/Admin/it-officer/profile/page',
       },
     ],
   },
   {
-    name: 'Academic',
+    name: 'Performance',
     menuItems: [
       {
         icon: <FaChartBar className="text-blue-500" />, // Blue for reports
@@ -43,43 +43,54 @@ export const itOfficerConstants: MenuGroup[] = [
         route: '#',
         children: [
           {
-            icon: <FaChartBar className="text-blue-500" />, // Blue for student performance reports
-            label: 'Student Performance',
-            route: '/reports/student-performance',
+            icon: <FaChartBar className="text-blue-500" />, // Blue for system logs
+            label: 'System Logs',
+            route: '/reports/system-logs',
           },
-        ],
-      },
-      {
-        icon: <FaUserGraduate className="text-green-500" />, // Green for students
-        label: 'Students',
-        route: '#',
-        children: [
           {
-            icon: <FaUserGraduate className="text-green-500" />,
-            label: 'All Students',
-            route: '/Admin/students/all/page',
+            icon: <FaDatabase className="text-red-500" />, // Red for backup management
+            label: 'Backup Management',
+            route: '/Admin/it-officer/backups/backup-management',
           },
+          
+          // {
+          //   icon: <FaChartBar className="text-blue-500" />, // Blue for student performance reports
+          //   label: 'Student Performance',
+          //   route: '/reports/student-performance',
+          // },
         ],
       },
+      // {
+      //   icon: <FaUserGraduate className="text-green-500" />, // Green for students
+      //   label: 'Students',
+      //   route: '#',
+      //   children: [
+      //     {
+      //       icon: <FaUserGraduate className="text-green-500" />,
+      //       label: 'All Students',
+      //       route: '/Admin/students/all/page',
+      //     },
+      //   ],
+      // },
     ],
   },
   {
-    name: 'Events',
+    name: 'Scheduling',
     menuItems: [
       {
         icon: <FaCalendarAlt className="text-orange-500" />, // Orange for events
-        label: 'Events',
+        label: 'School Events',
         route: '#',
         children: [
           {
             icon: <FaCalendarAlt className="text-orange-500" />,
-            label: 'All Events',
-            route: '/events/all',
+            label: 'Academic Calendar',
+            route: '/Admin/it-officer/events/calendar',
           },
           {
             icon: <FaCalendarAlt className="text-orange-500" />,
             label: 'Event Calendar',
-            route: '/events/calendar',
+            route: '/Admin/it-officer/events/event',
           },
         ],
       },
@@ -96,17 +107,7 @@ export const itOfficerConstants: MenuGroup[] = [
           {
             icon: <FaHistory className="text-red-500" />, // Red for audit trail
             label: 'Audit Trail',
-            route: '/Admin/settings/audit/Index',
-          },
-          {
-            icon: <FaDatabase className="text-red-500" />, // Red for backup management
-            label: 'Backup Management',
-            route: '/settings/backup-management',
-          },
-          {
-            icon: <FaChartBar className="text-blue-500" />, // Blue for system logs
-            label: 'System Logs',
-            route: '/reports/system-logs',
+            route: '/Admin/it-officer/audit/Index',
           },
           {
             icon: <FaKey className="text-red-500" />, // Red for password complexity

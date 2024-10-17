@@ -323,6 +323,51 @@ export const departmentFields = [
     }
   ];
 
+
+  export const timetableFields = [
+    
+    { 
+      type: 'select', 
+      name: 'class_id',
+      placeholder: 'Select Class',
+      label: 'Class',
+      options: [
+        { label: 'Form 1', value: 1 },
+        { label: 'Form 2', value: 2 },
+        { label: 'Form 3', value: 3 },
+        { label: 'Form 4', value: 4 },
+        { label: 'Form 5', value: 5 }
+
+        // Add more classrooms as necessary
+      ],
+    },
+    {
+      name: 'description',
+      type: 'text', 
+      placeholder: 'Description',
+      label: 'Description',
+    }
+  ];
+  
+  export const selectTimetableFields = [
+    
+    { 
+      type: 'select', 
+      name: 'class_id',
+      placeholder: 'Select Class',
+      label: 'Class',
+      options: [
+        { label: 'Form 1', value: 1 },
+        { label: 'Form 2', value: 2 },
+        { label: 'Form 3', value: 3 },
+        { label: 'Form 4', value: 4 },
+        { label: 'Form 5', value: 5 }
+
+        // Add more classrooms as necessary
+      ],
+    },
+  ];
+
 // assessments
 export const resultsFields = [
   {
