@@ -60,30 +60,39 @@ const StudentProfile: React.FC<ProfileProps> = ({ user }) => {
       setSelectedImage(imageUrl);
     }
   };
-
+  
   const handleImageUpload = async () => {
-    if (!imageFile) return;
-    
+    if (!imageFile) {
+      toast.error('Please select an image file to upload.');
+      return;
+    }
+  
+    if (!studentId) {
+      toast.error('Student ID is missing.');
+      return;
+    }
+  
     const formData = new FormData();
-    formData.append('profile_picture', imageFile);
-    
+    formData.append('profile_picture', imageFile); // Add the image file to form data
+    formData.append('student_id', studentId ); // Add the student ID
+  
     try {
-      // eslint-disable-next-line react-hooks/rules-of-hooks
-      useShowDataHelper<Student>(endpoint, studentId, setStudentData);
-
-      const response = await axios.post(`/api/uploadImage`, {
-        endPoint:uploadEndpoint,
-        id:studentId,
-        data:formData
+      const response = await axios.post(`/api/uploadImage`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
       });
-      if(response.status === 200){
+  
+      if (response.status === 200) {
         toast.success('Profile picture updated successfully!');
+        setSelectedImage(URL.createObjectURL(imageFile)); // Update displayed image
       }
-      // Optionally refresh the student data to show the updated picture
-    } catch (error) {
+    } catch (error:any) {
+      console.error('Error uploading image:', error.response?.data || error.message);
       toast.error('Failed to update profile picture.');
     }
   };
+  
 
   return (
     <div className="p-6 h-screen">

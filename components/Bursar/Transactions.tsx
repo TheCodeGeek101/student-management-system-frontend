@@ -189,7 +189,7 @@ const Transactions: React.FC<TransactionProps> = ({user}) => {
                   subHeaderComponent={
                     <input
                       type="text"
-                      className="w-25 mb-5 rounded-md border bg-white py-2 px-4 text-gray-900 focus:border-blue-400"
+                      className="w-42 mb-5 rounded-md border bg-white py-2 px-4 text-gray-900 focus:border-blue-400"
                       placeholder="Search transaction..."
                       value={search}
                       onChange={(e) => setSearch(e.target.value)}

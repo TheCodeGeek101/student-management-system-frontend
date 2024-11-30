@@ -23,7 +23,9 @@
     "axios": "^1.7.2",
     "cli": "^1.0.1",
     "cookie": "^0.6.0",
+    "date-fns": "^4.1.0",
     "dotenv": "^16.4.5",
+    "formidable": "^3.5.2",
     "framer-motion": "^11.3.12",
     "js-cookie": "^3.0.5",
     "jsonwebtoken": "^9.0.2",
@@ -45,6 +47,7 @@
   },
   "devDependencies": {
     "@types/cookie": "^0.6.0",
+    "@types/formidable": "^3.4.5",
     "@types/jsonwebtoken": "^9.0.6",
     "@types/node": "^20",
     "@types/react": "^18",

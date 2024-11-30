@@ -4,6 +4,8 @@ import DefaultLayout from '@/components/Layouts/DefaultLayout';
 import GetLoggedInUserHelper from '@/helpers/GetLoggedInUserHelper';
 import Loader from '@/components/Shared/Loader';
 import Timetables from '@/components/Teachers/Timetable/Timetables';
+
+import ViewTimetable from '@/components/Teachers/Timetable/Timetables';
 const Page = () => {
   const user = GetLoggedInUserHelper();
 
@@ -13,7 +15,7 @@ const Page = () => {
       <Loader /> // Handle the case where user is still being fetched
     ) : (
       <DefaultLayout user={user}>
-        <Timetables user={user}/>
+        <ViewTimetable user={user}/>
       </DefaultLayout>
     )
   );

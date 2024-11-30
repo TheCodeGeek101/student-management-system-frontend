@@ -175,11 +175,6 @@ export const menuGroups: MenuGroup[] = [
             icon: <FaUser className="text-red-500" />, // Red for profile
             label: 'Profile',
             route: '/Admin/profile/page',
-          },
-          {
-            icon: <FaUsers className="text-red-500" />, // Red for user management
-            label: 'User Management',
-            route: '/Admin/settings/Usermanagement/Index',
           }
         ],
       },

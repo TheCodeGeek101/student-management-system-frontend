@@ -120,11 +120,12 @@ const CreateTimetable: React.FC<AssignSubjectProps> = ({ id }) => {
     }
 
     try {
+      console.log("class id:" + formData.class_id);
       const response = await axios.post('/api/GenerateTimetable', {
         class_id:formData.class_id
       });
 
-      if (response.status === 201) {
+      if (response.status === 200 || response.status === 201 ) {
         toast.success('Record created successfully!');
         setFormData(createInitialFormState(timetableFields));
         setErrors({});

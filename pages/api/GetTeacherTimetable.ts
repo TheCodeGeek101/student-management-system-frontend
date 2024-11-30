@@ -6,15 +6,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return res.status(405).end(`Method ${req.method} Not Allowed`);
   }
 
-  const {  class_id } = req.body as {  class_id:number };
+  const { teacher_id } = req.body as { teacher_id:number };
 
-  if (!class_id) {
+  if (!teacher_id) {
     return res.status(400).json({ message: 'Missing or invalid id' });
   }
-  console.log("teacher id:" + class_id);
+  
+  console.log("teacher id:" + teacher_id);
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/timetables/${class_id}/create`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/timetables/teacher/${teacher_id}`,
       {
         method: 'GET',
         headers: {

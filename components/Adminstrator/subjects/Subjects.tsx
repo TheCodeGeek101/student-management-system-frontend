@@ -133,7 +133,7 @@ const Subjects: React.FC = () => {
 
   return (
     <>
-      <div className="h-screen">
+      <div className="min-h-screen">
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -168,7 +168,7 @@ const Subjects: React.FC = () => {
                   subHeaderComponent={
                     <input
                       type="text"
-                      className="w-25 mb-5 rounded-md border bg-white py-2 px-4 text-gray-900 focus:border-blue-400"
+                      className="w-38 mb-5 rounded-md border bg-white py-2 px-4 text-gray-900 focus:border-blue-400"
                       placeholder="Search subject..."
                       value={search}
                       onChange={(e) => setSearch(e.target.value)}

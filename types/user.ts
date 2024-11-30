@@ -78,5 +78,6 @@ export type User =
 }
   | {
     role: string; admin: Admin 
+    position:string;
 };
 

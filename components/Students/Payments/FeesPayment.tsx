@@ -164,7 +164,7 @@ const PaymentDetails: React.FC<PaymentsProps> = ({user}) => {
                         placeholder={field.placeholder}
                         value={formData[field.name as keyof Tutor]}
                         onChange={(e) => handleChange(e as React.ChangeEvent<HTMLTextAreaElement>, field.name)}
-                        className="border border-gray-400 rounded-md  py-2 px-4 w-96 h-32"
+                        className="border border-gray-400 rounded-md  py-2 px-4 max-w-xl w-screen h-32"
                       />
                     ) : field.type === 'select' ? (
                       <select

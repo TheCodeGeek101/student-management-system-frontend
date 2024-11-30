@@ -167,7 +167,7 @@ export const departmentFields = [
        name: 'first_name',
         placeholder: 'Firstname', 
         label: 'First Name' 
-      },
+     },
     { 
       type: 'text',
        name: 'last_name', 
@@ -223,7 +223,7 @@ export const departmentFields = [
         {
            name: 'description',
            type: 'textarea', 
-           placeholder: 'description',
+           placeholder: 'Type the payment description',
            label: 'Description' 
         }
   ];

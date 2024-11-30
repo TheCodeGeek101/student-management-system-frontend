@@ -13,9 +13,8 @@ import axios from 'axios';
 import toast, { Toaster } from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
 import { User } from '../types/user';
-import React from 'react';
-import TwoFactor from './TwoFactor/[data]';
-
+import React, { useContext } from 'react';
+import { UserContext } from '@/contexts/AuthContext';
 interface FormErrors {
   email?: string;
   password?: string;
@@ -28,6 +27,7 @@ export default function Home() {
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [errors, setErrors] = useState<FormErrors>({});
+  const {setUser} = useContext(UserContext);
 
   const validateForm = (): boolean => {
     const newErrors: FormErrors = {};
@@ -55,40 +55,8 @@ export default function Home() {
       if (response.status === 200) {
         toast.success(response.data.message || 'Login successful');
         const authenticatedUser: User = response.data.user;
-          // <TwoFactor data={response.data}/>
-          const data = response.data;
-          if (data.superadmin) {
-            router.push('/Admin/dashboard/page');
-        } else if (data.admin) {
-            const { position } = data.admin;
-
-            switch (position) {
-                case "Bursar":
-                case "Assistant Bursar":
-                    router.push('/Admin/bursar/dashboard/page');
-                    break;
-                case "Secretary":
-                    router.push('/Admin/secretary/dashboard/page');
-                    break;
-                case "It Officer":
-                    router.push('/Admin/it-officer/dashboard/page');
-                    break;
-                case "Head Teacher":
-                case "Deputy Head Teacher":
-                    router.push('/Admin/dashboard/page');
-                    break;
-                default:
-                    router.push('/Admin/bursar/dashboard/page');
-                    break;
-            }
-        } else if (data.student) {
-            router.push('/Student/dashboard/page');
-        } else if (data.tutor) {
-            router.push('/Tutors/dashboard/page');
-        }
-
-
-          // router.push(`/Twofactor/${data}`);
+        setUser(response.data.user);
+          router.push('/two-factor');
       } else {
         toast.error(response.data.message || 'Unexpected error');
       }
@@ -117,16 +85,7 @@ export default function Home() {
                 </div>
                 <div className="py-5">
                   <div className="flex justify-center">
-                    {/* <Link href="/">
-                        <Image
-                            width={150}
-                            height={40}
-                            src={logo}
-                            alt="Logo"
-                            className="flex justify-center  ml-10"
-                            priority
-                        />
-                    </Link> */}
+                
                   </div>
                   <h2 className="mb-2 text-3xl font-bold text-mainColor">Welcome Back</h2>
                   <div className="inline-block w-10 mb-2 border-2 border-mainColor"></div>

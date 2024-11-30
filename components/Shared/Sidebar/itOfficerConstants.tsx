@@ -35,46 +35,6 @@ export const itOfficerConstants: MenuGroup[] = [
     ],
   },
   {
-    name: 'Performance',
-    menuItems: [
-      {
-        icon: <FaChartBar className="text-blue-500" />, // Blue for reports
-        label: 'Reports',
-        route: '#',
-        children: [
-          {
-            icon: <FaChartBar className="text-blue-500" />, // Blue for system logs
-            label: 'System Logs',
-            route: '/reports/system-logs',
-          },
-          {
-            icon: <FaDatabase className="text-red-500" />, // Red for backup management
-            label: 'Backup Management',
-            route: '/Admin/it-officer/backups/backup-management',
-          },
-          
-          // {
-          //   icon: <FaChartBar className="text-blue-500" />, // Blue for student performance reports
-          //   label: 'Student Performance',
-          //   route: '/reports/student-performance',
-          // },
-        ],
-      },
-      // {
-      //   icon: <FaUserGraduate className="text-green-500" />, // Green for students
-      //   label: 'Students',
-      //   route: '#',
-      //   children: [
-      //     {
-      //       icon: <FaUserGraduate className="text-green-500" />,
-      //       label: 'All Students',
-      //       route: '/Admin/students/all/page',
-      //     },
-      //   ],
-      // },
-    ],
-  },
-  {
     name: 'Scheduling',
     menuItems: [
       {
@@ -97,6 +57,34 @@ export const itOfficerConstants: MenuGroup[] = [
     ],
   },
   {
+    name: 'System management',
+    menuItems: [
+      {
+        icon: <FaChartBar className="text-blue-500" />, // Blue for reports
+        label: 'Reports',
+        route: '#',
+        children: [
+          {
+            icon: <FaChartBar className="text-blue-500" />, // Blue for system logs
+            label: 'System Logs',
+            route: '/reports/system-logs',
+          },
+          {
+            icon: <FaDatabase className="text-red-500" />, // Red for backup management
+            label: 'Backup Management',
+            route: '/Admin/it-officer/backups/backup-management',
+          },
+          {
+            icon: <FaHistory className="text-red-500" />, // Red for audit trail
+            label: 'Audit Trail',
+            route: '/Admin/it-officer/audit/Index',
+          },
+        ],
+      },
+    ],
+  },
+  
+  {
     name: 'Settings',
     menuItems: [
       {
@@ -105,9 +93,9 @@ export const itOfficerConstants: MenuGroup[] = [
         route: '#',
         children: [
           {
-            icon: <FaHistory className="text-red-500" />, // Red for audit trail
-            label: 'Audit Trail',
-            route: '/Admin/it-officer/audit/Index',
+            icon: <FaUsers className="text-red-500" />, // Red for user management
+            label: 'User Management',
+            route: '/Admin/settings/Usermanagement/Index',
           },
           {
             icon: <FaKey className="text-red-500" />, // Red for password complexity
